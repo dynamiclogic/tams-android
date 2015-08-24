@@ -1,16 +1,16 @@
 package com.dynamiclogic.tams.database.model;
 
-public class TAMSAsset {
+public class Asset {
 
     private String id;
     private Coordinates coords;
     private String description;
 
-    public TAMSAsset(Coordinates coords) {
+    public Asset(Coordinates coords) {
         this.coords = coords;
     }
 
-    public TAMSAsset(Coordinates coords, String description) {
+    public Asset(Coordinates coords, String description) {
         this.coords = coords;
         this.description = description;
     }

@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
-import com.dynamiclogic.tams.database.model.TAMSAsset;
+import com.dynamiclogic.tams.database.model.Asset;
 
 import java.util.Random;
 
@@ -24,14 +24,14 @@ public class PanelFragment extends Fragment {
 
     private static final String TAG = MyAdapter.class.getSimpleName();
 
-    private OnFragmentInteractionListener mListener;
+    private OnPanelFragmentInteractionListener mListener;
 
     private ListView mListView;
     private String[] favoriteTVShows = {"the office", "game of thrones", "everybody loves raymond"};
-    TAMSAsset asset1 = new TAMSAsset(new TAMSAsset.Coordinates(0, 0));
-    TAMSAsset asset2 = new TAMSAsset(new TAMSAsset.Coordinates(5, 5));
-    TAMSAsset asset3 = new TAMSAsset(new TAMSAsset.Coordinates(7, 10));
-    private TAMSAsset[] mListAssets = { asset1, asset2, asset3 };
+    Asset asset1 = new Asset(new Asset.Coordinates(0, 0));
+    Asset asset2 = new Asset(new Asset.Coordinates(5, 5));
+    Asset asset3 = new Asset(new Asset.Coordinates(7, 10));
+    private Asset[] mListAssets = { asset1, asset2, asset3 };
     private ListAdapter mListAdapter;
 
     public PanelFragment() { }
@@ -40,7 +40,6 @@ public class PanelFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-
     }
 
     @Override
@@ -54,7 +53,7 @@ public class PanelFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnPanelFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -96,85 +95,25 @@ public class PanelFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction();
-    }
-
-    private class MyListAdapter extends ArrayAdapter<TAMSAsset> {
-
-        private final String TAG = MyAdapter.class.getSimpleName();
-        private Context mContext;
-        private TAMSAsset[] mTamsAssets;
-
-        public MyListAdapter(Context context, TAMSAsset[] tamsAssets) {
-            super(context, R.layout.fragment_cell_asset, tamsAssets);
-            Log.d(TAG, "MyListAdapter constructor called");
-            mContext = context;
-            mTamsAssets = tamsAssets;
-        }
-
-        @Override
-        public int getCount() {
-            return mTamsAssets.length;
-        }
-
-        @Override
-        public TAMSAsset getItem(int position) {
-            if (position >= mTamsAssets.length) {
-                Log.d(TAG, String.format("position = %d, array length = %d",
-                        position, mTamsAssets.length));
-                return null;
-            }
-            return mTamsAssets[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Log.e(TAG, "getView() called");
-
-            if (convertView == null) {
-                LayoutInflater theInflater = LayoutInflater.from(mContext);
-
-                View theView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
-
-                TAMSAsset asset = mTamsAssets[position];
-
-                TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
-                TextView textViewBody = (TextView) theView.findViewById(R.id.asset_content);
-                TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
-
-                textViewTitle.setText(asset.toString());
-                textViewBody.setText(asset.getCoordinates().toString());
-                textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
-
-                return theView;
-            } else {
-                return convertView;
-            }
-        }
+    public interface OnPanelFragmentInteractionListener {
+        void onPanelFragmentInteraction();
     }
 
     private class MyAdapter extends BaseAdapter {
 
         private final String TAG = MyAdapter.class.getSimpleName();
         private Context mContext;
-        private TAMSAsset[] mTamsAssets;
+        private Asset[] mAssets;
 
-        public MyAdapter(Context context, TAMSAsset[] tamsAssets) {
+        public MyAdapter(Context context, Asset[] assets) {
             Log.d(TAG, "MyAdapter()");
             mContext = context;
-            mTamsAssets = tamsAssets;
+            mAssets = assets;
         }
 
         @Override
         public int getCount() {
-            return mTamsAssets.length;
+            return mAssets.length;
         }
 
         @Override
@@ -201,7 +140,7 @@ public class PanelFragment extends Fragment {
 
                 View theView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
 
-                TAMSAsset asset = mTamsAssets[position];
+                Asset asset = mAssets[position];
 
                 TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
                 TextView textViewBody = (TextView) theView.findViewById(R.id.asset_content);
