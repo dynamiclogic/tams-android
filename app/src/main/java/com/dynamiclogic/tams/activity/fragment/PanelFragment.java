@@ -9,22 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
-import com.dynamiclogic.tams.database.model.Asset;
-import com.google.android.gms.maps.model.LatLng;
+import com.dynamiclogic.tams.model.Asset;
+import com.dynamiclogic.tams.model.callback.AssetsListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class PanelFragment extends Fragment {
+public class PanelFragment extends Fragment implements AssetsListener {
 
     private static final String TAG = MyAdapter.class.getSimpleName();
 
@@ -82,12 +82,27 @@ public class PanelFragment extends Fragment {
             }
         });
 
+        database.addAssetListener(this);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        database.removeAssetListener(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void onAssetsUpdated(List<Asset> assets) {
+        Log.d(TAG, "onAssetsUpdated");
+        mListAssets.clear();
+        mListAssets.addAll(assets);
+        ((BaseAdapter)mListAdapter).notifyDataSetChanged();
     }
 
     /**
@@ -111,7 +126,6 @@ public class PanelFragment extends Fragment {
         private List<Asset> mAssets;
 
         public MyAdapter(Context context, List<Asset> assets) {
-            Log.d(TAG, "MyAdapter()");
             mContext = context;
             mAssets = assets;
         }
@@ -138,7 +152,6 @@ public class PanelFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.e(TAG, "getView() called");
 
             if (convertView == null) {
                 LayoutInflater theInflater = LayoutInflater.from(mContext);
@@ -155,13 +168,34 @@ public class PanelFragment extends Fragment {
                 textViewBody.setText(asset.getLatLng().toString());
                 textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
 
+                theView.setTag(asset);
+
+                theView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Asset asset = null;
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnLongClick: " + e);
+                            return false;
+                        }
+
+                        if (asset != null) {
+                            database.removeAsset(asset);
+                            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
+                        }
+
+                        return true;
+                    }
+                });
+
                 return theView;
             } else {
                 return convertView;
             }
         }
     }
-
 
 
 }

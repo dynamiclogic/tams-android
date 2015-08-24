@@ -13,7 +13,7 @@ import android.view.View;
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.fragment.PanelFragment.*;
 import com.dynamiclogic.tams.database.Database;
-import com.dynamiclogic.tams.database.model.callback.AssetListener;
+import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
 import android.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,16 +24,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.dynamiclogic.tams.database.model.Asset;
+import com.dynamiclogic.tams.model.Asset;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
                                                         SlidingUpPanelLayout.PanelSlideListener,
                                                         LocationListener,
                                                         OnPanelFragmentInteractionListener,
-                                                        AssetListener {
+                                                        AssetsListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -76,25 +77,35 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
-    }
-
-    public void addAsset(View view){
-        Asset newAsset = new Asset(mCurrentLatLng);
-        MarkerOptions mMarker = new MarkerOptions().position(newAsset.getLatLng());
-        map.addMarker(mMarker);
-        mListLatLngs.add(mMarker.getPosition());
+        database.addAssetListener(this);
     }
 
     @Override
-    public void onAssetUpdate(Asset asset) {
+    protected void onPause() {
+        super.onPause();
+        database.removeAssetListener(this);
+    }
 
+    //    public void addAsset(View view){
+//        Asset newAsset = new Asset(mCurrentLatLng);
+//        MarkerOptions mMarker = new MarkerOptions().position(newAsset.getLatLng());
+//        map.addMarker(mMarker);
+//        mListLatLngs.add(mMarker.getPosition());
+//    }
+
+    @Override
+    public void onAssetsUpdated(List<Asset> assets) {
+        Log.d(TAG, "onAssetsUpdated");
+        mListLatLngs.clear();
+        mListLatLngs.addAll(database.getListOfLatLngs());
+        refreshMarkers();
     }
 
     public Object onRetainCustomNonConfigurationInstance() {
         return mListLatLngs;
     }
 
-    private  void drawMarker(LatLng point){
+    private void drawMarker(LatLng point){
         MarkerOptions markerOptions = new MarkerOptions().position(point);
         //markerOptions.position(point);
         if(map != null) {
@@ -104,8 +115,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap map) {
-        Log.d(TAG, "onMapReady()");
-
         this.map = map;
         //map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         try {
@@ -160,16 +169,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
 
-            if (mListLatLngs != null) {
-                for (int i = 0; i < mListLatLngs.size(); i++) {
-                    if (mListLatLngs.get(i) != null) {
-                        drawMarker(mListLatLngs.get(i));
-                    }
+            drawMarkers();
+        }
+    }
+
+    public void drawMarkers() {
+        if (mListLatLngs != null) {
+            for (int i = 0; i < mListLatLngs.size(); i++) {
+                if (mListLatLngs.get(i) != null) {
+                    drawMarker(mListLatLngs.get(i));
                 }
             }
         }
+    }
 
-
+    public void refreshMarkers() {
+        map.clear();
+        drawMarkers();
     }
 
         /*              LocationListener - Start              */
@@ -178,26 +194,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged");
         mCurrentLocation = location;
-
         mCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCurrentLatLng, 19);
         map.animateCamera(cameraUpdate);
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d(TAG, "onStatusChanged");
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
     @Override
-    public void onProviderEnabled(String provider) {
-        Log.d(TAG, "onProviderEnabled");
-    }
+    public void onProviderEnabled(String provider) { }
 
     @Override
-    public void onProviderDisabled(String provider) {
-        Log.d(TAG, "onProviderDisabled");
-    }
+    public void onProviderDisabled(String provider) { }
 
         /*              LocationListener - End              */
 
@@ -225,34 +235,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     /*              PanelSlideListener - Start              */
     @Override
-    public void onPanelSlide(View panel, float slideOffset) { Log.d(TAG, "onPanelSlide"); }
+    public void onPanelSlide(View panel, float slideOffset) { }
 
     @Override
-    public void onPanelCollapsed(View panel) {
-        Log.d(TAG, "onPanelCollapsed()");
-    }
+    public void onPanelCollapsed(View panel) { }
 
     @Override
-    public void onPanelExpanded(View panel) {
-        Log.d(TAG, "onPanelExpanded()");
-    }
+    public void onPanelExpanded(View panel) { }
 
     @Override
-    public void onPanelAnchored(View panel) {
-        Log.d(TAG, "onPanelAnchored()");
-    }
+    public void onPanelAnchored(View panel) { }
 
     @Override
-    public void onPanelHidden(View panel) {
-        Log.d(TAG, "onPanelHidden()");
-    }
+    public void onPanelHidden(View panel) { }
 
     /*              PanelSlideListener - End              */
 
     @Override
-    public void onPanelFragmentInteraction() {
-        Log.d(TAG, "onFragmentInteraction()");
-    }
+    public void onPanelFragmentInteraction() { }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putParcelableArrayList("points", mListLatLngs);

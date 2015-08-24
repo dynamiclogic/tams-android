@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.dynamiclogic.tams.database.model.Asset;
-import com.dynamiclogic.tams.database.model.callback.AssetListener;
+import com.dynamiclogic.tams.model.Asset;
+import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.utils.BaseApplication;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -23,7 +23,7 @@ public final class Database {
     private static final String TAG = Database.class.getSimpleName();
     private static Database instance = new Database();
     private SharedPreferences prefs;
-    private List<AssetListener> assetListenerList = new ArrayList<>();
+    private List<AssetsListener> assetListenerList = new ArrayList<>();
 
     private Database() { }
 
@@ -36,36 +36,33 @@ public final class Database {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public boolean addAssetListener(AssetListener listener) {
+    public boolean addAssetListener(AssetsListener listener) {
         return assetListenerList.add(listener);
     }
 
-    public boolean removeAssetListener(AssetListener listener) {
+    public boolean removeAssetListener(AssetsListener listener) {
         return assetListenerList.remove(listener);
     }
 
-    // TODO find out why this isn't working
     public void addNewAsset(Asset asset) {
 
-        // read current list of assets
-        String data = prefs.getString("asset_list", null);
-
-        GsonBuilder gsonb = new GsonBuilder();
-        Gson gson = gsonb.create();
-        List<Asset> list = gson.fromJson(data, ArrayList.class);
-
-        if (list == null) {
-            list = new ArrayList<Asset>();
-        }
-
+        List<Asset> list = getListOfAssets();
         list.add(asset);
-        data = gson.toJson(list);
-        SharedPreferences.Editor e = prefs.edit();
-        e.putString("asset_list", data);
-        e.commit();
+        writeListOfAssetsToPrefs(list);
 
-        for (AssetListener listener : assetListenerList) {
-            listener.onAssetUpdate(asset);
+        for (AssetsListener listener : assetListenerList) {
+            listener.onAssetsUpdated(list);
+        }
+    }
+
+    public void removeAsset(Asset asset) {
+        List<Asset> list = getListOfAssets();
+        list.remove(asset);
+
+        writeListOfAssetsToPrefs(list);
+
+        for (AssetsListener listener : assetListenerList) {
+            listener.onAssetsUpdated(list);
         }
     }
 
@@ -103,6 +100,14 @@ public final class Database {
         return latLngs;
     }
 
+    private boolean writeListOfAssetsToPrefs(List<Asset> assets) {
+        GsonBuilder gsonb = new GsonBuilder();
+        Gson gson = gsonb.create();
+        String data = gson.toJson(assets);
+        SharedPreferences.Editor e = prefs.edit();
+        e.putString("asset_list", data);
+        return e.commit();
+    }
 
 
 }
