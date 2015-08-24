@@ -1,63 +1,33 @@
 package com.dynamiclogic.tams.database.model;
 
+import com.google.android.gms.maps.model.LatLng;
+
+/**
+ * Created by Andreas on 8/2/2015.
+ */
 public class Asset {
 
-    private String id;
-    private Coordinates coords;
-    private String description;
+    private LatLng mAssetLatLng;
 
-    public Asset(Coordinates coords) {
-        this.coords = coords;
+    // a URL to the image online
+    private String mImageURL;
+
+    // a path to the image on the device
+    private String mImagePathLocal;
+
+    public Asset(LatLng latLng){
+        mAssetLatLng = latLng;
     }
 
-    public Asset(Coordinates coords, String description) {
-        this.coords = coords;
-        this.description = description;
+    public LatLng getLatLng(){
+        return mAssetLatLng;
     }
 
-    public String getId() {
-        return id;
+    public String getImageURL() {
+        return mImageURL;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Coordinates getCoordinates() {
-        return coords;
-    }
-
-
-    @Override
-    public String toString() {
-        return String.format("asset at %s", coords);
-    }
-
-    public static class Coordinates {
-
-        double x, y;
-
-        public Coordinates(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public double getX() { return x; }
-
-        public void setX(double x) { this.x = x; }
-
-        public double getY() { return y; }
-
-        public void setY(double y) { this.y = y; }
-
-        public static double round(double dbl) {
-            return Math.round(dbl * 100.0) / 100.0;
-        }
-
-        @Override
-        public String toString() {
-            return Coordinates.class.getSimpleName();
-        //    return String.format("[ (x,y) = (%,%f)", round(x), round(y));
-        }
+    public String getImagePathLocal() {
+        return mImagePathLocal;
     }
 }

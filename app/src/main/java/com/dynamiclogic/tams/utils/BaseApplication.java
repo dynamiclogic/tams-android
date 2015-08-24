@@ -1,7 +1,8 @@
 package com.dynamiclogic.tams.utils;
 
 import android.app.Application;
-import android.util.Log;
+
+import com.dynamiclogic.tams.database.Database;
 
 public class BaseApplication extends Application {
 
@@ -10,6 +11,8 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate() called");
+
+        // Initialize the Database
+        Database.getInstance().initialize(getApplicationContext());
     }
 }

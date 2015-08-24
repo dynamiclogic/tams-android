@@ -10,11 +10,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.fragment.PanelFragment.*;
+import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.model.callback.AssetListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
-import com.google.android.gms.common.ConnectionResult;
 import android.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,7 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.dynamiclogic.tams.utils.Asset;
+import com.dynamiclogic.tams.database.model.Asset;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,8 @@ import java.util.ArrayList;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
                                                         SlidingUpPanelLayout.PanelSlideListener,
                                                         LocationListener,
-                                                        OnPanelFragmentInteractionListener {
+                                                        OnPanelFragmentInteractionListener,
+                                                        AssetListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -40,7 +41,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected LatLng mCurrentLatLng;
     protected GoogleMap map;
     private LocationManager mLocationManager;
-
+    private Database database;
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
 
     @Override
@@ -48,6 +49,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_main);
+
+        database = Database.getInstance();
 
         ((SlidingUpPanelLayout) getWindow().getDecorView().findViewById(R.id.sliding_layout))
                 .setPanelSlideListener(this);
@@ -59,11 +62,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
 
-        //Restoring the markers on configuration changes
+        // Restoring the markers on configuration changes
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("points")) {
                 mListLatLngs =  savedInstanceState.getParcelableArrayList("points");
             }
+        } else {
+            mListLatLngs.addAll(database.getListOfLatLngs());
         }
     }
 
@@ -78,6 +83,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions mMarker = new MarkerOptions().position(newAsset.getLatLng());
         map.addMarker(mMarker);
         mListLatLngs.add(mMarker.getPosition());
+    }
+
+    @Override
+    public void onAssetUpdate(Asset asset) {
+
     }
 
     public Object onRetainCustomNonConfigurationInstance() {
@@ -131,7 +141,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //    map.getUiSettings().setZoomControlsEnabled(true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception: " + e);
         }
 
 
@@ -144,6 +154,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     MarkerOptions newMarker = new MarkerOptions().position(point);
                     finalMap.addMarker(newMarker);
                     mListLatLngs.add(newMarker.getPosition());
+
+                    Asset newAsset = new Asset(newMarker.getPosition());
+                    database.addNewAsset(newAsset);
                 }
             });
 

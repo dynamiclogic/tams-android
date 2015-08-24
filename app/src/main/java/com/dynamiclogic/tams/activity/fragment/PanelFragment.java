@@ -16,8 +16,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
+import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.database.model.Asset;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PanelFragment extends Fragment {
@@ -27,12 +31,9 @@ public class PanelFragment extends Fragment {
     private OnPanelFragmentInteractionListener mListener;
 
     private ListView mListView;
-    private String[] favoriteTVShows = {"the office", "game of thrones", "everybody loves raymond"};
-    Asset asset1 = new Asset(new Asset.Coordinates(0, 0));
-    Asset asset2 = new Asset(new Asset.Coordinates(5, 5));
-    Asset asset3 = new Asset(new Asset.Coordinates(7, 10));
-    private Asset[] mListAssets = { asset1, asset2, asset3 };
+    private ArrayList<Asset> mListAssets = new ArrayList<Asset>();
     private ListAdapter mListAdapter;
+    private Database database;
 
     public PanelFragment() { }
 
@@ -40,6 +41,10 @@ public class PanelFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+
+        database = Database.getInstance();
+
+        mListAssets.addAll(database.getListOfAssets());
     }
 
     @Override
@@ -103,9 +108,9 @@ public class PanelFragment extends Fragment {
 
         private final String TAG = MyAdapter.class.getSimpleName();
         private Context mContext;
-        private Asset[] mAssets;
+        private List<Asset> mAssets;
 
-        public MyAdapter(Context context, Asset[] assets) {
+        public MyAdapter(Context context, List<Asset> assets) {
             Log.d(TAG, "MyAdapter()");
             mContext = context;
             mAssets = assets;
@@ -113,17 +118,17 @@ public class PanelFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return mAssets.length;
+            return mAssets.size();
         }
 
         @Override
         public Object getItem(int position) {
-            if (position >= mListAssets.length) {
+            if (position >= mListAssets.size()) {
                 Log.d(TAG, String.format("position = %d, array length = %d",
-                        position, mListAssets.length));
+                        position, mListAssets.size()));
                 return null;
             }
-            return mListAssets[position];
+            return mListAssets.get(position);
         }
 
         @Override
@@ -140,14 +145,14 @@ public class PanelFragment extends Fragment {
 
                 View theView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
 
-                Asset asset = mAssets[position];
+                Asset asset = mAssets.get(position);
 
                 TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
                 TextView textViewBody = (TextView) theView.findViewById(R.id.asset_content);
                 TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
 
                 textViewTitle.setText(asset.toString());
-                textViewBody.setText(asset.getCoordinates().toString());
+                textViewBody.setText(asset.getLatLng().toString());
                 textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
 
                 return theView;
