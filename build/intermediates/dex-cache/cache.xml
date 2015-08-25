@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-fee2df1f0cc921b38eecbc7f7359d2ca9da79e0c.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-15765f0fb7a875ed735fc9fb5cf698a49ec80ccf.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="98137c4d12c50923f5809852b1ef4d1c4e162081">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-815194df8791c1eaae00af954b8e17b85f454227.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-0cb35f07cbb1a7b9bb4f14549e15a7d1f4b4464c.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="b99f0b78bbcb76b915bc6529a83b65d4d46990dd">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-aa183e753f792745bcb5cf4952eef764c5268461.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/gson-2.3.1-551f63b265435283f730eadc60867169f4ca0ca2.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="adebe28e0c0c05d34a3bfd76f3275bf4d8ff87b6">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-190316feb2b329aadf888917148ef2751760614a.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="130b32ed466fa0f63efd4c7d6250ccd2ed506790">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-bed22432b9cb2d0e0f5cdbcd0c87448849741b42.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-43eb8d0d95c0418fccfeb4e3e57277d9691a915c.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="c2ac04c5b232f6f0658ee4f1c13be09cd76406e2">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-e2d5cc09ec75dfbbbef69d31dd51567c313deab6.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.1/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-ab4b124a3bf7f8e68035ba2a3686c49a38389c81.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="2491ae1b2a848af1f4f0c795f3117c1bd6a1989f">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-d3e56b6ec96d1effe21f3989ba01f141d3e8e555.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="cb6fab7a71fa9ec1f483d44c5fca65ab469d8aca">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-32bf6cc7876d00bcd9b67f588c7429bb85196557.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="6e85edfc9b5346d216e50ccef1f8e825504144a3">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-f4388c5c8da7ea8856b77560308e20143cf5b941.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-47d3c80e7658c30316a9d3986d925eabf86ff674.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="c5cafb324568d954780abb858c25db7ce675ab3c">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-6eb6c12d0b69f986092380cdfd4ee2493d7740e4.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="166e458ee3b5fb5fcff0f936df3f3a788e6c54f3">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-2d2883a5aabe2ce8ca098d5b14242a47b78c5fee.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="edea92852b40eee716e910af8dad9eeaa58fb0e1">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-25abf317697f6e6223a129a8cab21230ff55d55d.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="2e24e5f1b11170163028277de63f709e42525db4">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-d1eaea7addf58b542de830462a9222c6fbc5ce22.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-5749f8ba1e75960b06f27bea0de6315f9cb5e95c.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-ad2b7580dd5a020ff66a92addc6600e9543c58f7.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/libs/internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-62b115c84b9702fa48b7e98c806e565305c76bef.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-222e11de616af126d51ad8985c41d781e4000009.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="77a9dcb5f8b1dba36aacaa9c150eb0942dbea158">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-854d1c0887efd4e1d323ab8d2180a06eb465fe32.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.sothree.slidinguppanel/library/3.1.1/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="76351d3022d4a2803789c01046aa0aa4b0d5d134">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-f2df26ef5f212bc6bbb66430adf6f69cc67729e9.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="4a135d56554069e5d0ff80e3220e887e57146ee5">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-cf1c0abbde9a5ca329d97ff36c3a8c8344dc3a9a.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.getbase/floatingactionbutton/1.10.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="078cad8ebaa25b1eb1790bd622b3a8ae27c9cc7a">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-7606b30cfb2034fce2373ffbc27c237b86917512.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-e1fb611c47a310b29bcdc9f61964429b6201c1b0.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="c756d14e99d39471e99013a1e8fd2f3813ed42bf">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-2d4334ae233a8beb81ec55e5dd346ddbe5ffab27.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="d11330ea68c0d964d30d5caed1f27e6b1488b189">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-8f01e3409065ed5dcb4afb1fbf0d36efe2b51e60.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-d7cb9ae37327478f92550931efea03c974bd24f2.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/library-2.4.0-30b4c0cfe70507b44dcce3ec99ce9492e2d64bc1.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.8.0/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc3"
+        sha1="42a1ee578b62fd1bd28b3307a679dc9ba0791587">
+        <dex dex="/Users/ntessema/workspace/tams-android/app/build/intermediates/pre-dexed/debug/classes-73a5438524a1389458fac6d3cbf1902dd7d50883.jar" />
+    </item>
+
+</items>
