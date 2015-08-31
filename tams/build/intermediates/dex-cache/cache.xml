@@ -2,6 +2,20 @@
 <items version="2" >
 
     <item
+        jar="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/classes-b34a74b51538126f0837af258f54ac833637e4f4.jar" />
+    </item>
+    <item
+        jar="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/classes-bfaeee0304fdb3e5adc329b23619a0c96363dc95.jar" />
+    </item>
+    <item
         jar="/Users/ntessema/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.0/support-annotations-23.0.0.jar"
         jumboMode="false"
         revision="23.0.0"
@@ -9,25 +23,11 @@
         <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.0-faecc55cdf0d7ea65cd74cb2a2a038aaaa228700.jar" />
     </item>
     <item
-        jar="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
-        <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/classes-8b33bb4c2374e0aab6212754b6aa7a69918b1f3e.jar" />
-    </item>
-    <item
-        jar="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/libs/internal_impl-23.0.0.jar"
+        jar="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/libs/internal_impl-23.0.0.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
-        <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0-ba849236b84915aa04893908e1870576113b7d90.jar" />
-    </item>
-    <item
-        jar="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
-        <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/classes-3800dd40f7af0165b58530ff2f447bb3d6e2756f.jar" />
+        <dex dex="/Users/ntessema/workspace/tams-android/tams/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0-4168029a8a5b67ec458e4343915bc9b2e6480743.jar" />
     </item>
 
 </items>
