@@ -14,9 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -44,7 +42,8 @@
         <!-- Google Maps API key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBIr5Elw4i5olkVQn04nAfQg1FqwfF6aQw" />
+            android:value="AIzaSyA_veMSXmFGvXNnTpY6ecCjBSSw0F-OigA" />
+        <!-- android:value="AIzaSyBIr5Elw4i5olkVQn04nAfQg1FqwfF6aQw" /> -->
 
         <activity
             android:name="com.dynamiclogic.tams.activity.MainActivity"
@@ -55,6 +54,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.dynamiclogic.tams.activity.AddAsset"
+            android:label="Add Asset"
+            android:parentActivityName="com.dynamiclogic.tams.MainActivity" >
+        </activity>
+        <activity
+            android:name="com.dynamiclogic.tams.activity.AudioRecordTest"
+            android:label="Audio Record Test"
+            android:parentActivityName="com.dynamiclogic.tams.MainActivity" >
         </activity>
         <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity

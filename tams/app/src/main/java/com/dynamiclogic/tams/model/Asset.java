@@ -1,5 +1,7 @@
 package com.dynamiclogic.tams.model;
 
+import android.graphics.Bitmap;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -7,40 +9,69 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Asset {
 
+    //Not sure if we need mId as a string or a UUID???
     private String mId;
-    private LatLng mAssetLatLng;
+    private String mName, mDescription;
+    private Bitmap mPicture;
+    private LatLng mLatLng;
 
-    // a URL to the image online
-    private String mImageURL;
-
-    // a path to the image on the device
-    private String mImagePathLocal;
+//    // a URL to the image online
+//    private String mImageURL;
+//
+//    // a path to the image on the device
+//    private String mImagePathLocal;
 
     public Asset(LatLng latLng){
-        mAssetLatLng = latLng;
+        mLatLng = latLng;
     }
 
     public LatLng getLatLng(){
-        return mAssetLatLng;
+        return mLatLng;
     }
 
-    public String getImageURL() {
-        return mImageURL;
+//    public String getImageURL() {
+//        return mImageURL;
+//    }
+//
+//    public String getImagePathLocal() {
+//        return mImagePathLocal;
+//    }
+
+    public String getName() {
+        return mName;
     }
 
-    public String getImagePathLocal() {
-        return mImagePathLocal;
+    public void setName(String name) {
+        mName = name;
     }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
+    }
+
+    public Bitmap getPicture() {
+        return mPicture;
+    }
+
+    public void setPicture(Bitmap picture) {
+        mPicture = picture;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
-        return this.mAssetLatLng.latitude == ((Asset)o).mAssetLatLng.latitude
-                && this.mAssetLatLng.longitude == ((Asset)o).mAssetLatLng.longitude
+        return this.mLatLng.latitude == ((Asset)o).mLatLng.latitude
+                && this.mLatLng.longitude == ((Asset)o).mLatLng.longitude
                 && this.mId == ((Asset)o).mId;
     }
 
     @Override
     public int hashCode() {
-        return (int)(mAssetLatLng.latitude * mAssetLatLng.longitude * 1000000);
+        return (int)(mLatLng.latitude * mLatLng.longitude * 1000000);
     }
 }

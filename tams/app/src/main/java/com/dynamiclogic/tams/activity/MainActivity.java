@@ -1,8 +1,12 @@
 package com.dynamiclogic.tams.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -10,12 +14,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import com.dynamiclogic.tams.R;
-import com.dynamiclogic.tams.activity.fragment.PanelFragment.*;
+import com.dynamiclogic.tams.activity.fragment.PanelFragment.OnPanelFragmentInteractionListener;
 import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
-import android.location.LocationListener;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,17 +31,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.dynamiclogic.tams.model.Asset;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
-                                                        SlidingUpPanelLayout.PanelSlideListener,
-                                                        LocationListener,
-                                                        OnPanelFragmentInteractionListener,
-                                                        AssetsListener {
+        SlidingUpPanelLayout.PanelSlideListener,
+        LocationListener,
+        OnPanelFragmentInteractionListener,
+        AssetsListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -71,6 +77,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             mListLatLngs.addAll(database.getListOfLatLngs());
         }
+
+
+
+        final Intent intent = new Intent(this, AddAsset.class);
+        // Get a reference to the floating button's to start appropriate activities
+        final FloatingActionButton newNode = (FloatingActionButton)findViewById(R.id.node);
+        newNode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Pressed New Node", Toast.LENGTH_SHORT).show();
+
+
+                startActivity(intent);
+
+
+            }
+        });
+
     }
 
     @Override
