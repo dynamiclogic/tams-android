@@ -39,6 +39,7 @@ public class AddAssetFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
 
 
+
         GPSTracker gpsTracker = new GPSTracker(getActivity());
         if (gpsTracker.getIsGPSTrackingEnabled())
         {

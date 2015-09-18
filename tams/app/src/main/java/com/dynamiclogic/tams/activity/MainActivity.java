@@ -1,9 +1,7 @@
 package com.dynamiclogic.tams.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -67,7 +65,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
+        mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.d(TAG, "Current Location: " + mCurrentLocation.toString());
+        //Log.d(TAG, "Current Lat: " + mCurrentLocation.getLatitude() + " Long: " + mCurrentLocation.getLongitude());
 
         // Restoring the markers on configuration changes
         if (savedInstanceState != null) {
@@ -87,10 +89,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Pressed New Node", Toast.LENGTH_SHORT).show();
+                final GoogleMap finalMap = map;
 
+
+                //Log.d(TAG, "Current Lat: " + mCurrentLocation.getLatitude() + " Long: " + mCurrentLocation.getLongitude());
+                LatLng newLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+                MarkerOptions newMarker = new MarkerOptions().position(newLatLng);
+                finalMap.addMarker(newMarker);
+                mListLatLngs.add(newMarker.getPosition());
+
+                Asset newAsset = new Asset(newMarker.getPosition());
+                database.addNewAsset(newAsset);
 
                 startActivity(intent);
-
+                drawMarkers();
 
             }
         });
@@ -153,7 +166,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             if (location != null) {
                 onLocationChanged(location);
             }
-            // locationManager.requestLocationUpdates();
+//             locationManager.requestLocationUpdates();
 
             // map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(map.getMyLocation().getLatitude(),map.getMyLocation().getLongitude()),13));
             map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -217,6 +230,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged");
+        if (location == null){
+
+            Log.d(TAG, "location is null for some reason");
+        }
         mCurrentLocation = location;
         mCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
 

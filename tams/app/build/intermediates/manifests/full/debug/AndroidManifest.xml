@@ -58,12 +58,12 @@
         <activity
             android:name="com.dynamiclogic.tams.activity.AddAsset"
             android:label="Add Asset"
-            android:parentActivityName="com.dynamiclogic.tams.MainActivity" >
+            android:parentActivityName="com.dynamiclogic.tams.activity.MainActivity" >
         </activity>
         <activity
             android:name="com.dynamiclogic.tams.activity.AudioRecordTest"
             android:label="Audio Record Test"
-            android:parentActivityName="com.dynamiclogic.tams.MainActivity" >
+            android:parentActivityName="com.dynamiclogic.tams.activity.AddAsset" >
         </activity>
         <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity
