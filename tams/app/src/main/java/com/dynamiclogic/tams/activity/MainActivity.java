@@ -1,6 +1,7 @@
 package com.dynamiclogic.tams.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,6 +17,9 @@ import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
 import android.location.LocationListener;
+import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -71,7 +75,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             mListLatLngs.addAll(database.getListOfLatLngs());
         }
+
+        final Intent intent = new Intent(this, AddAsset.class);
+
+
+        final FloatingActionButton newNode = (FloatingActionButton)findViewById(R.id.node);
+        newNode.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Toast.makeText(getApplicationContext(),"Pressed New Node", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+            }
+        });
     }
+
+
 
     @Override
     protected void onResume() {

@@ -11,6 +11,11 @@
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="red_pressed">#a3fe0c00</color>
 
+
+    <color name="primary">#CDDC39</color>
+    <color name="primary_dark">#AFB42B</color>
+    <color name="accent">#673AB7</color>
+
     <!-- all colors -->
 
     <color name="white">#ffffff</color>

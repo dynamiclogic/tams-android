@@ -55,6 +55,10 @@ public final class Database {
         }
     }
 
+    public void manageAsset(Asset asset){
+        List<Asset> list = getListOfAssets();
+    }
+
     public void removeAsset(Asset asset) {
         List<Asset> list = getListOfAssets();
         list.remove(asset);
