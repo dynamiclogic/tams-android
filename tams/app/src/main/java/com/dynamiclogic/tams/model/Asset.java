@@ -4,24 +4,19 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
 
-/**
- * Created by Andreas on 8/2/2015.
- */
-public class Asset {
+import java.util.UUID;
+
+public class Asset{
 
     //Not sure if we need mId as a string or a UUID???
-    private String mId;
+    private UUID mId;
     private String mName, mDescription;
     private Bitmap mPicture;
     private LatLng mLatLng;
 
-//    // a URL to the image online
-//    private String mImageURL;
-//
-//    // a path to the image on the device
-//    private String mImagePathLocal;
 
     public Asset(LatLng latLng){
+        mId = UUID.randomUUID();
         mLatLng = latLng;
     }
 
@@ -29,13 +24,9 @@ public class Asset {
         return mLatLng;
     }
 
-//    public String getImageURL() {
-//        return mImageURL;
-//    }
-//
-//    public String getImagePathLocal() {
-//        return mImagePathLocal;
-//    }
+    public UUID getId() {
+        return mId;
+    }
 
     public String getName() {
         return mName;

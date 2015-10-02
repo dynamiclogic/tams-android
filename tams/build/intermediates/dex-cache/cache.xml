@@ -8,5 +8,33 @@
         sha1="1ccbc26be2c465c622a48310e8092241b01abe80">
         <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-a7b73665e40f64aa8bd98b68fcea79e62c378e9f.jar" />
     </item>
+    <item
+        jar="C:\Users\Javier G\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-b58b2aef3e0223038f23b96f2172b3165f1a2053.jar" />
+    </item>
+    <item
+        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-590b097dcfdf35a30105e160cedc880ffc431aee.jar" />
+    </item>
+    <item
+        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-b7580cb7f620d8eb645888056e92d5b79920c295.jar" />
+    </item>
+    <item
+        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-8c571efc61a26cf2283f735fcbbc9405217b0734.jar" />
+    </item>
 
 </items>

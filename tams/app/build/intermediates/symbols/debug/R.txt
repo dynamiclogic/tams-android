@@ -944,7 +944,7 @@ int id decor_content_parent 0x7f0d0078
 int id default_activity_button 0x7f0d0063
 int id default_control_frame 0x7f0d00ae
 int id description 0x7f0d009b
-int id descriptionEditText 0x7f0d0096
+int id descriptionEditText 0x7f0d0094
 int id disableHome 0x7f0d0011
 int id disconnect 0x7f0d00b5
 int id donate_with 0x7f0d0054
@@ -982,7 +982,7 @@ int id hybrid 0x7f0d0038
 int id icon 0x7f0d0065
 int id ifRoom 0x7f0d003d
 int id image 0x7f0d0062
-int id imageView 0x7f0d0093
+int id imageView 0x7f0d0097
 int id info 0x7f0d00c2
 int id item_touch_helper_previous_elevation 0x7f0d0008
 int id latitudeTextView 0x7f0d0090
@@ -1015,7 +1015,7 @@ int id none 0x7f0d0013
 int id normal 0x7f0d000f
 int id parallax 0x7f0d001c
 int id parentPanel 0x7f0d0067
-int id pictureButton 0x7f0d0094
+int id pictureButton 0x7f0d0095
 int id pin 0x7f0d001d
 int id play_pause 0x7f0d00b0
 int id polyline 0x7f0d00a3
@@ -1023,7 +1023,7 @@ int id production 0x7f0d0049
 int id progress_circular 0x7f0d0009
 int id progress_horizontal 0x7f0d000a
 int id radio 0x7f0d0074
-int id recordButton 0x7f0d0097
+int id recordButton 0x7f0d0096
 int id right 0x7f0d002e
 int id route_name 0x7f0d00ab
 int id sandbox 0x7f0d004a
@@ -1071,7 +1071,7 @@ int id text2 0x7f0d00bf
 int id textSpacerNoButtons 0x7f0d006d
 int id text_wrapper 0x7f0d009d
 int id til 0x7f0d008d
-int id til4 0x7f0d0095
+int id til4 0x7f0d0093
 int id time 0x7f0d00bd
 int id title 0x7f0d0066
 int id title_bar 0x7f0d00aa

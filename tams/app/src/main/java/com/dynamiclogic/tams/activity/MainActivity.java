@@ -1,18 +1,20 @@
 package com.dynamiclogic.tams.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.fragment.PanelFragment.OnPanelFragmentInteractionListener;
@@ -21,6 +23,9 @@ import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,16 +43,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SlidingUpPanelLayout.PanelSlideListener,
         LocationListener,
         OnPanelFragmentInteractionListener,
-        AssetsListener {
+        AssetsListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     protected Location mCurrentLocation;
     protected LatLng mCurrentLatLng;
+    protected GoogleApiClient mGoogleApiClient;
     protected GoogleMap map;
     private LocationManager mLocationManager;
     private Database database;
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,50 +73,68 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        buildGoogleApiClient();
+
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
-        mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Log.d(TAG, "Current Location: " + mCurrentLocation.toString());
-        //Log.d(TAG, "Current Lat: " + mCurrentLocation.getLatitude() + " Long: " + mCurrentLocation.getLongitude());
 
         // Restoring the markers on configuration changes
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("points")) {
-                mListLatLngs =  savedInstanceState.getParcelableArrayList("points");
+                mListLatLngs = savedInstanceState.getParcelableArrayList("points");
             }
         } else {
             mListLatLngs.addAll(database.getListOfLatLngs());
         }
 
 
+        //Intent to start the AddAsset Activity
+        final Intent addAssetIntent = new Intent(this, AddAsset.class);
 
-        final Intent intent = new Intent(this, AddAsset.class);
+
         // Get a reference to the floating button's to start appropriate activities
-        final FloatingActionButton newNode = (FloatingActionButton)findViewById(R.id.node);
+        final FloatingActionButton newNode = (FloatingActionButton) findViewById(R.id.node);
         newNode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Pressed New Node", Toast.LENGTH_SHORT).show();
-                final GoogleMap finalMap = map;
+                Log.d(TAG, "onClick for FAB");
+                mCurrentLocation = mLastLocation;
 
+                addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, mCurrentLocation);
 
-                //Log.d(TAG, "Current Lat: " + mCurrentLocation.getLatitude() + " Long: " + mCurrentLocation.getLongitude());
-                LatLng newLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-
-                MarkerOptions newMarker = new MarkerOptions().position(newLatLng);
-                finalMap.addMarker(newMarker);
-                mListLatLngs.add(newMarker.getPosition());
-
-                Asset newAsset = new Asset(newMarker.getPosition());
-                database.addNewAsset(newAsset);
-
-                startActivity(intent);
+                startActivity(addAssetIntent);
                 drawMarkers();
 
             }
         });
 
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Connect to the Google API Client
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //Disconnect from Google API Client
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     @Override
@@ -123,13 +150,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         database.removeAssetListener(this);
     }
 
-    //    public void addAsset(View view){
-//        Asset newAsset = new Asset(mCurrentLatLng);
-//        MarkerOptions mMarker = new MarkerOptions().position(newAsset.getLatLng());
-//        map.addMarker(mMarker);
-//        mListLatLngs.add(mMarker.getPosition());
-//    }
-
     @Override
     public void onAssetsUpdated(List<Asset> assets) {
         Log.d(TAG, "onAssetsUpdated");
@@ -142,10 +162,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         return mListLatLngs;
     }
 
-    private void drawMarker(LatLng point){
+    private void drawMarker(LatLng point) {
         MarkerOptions markerOptions = new MarkerOptions().position(point);
         //markerOptions.position(point);
-        if(map != null) {
+        if (map != null) {
             this.map.addMarker(markerOptions);
         }
     }
@@ -153,7 +173,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
-        //map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         try {
             if (map == null) {
                 map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -161,14 +180,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             Criteria criteria = new Criteria();
             String bestProvider = mLocationManager.getBestProvider(criteria, true);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                return;
+            }
             Location location = mLocationManager.getLastKnownLocation(bestProvider);
 
             if (location != null) {
                 onLocationChanged(location);
             }
-//             locationManager.requestLocationUpdates();
 
-            // map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(map.getMyLocation().getLatitude(),map.getMyLocation().getLongitude()),13));
+            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(map.getMyLocation().getLatitude(),map.getMyLocation().getLongitude()),13));
             map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
             // Place dot on current location
@@ -306,4 +334,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         ((SlidingUpPanelLayout)getWindow().getDecorView().findViewById(R.id.sliding_layout)).setPanelSlideListener(null);
     }
 
+    //Getting current location using the Google API Client
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d(TAG, "onConnected");
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
 }

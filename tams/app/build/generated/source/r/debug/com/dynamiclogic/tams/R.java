@@ -3126,7 +3126,7 @@ containing a value of this type.
         public static final int default_activity_button=0x7f0d0063;
         public static final int default_control_frame=0x7f0d00ae;
         public static final int description=0x7f0d009b;
-        public static final int descriptionEditText=0x7f0d0096;
+        public static final int descriptionEditText=0x7f0d0094;
         public static final int disableHome=0x7f0d0011;
         public static final int disconnect=0x7f0d00b5;
         public static final int donate_with=0x7f0d0054;
@@ -3164,7 +3164,7 @@ containing a value of this type.
         public static final int icon=0x7f0d0065;
         public static final int ifRoom=0x7f0d003d;
         public static final int image=0x7f0d0062;
-        public static final int imageView=0x7f0d0093;
+        public static final int imageView=0x7f0d0097;
         public static final int info=0x7f0d00c2;
         public static final int item_touch_helper_previous_elevation=0x7f0d0008;
         public static final int latitudeTextView=0x7f0d0090;
@@ -3197,7 +3197,7 @@ containing a value of this type.
         public static final int normal=0x7f0d000f;
         public static final int parallax=0x7f0d001c;
         public static final int parentPanel=0x7f0d0067;
-        public static final int pictureButton=0x7f0d0094;
+        public static final int pictureButton=0x7f0d0095;
         public static final int pin=0x7f0d001d;
         public static final int play_pause=0x7f0d00b0;
         public static final int polyline=0x7f0d00a3;
@@ -3205,7 +3205,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f0d0009;
         public static final int progress_horizontal=0x7f0d000a;
         public static final int radio=0x7f0d0074;
-        public static final int recordButton=0x7f0d0097;
+        public static final int recordButton=0x7f0d0096;
         public static final int right=0x7f0d002e;
         public static final int route_name=0x7f0d00ab;
         public static final int sandbox=0x7f0d004a;
@@ -3253,7 +3253,7 @@ containing a value of this type.
         public static final int textSpacerNoButtons=0x7f0d006d;
         public static final int text_wrapper=0x7f0d009d;
         public static final int til=0x7f0d008d;
-        public static final int til4=0x7f0d0095;
+        public static final int til4=0x7f0d0093;
         public static final int time=0x7f0d00bd;
         public static final int title=0x7f0d0066;
         public static final int title_bar=0x7f0d00aa;

@@ -510,7 +510,7 @@
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>
-    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.0/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/res/values/values.xml -->
@@ -570,7 +570,7 @@
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="home" type="id"/>
-    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.0/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item name="item_touch_helper_previous_elevation" type="id"/>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->

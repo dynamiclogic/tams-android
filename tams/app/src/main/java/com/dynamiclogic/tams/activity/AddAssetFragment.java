@@ -3,6 +3,7 @@ package com.dynamiclogic.tams.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -17,55 +18,65 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
+import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Javier G on 8/17/2015.
  */
-public class AddAssetFragment extends Fragment {
+public class AddAssetFragment extends Fragment{
     private static final String TAG = AddAssetFragment.class.getSimpleName();
     private static final int CAMERA_REQUEST = 1888;
+    private TextView mLatiture, mLongitude;
     private ImageView mImageView;
     private EditText mNameEditField, mDescriptionEditField;
     private Asset mAsset;
+    private Location mLocation;
+    public static final String EXTRA_ASSET_LOCATION =
+            "com.dynamiclogic.tams.activity.asset_location";
+    private Database db;
+
+    /*Trying to save asset on state change
+    public static final String ASSET =
+            "com.dynamiclogic.tams.activity.asset";*/
 
 
-    TextView textview;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
 
+        db = Database.getInstance();
+
+        /*Trying to save asset on state change
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(ASSET)) {
+                mAsset = (Asset) savedInstanceState.getSerializable(ASSET);
+            }
+        } else {
+            *//*mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
+
+            if (mAsset == null){
+                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+                mAsset = new Asset(latLng);
+            }*//*
+        }*/
+
+        mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
+
+        LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        mAsset = new Asset(latLng);
 
 
-        GPSTracker gpsTracker = new GPSTracker(getActivity());
-        if (gpsTracker.getIsGPSTrackingEnabled())
-        {
-
-            Log.d(TAG, "Lat: " + gpsTracker.latitude + "     Long: " + gpsTracker.longitude);
-            LatLng latLng = new LatLng(gpsTracker.latitude, gpsTracker.longitude);
-            mAsset  = new Asset(latLng);
-            Log.d(TAG, "Making new asset");
-
-            textview = (TextView)v.findViewById(R.id.latitudeTextView);
-            textview.setText(String.valueOf(mAsset.getLatLng().latitude));
-
-            textview = (TextView)v.findViewById(R.id.longitudeTextView);
-            textview.setText(String.valueOf(mAsset.getLatLng().longitude));
 
 
-        }
-        else
-        {
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            gpsTracker.showSettingsAlert();
-        }
+        mLatiture = (TextView)v.findViewById(R.id.latitudeTextView);
+        mLatiture.setText(String.valueOf(mAsset.getLatLng().latitude));
 
-
+        mLongitude = (TextView)v.findViewById(R.id.longitudeTextView);
+        mLongitude.setText(String.valueOf(mAsset.getLatLng().latitude));
 
         Button mRecordButton = (Button)v.findViewById(R.id.recordButton);
         mRecordButton.setOnClickListener(new View.OnClickListener() {
@@ -136,10 +147,28 @@ public class AddAssetFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+
+        //Add Asset to the database
+        db.addNewAsset(mAsset);
+    }
+
+    //Respond to calls to StartActivityForResult
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //Responding to the Camera activity call for result
         if (requestCode == CAMERA_REQUEST) {
             mAsset.setPicture((Bitmap) data.getExtras().get("data"));
             mImageView.setImageBitmap(mAsset.getPicture());
         }
     }
+
+    /*Trying to save asset on state changed
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(ASSET, mAsset);
+        super.onSaveInstanceState(outState);
+    }*/
 }
