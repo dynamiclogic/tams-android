@@ -2,39 +2,242 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.0\jars\classes.jar"
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.8.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="1ccbc26be2c465c622a48310e8092241b01abe80">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-a7b73665e40f64aa8bd98b68fcea79e62c378e9f.jar" />
+        sha1="cb6fab7a71fa9ec1f483d44c5fca65ab469d8aca">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-4db9f012aaf90d761cee621b9eaa917e822529de.jar" />
     </item>
     <item
-        jar="C:\Users\Javier G\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-b2added2b65f49775308f9fc2d85663e13b7e526.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.getbase\floatingactionbutton\1.10.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="078cad8ebaa25b1eb1790bd622b3a8ae27c9cc7a">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-f96c0457354d3c787267017f22616bade9233777.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\AppData\Local\Android\sdk1\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-b58b2aef3e0223038f23b96f2172b3165f1a2053.jar" />
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-7f6b907afa7fbf514f9e9915345ea3de468c93ca.jar" />
     </item>
     <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\jars\classes.jar"
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.8.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-590b097dcfdf35a30105e160cedc880ffc431aee.jar" />
+        sha1="adebe28e0c0c05d34a3bfd76f3275bf4d8ff87b6">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-ee8609ad8e4ca21205929e9ce2fbbefd1aecac53.jar" />
     </item>
     <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appstate\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="edea92852b40eee716e910af8dad9eeaa58fb0e1">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-9767fa54c6a990186a2f7997cd79d8e4fbdb0527.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\gson-2.3.1-574ac9ed42a8a6736c516c84ad59cfb2ff3c12a2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="98137c4d12c50923f5809852b1ef4d1c4e162081">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-e1cdd0ec9f2e7f30f8f37812b6a0e75f6659f6f9.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-3efc219b6e4576d89bb12c158ae8ad15bf8b90d4.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="d11330ea68c0d964d30d5caed1f27e6b1488b189">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-119bf685804e3ce114cc6c2f43cefb59c4ab99fd.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\design\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1821601ddbec5ff125653097812823388700af74">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-a1de9cc8ce7819ed7352292ce810a01731ba7c2b.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="2e24e5f1b11170163028277de63f709e42525db4">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-f2e5f96fd1e19dd7131572312dfebdabed0b0892.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c756d14e99d39471e99013a1e8fd2f3813ed42bf">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-e9937adfe7301550502b4c671451c803959542d3.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-b7580cb7f620d8eb645888056e92d5b79920c295.jar" />
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-9693cdc78db7eb1552aa09f6cbc8f31efe325932.jar" />
     </item>
     <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="42a1ee578b62fd1bd28b3307a679dc9ba0791587">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-eb4b260bded45b165bf34145b4b210dd38a1e0d7.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="77a9dcb5f8b1dba36aacaa9c150eb0942dbea158">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-7608f82de1931d1ce00149edfc30d114b4a4eaa5.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="6e85edfc9b5346d216e50ccef1f8e825504144a3">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-678af5d6fb6b6ae7813ab0da5f2f121da9bcaaaf.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-vision\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="b99f0b78bbcb76b915bc6529a83b65d4d46990dd">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-54d715a00c1a8c345b3d6f9aab764cf83aff2e27.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1ccbc26be2c465c622a48310e8092241b01abe80">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-925a1218c3e3d5d79b1ca8795dfd03be3608118e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.sothree.slidinguppanel\library\3.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="76351d3022d4a2803789c01046aa0aa4b0d5d134">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-cf94c7e4d150b155c0db8be0cc91bed699434d13.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-4276fbe65187f56c858fb35600de384cb2094182.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="130b32ed466fa0f63efd4c7d6250ccd2ed506790">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-d5dd65109a2d994c14cd8ba4ad6ca453973b5174.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="2491ae1b2a848af1f4f0c795f3117c1bd6a1989f">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-9552c1a40ba22cb0ee56fb7fc49b3483e8542fe8.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="166e458ee3b5fb5fcff0f936df3f3a788e6c54f3">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-a29985ba22713c77fd401eb182c5046bcfec07d7.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-8eadbbcd69e066c63a0172ad074f40e745ed19a2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c2ac04c5b232f6f0658ee4f1c13be09cd76406e2">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-434f8169751220fd1fccbe45fd27f86e4791701e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-53a70ceaf574c419023031e8972375e8a6f5e5c7.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-fc587b04de9178c12796d106251c289b191432bb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4a135d56554069e5d0ff80e3220e887e57146ee5">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-fb48c0546ca23fa54b8ea26b3a5cb172ff847232.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-8c571efc61a26cf2283f735fcbbc9405217b0734.jar" />
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-ed3c9e6865a151392e43fd18102dac5f8f93c000.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\library-2.4.0-486f1693f413790cb56a1513aae256d638930dab.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-634764de6a9c525364be1183e69db6e3d58783a3.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-e8228d283279ca8a5f06f24eaf088020be28e062.jar" />
+    </item>
+    <item
+        jar="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c5cafb324568d954780abb858c25db7ce675ab3c">
+        <dex dex="C:\Users\Andreas\Documents\TAMSandroid\tams-android-1\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-3b03653416162f1f0f85c86d321a0b871e84a64c.jar" />
     </item>
 
 </items>

@@ -1,9 +1,12 @@
 package com.dynamiclogic.tams.model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 public class Asset{
@@ -65,4 +68,6 @@ public class Asset{
     public int hashCode() {
         return (int)(mLatLng.latitude * mLatLng.longitude * 1000000);
     }
+
+
 }

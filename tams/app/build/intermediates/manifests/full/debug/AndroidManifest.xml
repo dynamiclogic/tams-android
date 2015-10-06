@@ -44,7 +44,8 @@
         <!-- Google Maps API key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA_veMSXmFGvXNnTpY6ecCjBSSw0F-OigA" />
+            android:value="AIzaSyDwutPcj42duVWT3WhhZAxxU85WAdZnjUI" />
+        <!-- android:value="AIzaSyA_veMSXmFGvXNnTpY6ecCjBSSw0F-OigA" /> -->
         <!-- android:value="AIzaSyBIr5Elw4i5olkVQn04nAfQg1FqwfF6aQw" /> -->
 
         <activity
@@ -67,6 +68,10 @@
             android:label="Audio Record Test"
             android:parentActivityName="com.dynamiclogic.tams.activity.AddAsset" >
         </activity>
+        <activity
+            android:name="com.dynamiclogic.tams.activity.ManageAsset"
+            android:label="Manage Asset"
+            android:parentActivityName="com.dynamiclogic.tams.activity.ManageAsset" />
         <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

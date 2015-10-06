@@ -3,6 +3,7 @@ package com.dynamiclogic.tams.database;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
@@ -14,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by ntessema on 8/23/15.
@@ -45,7 +47,7 @@ public final class Database {
     }
 
     public void addNewAsset(Asset asset) {
-
+        Log.d(TAG, "onAddNewsAsset");
         List<Asset> list = getListOfAssets();
         list.add(asset);
         writeListOfAssetsToPrefs(list);
@@ -55,6 +57,10 @@ public final class Database {
         }
     }
 
+    /**
+     * POSSIBLE ERROR IN removal
+     * @param asset
+     */
     public void removeAsset(Asset asset) {
         List<Asset> list = getListOfAssets();
         list.remove(asset);
@@ -109,5 +115,32 @@ public final class Database {
         return e.commit();
     }
 
+    public Asset getAssetFromUUID(UUID id){
+
+        for(Asset a : this.getListOfAssets()){
+            if(a.getId().equals(id)){
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public void updateAsset(Asset asset){
+        Log.d(TAG, "onUpdateAsset");
+        List<Asset> list = getListOfAssets();
+
+        for(Asset a : list){
+            if(a.getId().equals(asset.getId())){
+                a.setName(asset.getName());
+                a.setDescription(asset.getDescription());
+
+            }
+        }
+        writeListOfAssetsToPrefs(list);
+        for (AssetsListener listener : assetListenerList) {
+            listener.onAssetsUpdated(list);
+        }
+
+    }
 
 }

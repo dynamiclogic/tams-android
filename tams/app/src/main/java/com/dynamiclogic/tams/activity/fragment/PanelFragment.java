@@ -2,6 +2,7 @@ package com.dynamiclogic.tams.activity.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -16,13 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
+import com.dynamiclogic.tams.activity.ManageAsset;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class PanelFragment extends Fragment implements AssetsListener {
 
@@ -164,7 +168,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 TextView textViewBody = (TextView) theView.findViewById(R.id.asset_content);
                 TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
 
-                textViewTitle.setText(asset.toString());
+                textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getLatLng().toString());
                 textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
 
@@ -174,6 +178,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                     @Override
                     public boolean onLongClick(View v) {
                         Asset asset = null;
+                        Intent intent = new Intent(getActivity(), ManageAsset.class);
                         try {
                             asset = (Asset) v.getTag();
                         } catch (ClassCastException e) {
@@ -182,6 +187,14 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
+                            UUID dis = asset.getId();
+                            Bundle bundle = new Bundle();
+                           // bundle.putSerializable("asset_pass",asset);
+                            intent.putExtra("asset_pass", dis.toString());
+                            //intent.putExtra("asset_pass",(Serializable)asset);
+                           // intent.putExtras(bundle);
+                            startActivity(intent);
+
                             database.removeAsset(asset);
                             Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
