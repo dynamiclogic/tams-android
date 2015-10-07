@@ -21,13 +21,13 @@ import java.util.List;
 public final class Database {
 
     private static final String TAG = Database.class.getSimpleName();
-    private static Database instance = new Database();
+    private static Database sDatabase = new Database();
     private SharedPreferences prefs;
     private List<AssetsListener> assetListenerList = new ArrayList<>();
 
-    private Database() { }
+    private Database() {}
 
-    public static final synchronized Database getInstance() { return instance; }
+    public static final synchronized Database getInstance() { return sDatabase; }
 
     /**
      * This method should be called exactly once, from {@link BaseApplication}.

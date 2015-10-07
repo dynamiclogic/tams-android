@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -57,11 +58,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Database database;
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
     private Location mLastLocation;
+    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 0;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
+    private int coarseLocationPermissionCheck;
+    private int fineLocationPermissionCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
+        Log.d(TAG, "ONCREATE---mCurrentLocation: " + mCurrentLocation);
         setContentView(R.layout.activity_main);
 
         database = Database.getInstance();
@@ -75,6 +81,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         buildGoogleApiClient();
 
+        //Checking for permissions on Android Marshmallow and above
+        //ONLY NEED 1 of 2 location permissions, TODO fix
+        coarseLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        //If the permission isn't granted, request it
+        //ONLY NEED 1 of 2 location permissions, TODO fix
+        if( coarseLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
+            //Request coarse location
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_COARSE_LOCATION);
+        }
+        if ( fineLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
+            //Request fine location
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
@@ -98,7 +125,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick for FAB");
-                mCurrentLocation = mLastLocation;
+
 
                 addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, mCurrentLocation);
 
@@ -110,6 +137,57 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    //Check the results of requested permissions
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        //ONLY NEED 1 of 2 location permissions, TODO fix
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Log.d(TAG, "Coarse Location permission granted");
+                    coarseLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Log.d(TAG, "Fine Location permission granted");
+                    fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    public Location getCurrentLocation() {
+        return mCurrentLocation;
+    }
 
     @Override
     protected void onStart() {
@@ -258,6 +336,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged");
+        Log.d(TAG, "ONLOCATIONCHANGED---mCurrentLocation: " + mCurrentLocation);
         if (location == null){
 
             Log.d(TAG, "location is null for some reason");
@@ -338,7 +417,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onConnected(Bundle bundle) {
         Log.d(TAG, "onConnected");
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        Log.d(TAG, "ONCONNECTED---mCurrentLocation: " + mCurrentLocation);
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
     }
 

@@ -66,8 +66,10 @@ public class AddAssetFragment extends Fragment{
 
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
-        LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        mAsset = new Asset(latLng);
+        if(mLocation != null) {
+            LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            mAsset = new Asset(latLng);
+        }
 
 
 
