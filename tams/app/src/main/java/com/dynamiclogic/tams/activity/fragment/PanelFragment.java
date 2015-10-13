@@ -1,33 +1,33 @@
 package com.dynamiclogic.tams.activity.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
-import com.dynamiclogic.tams.activity.MainActivity;
-import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.DBController;
+import com.dynamiclogic.tams.database.DBSync;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Random;
 
-public class PanelFragment extends Fragment implements AssetsListener {
+public class PanelFragment extends Fragment implements AssetsListener, Observer {
 
     private static final String TAG = MyAdapter.class.getSimpleName();
 
@@ -36,9 +36,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
     private ListView mListView;
     private ArrayList<Asset> mListAssets = new ArrayList<Asset>();
     private ListAdapter mListAdapter;
-    private Database database;
-    private Location mCurrentLocation;
-    private LatLng mAssetLatLng;
+    private DBController database;
+    private DBSync dbSync;
 
     public PanelFragment() { }
 
@@ -47,9 +46,19 @@ public class PanelFragment extends Fragment implements AssetsListener {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        database = Database.getInstance();
+        database = DBController.getInstance(getActivity());
 
-        mListAssets.addAll(database.getListOfAssets());
+        dbSync = new DBSync(getActivity());
+        dbSync.addObserver(this);
+
+       // mListAssets.addAll(database.assetsList());
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        // This method is notified after data changes.
+        ((BaseAdapter)mListAdapter).notifyDataSetChanged();
+
     }
 
     @Override
@@ -87,14 +96,14 @@ public class PanelFragment extends Fragment implements AssetsListener {
             }
         });
 
-        database.addAssetListener(this);
+        //database.addAssetListener(this);
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        database.removeAssetListener(this);
+        //database.removeAssetListener(this);
     }
 
     @Override
@@ -166,27 +175,12 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 Asset asset = mAssets.get(position);
 
                 TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
-                TextView textViewLocation = (TextView) theView.findViewById(R.id.asset_location);
-                TextView textViewDescription = (TextView) theView.findViewById(R.id.asset_description);
+                TextView textViewBody = (TextView) theView.findViewById(R.id.asset_content);
                 TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
-                ImageView imageView = (ImageView) theView.findViewById(R.id.image);
 
-                imageView.setImageBitmap(asset.getPicture());
-                textViewTitle.setText(asset.getName());
-                textViewLocation.setText(asset.getLatLng().toString());
-                textViewDescription.setText(asset.getDescription());
-
-                mCurrentLocation = ((MainActivity)getActivity()).getCurrentLocation();
-                //mAssetLatLng = asset.getLatLng();
-                float[] results = new float[10];
-                if (mCurrentLocation != null){
-                    Location.distanceBetween(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), asset.getLatLng().latitude, asset.getLatLng().longitude, results);
-                }
-
-                Log.e(TAG, "Distance between is: " + results[0]);
-
-                //textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
-                textViewDistance.setText(String.format("%.2f",results[0] )+ " meters away");
+                textViewTitle.setText(asset.toString());
+                textViewBody.setText(asset.getLatLng().toString());
+                textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
 
                 theView.setTag(asset);
 
@@ -202,10 +196,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            Log.e(TAG, "Asset clicked was: " + asset.getId().toString());
-                            Log.e(TAG, "Asset title: " + asset.getName());
-                            Log.e(TAG, "Asset description: " + asset.getDescription());
-                            database.removeAsset(asset);
+                            database.deleteAsset(asset);
                             Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
 

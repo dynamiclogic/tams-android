@@ -96,4 +96,4 @@
         app:layout_anchorGravity="bottom|right|end"
         style="@style/FabStyle"/>
 
-</android.support.design.widget.CoordinatorLayout><!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/layout/fragment_add_asset_animated.xml -->
+</android.support.design.widget.CoordinatorLayout><!-- From: file:/Users/imihov/Downloads/tams-android-Javier2/tams/app/src/main/res/layout/fragment_add_asset_animated.xml -->

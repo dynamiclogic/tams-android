@@ -27,23 +27,17 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="16dp"/>
+            android:textSize="16dp"
+            android:hint="sample title"/>
 
         <TextView
-            android:id="@+id/asset_location"
+            android:id="@+id/asset_content"
             android:layout_below="@id/asset_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="14dp"/>
-
-        <TextView
-            android:id="@+id/asset_description"
-            android:layout_below="@id/asset_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14dp"/>
+            android:textSize="14dp"
+            android:hint="sample text sample text"/>
 
         <TextView
             android:id="@+id/asset_distance"

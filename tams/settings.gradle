@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':gson-2.3.1', ':android-async-http-1.4.6'

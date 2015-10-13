@@ -18,7 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
-import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.DBController;
+import com.dynamiclogic.tams.database.DBSync;
 import com.dynamiclogic.tams.model.Asset;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -35,7 +36,8 @@ public class AddAssetFragment extends Fragment{
     private Location mLocation;
     public static final String EXTRA_ASSET_LOCATION =
             "com.dynamiclogic.tams.activity.asset_location";
-    private Database db;
+    private DBController dbController;
+    private DBSync dbSync;
 
     /*Trying to save asset on state change
     public static final String ASSET =
@@ -48,7 +50,8 @@ public class AddAssetFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
 
-        db = Database.getInstance();
+        dbController = DBController.getInstance(getActivity());
+        dbSync = new DBSync(getActivity());
 
         /*Trying to save asset on state change
         if (savedInstanceState != null) {
@@ -66,10 +69,8 @@ public class AddAssetFragment extends Fragment{
 
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
-        if(mLocation != null) {
-            LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            mAsset = new Asset(latLng);
-        }
+        LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        mAsset = new Asset(latLng);
 
 
 
@@ -153,7 +154,8 @@ public class AddAssetFragment extends Fragment{
         super.onStop();
 
         //Add Asset to the database
-        db.addNewAsset(mAsset);
+        dbController.insertAsset(mAsset);
+        dbSync.sync();
     }
 
     //Respond to calls to StartActivityForResult
