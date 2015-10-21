@@ -3,7 +3,7 @@ package com.dynamiclogic.tams.activity.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.location.Location;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,21 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
-import com.dynamiclogic.tams.activity.MainActivity;
+import com.dynamiclogic.tams.activity.ManageAsset;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class PanelFragment extends Fragment implements AssetsListener {
 
@@ -37,8 +37,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
     private ArrayList<Asset> mListAssets = new ArrayList<Asset>();
     private ListAdapter mListAdapter;
     private Database database;
-    private Location mCurrentLocation;
-    private LatLng mAssetLatLng;
 
     public PanelFragment() { }
 
@@ -76,7 +74,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
         mListAdapter = new MyAdapter(getActivity(), mListAssets) {
         };
-        mListView = (ListView) getView().findViewById(R.id.listView);
+        mListView = (ListView) getView().findViewById(R.id.list);
         mListView.setAdapter(mListAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -108,6 +106,11 @@ public class PanelFragment extends Fragment implements AssetsListener {
         mListAssets.clear();
         mListAssets.addAll(assets);
         ((BaseAdapter)mListAdapter).notifyDataSetChanged();
+
+        mListView = (ListView)getView().findViewById(R.id.list);
+        mListView.setAdapter(mListAdapter);
+
+
     }
 
     /**
@@ -166,27 +169,13 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 Asset asset = mAssets.get(position);
 
                 TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
-                TextView textViewLocation = (TextView) theView.findViewById(R.id.asset_location);
-                TextView textViewDescription = (TextView) theView.findViewById(R.id.asset_description);
+                TextView textViewBody = (TextView) theView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
-                ImageView imageView = (ImageView) theView.findViewById(R.id.image);
 
-                imageView.setImageBitmap(asset.getPicture());
                 textViewTitle.setText(asset.getName());
-                textViewLocation.setText(asset.getLatLng().toString());
-                textViewDescription.setText(asset.getDescription());
-
-                mCurrentLocation = ((MainActivity)getActivity()).getCurrentLocation();
-                //mAssetLatLng = asset.getLatLng();
-                float[] results = new float[10];
-                if (mCurrentLocation != null){
-                    Location.distanceBetween(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), asset.getLatLng().latitude, asset.getLatLng().longitude, results);
-                }
-
-                Log.e(TAG, "Distance between is: " + results[0]);
-
-                //textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
-                textViewDistance.setText(String.format("%.2f",results[0] )+ " meters away");
+                textViewBody.setText(asset.getDescription());
+                //textViewBody.setText(asset.getLatLng().toString());
+                textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
 
                 theView.setTag(asset);
 
@@ -194,6 +183,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                     @Override
                     public boolean onLongClick(View v) {
                         Asset asset = null;
+                        Intent intent = new Intent(getActivity(), ManageAsset.class);
                         try {
                             asset = (Asset) v.getTag();
                         } catch (ClassCastException e) {
@@ -202,9 +192,14 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            Log.e(TAG, "Asset clicked was: " + asset.getId().toString());
-                            Log.e(TAG, "Asset title: " + asset.getName());
-                            Log.e(TAG, "Asset description: " + asset.getDescription());
+                            UUID dis = asset.getId();
+                            Bundle bundle = new Bundle();
+                            // bundle.putSerializable("asset_pass",asset);
+                            intent.putExtra("asset_pass", dis.toString());
+                            //intent.putExtra("asset_pass",(Serializable)asset);
+                            // intent.putExtras(bundle);
+                            startActivity(intent);
+
                             database.removeAsset(asset);
                             Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }

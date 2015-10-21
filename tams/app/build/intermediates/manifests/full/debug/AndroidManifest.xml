@@ -67,6 +67,14 @@
             android:label="Audio Record Test"
             android:parentActivityName="com.dynamiclogic.tams.activity.AddAsset" >
         </activity>
+        <activity
+            android:name="com.dynamiclogic.tams.activity.ManageAsset"
+            android:label="Manage Asset"
+            android:parentActivityName="com.dynamiclogic.tams.activity.ManageAsset" />
+
+        <service
+            android:name="com.dynamiclogic.tams.activity.FetchAddressIntentService"
+            android:exported="false" />
         <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

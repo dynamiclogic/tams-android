@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
@@ -28,14 +31,18 @@ import com.google.android.gms.maps.model.LatLng;
 public class AddAssetFragment extends Fragment{
     private static final String TAG = AddAssetFragment.class.getSimpleName();
     private static final int CAMERA_REQUEST = 1888;
-    private TextView mLatiture, mLongitude;
+    private TextView mLatitude, mLongitude;
     private ImageView mImageView;
     private EditText mNameEditField, mDescriptionEditField;
+    private Spinner mAssetTypeSpinner;
     private Asset mAsset;
     private Location mLocation;
     public static final String EXTRA_ASSET_LOCATION =
             "com.dynamiclogic.tams.activity.asset_location";
     private Database db;
+    private String mAddressOutput;
+    private AddressResultReceiver mResultReceiver;
+
 
     /*Trying to save asset on state change
     public static final String ASSET =
@@ -50,21 +57,10 @@ public class AddAssetFragment extends Fragment{
 
         db = Database.getInstance();
 
-        /*Trying to save asset on state change
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(ASSET)) {
-                mAsset = (Asset) savedInstanceState.getSerializable(ASSET);
-            }
-        } else {
-            *//*mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-
-            if (mAsset == null){
-                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-                mAsset = new Asset(latLng);
-            }*//*
-        }*/
 
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
+
+        startIntentService();
 
         if(mLocation != null) {
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
@@ -74,8 +70,8 @@ public class AddAssetFragment extends Fragment{
 
 
 
-        mLatiture = (TextView)v.findViewById(R.id.latitudeTextView);
-        mLatiture.setText(String.valueOf(mAsset.getLatLng().latitude));
+        mLatitude = (TextView)v.findViewById(R.id.latitudeTextView);
+        mLatitude.setText(String.valueOf(mAsset.getLatLng().latitude));
 
         mLongitude = (TextView)v.findViewById(R.id.longitudeTextView);
         mLongitude.setText(String.valueOf(mAsset.getLatLng().latitude));
@@ -90,7 +86,11 @@ public class AddAssetFragment extends Fragment{
         });
 
 
+
+
+
         mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
+        mNameEditField.setText(mAsset.getName());
         mNameEditField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,6 +109,7 @@ public class AddAssetFragment extends Fragment{
             }
         });
 
+        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
 
         mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
         mDescriptionEditField.setHintTextColor(getResources().getColor(R.color.material_blue_grey_800));
@@ -129,8 +130,6 @@ public class AddAssetFragment extends Fragment{
 
             }
         });
-
-
 
 
         this.mImageView = (ImageView)v.findViewById(R.id.imageView);
@@ -167,10 +166,41 @@ public class AddAssetFragment extends Fragment{
         }
     }
 
-    /*Trying to save asset on state changed
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ASSET, mAsset);
-        super.onSaveInstanceState(outState);
-    }*/
+    protected void startIntentService() {
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        mResultReceiver = new AddressResultReceiver(new Handler());
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLocation);
+        getActivity().startService(intent);
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                //showToast(getString(R.string.address_found));
+                Log.d(TAG, "address: " + mAddressOutput.toString());
+                updateUI();
+            }
+
+        }
+    }
+
+    private void updateUI() {
+
+        mAsset.setName(mAddressOutput.toString());
+        mNameEditField.setText(mAsset.getName());
+
+    }
+
 }

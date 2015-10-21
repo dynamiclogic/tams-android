@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string-array name="asset_type_array">
+        <item>Stop Sign</item>
+        <item>Tree</item>
+        <item>Traffic Light</item>
+        <item>Road</item>
+    </string-array>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
@@ -510,7 +518,7 @@
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>
-    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/res/values/values.xml -->
@@ -570,7 +578,7 @@
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="home" type="id"/>
-    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <item name="item_touch_helper_previous_elevation" type="id"/>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
@@ -620,10 +628,14 @@
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Settings</string>
+    <string name="address_found">Address Found</string>
     <string name="app_name">TAMS</string>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/design/22.2.1/res/values/values.xml -->
     <eat-comment/>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="asset_type_prompt">Chose the asset type</string>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.8.0/res/values/auth_strings.xml -->
     <eat-comment/>
     <string name="auth_google_play_services_client_facebook_display_name">Facebook</string>
@@ -676,6 +688,7 @@
     <eat-comment/>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_world">Hello world!</string>
+    <string name="invalid_lat_long_used">Invalid Latitude and Logitude Coordinates Used</string>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <string name="mr_media_route_button_content_description">Cast</string>
@@ -688,6 +701,10 @@
     <string name="mr_media_route_controller_stop">Stop casting</string>
     <string name="mr_system_route_name">System</string>
     <string name="mr_user_route_category_name">Devices</string>
+    <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="no_address_found">No Address was Found</string>
+    <string name="service_not_available">Service Not Available</string>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
     <eat-comment/>
     <string name="status_bar_notification_info_overflow">999+</string>

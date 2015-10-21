@@ -17,8 +17,16 @@
             android:layout_height="wrap_content"
             android:hint="Name"
             android:padding="10dp"
-            />
+            android:editable="false"
+            android:enabled="false"/>
     </android.support.design.widget.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/assetTypesSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/asset_type_prompt"
+        android:entries="@array/asset_type_array"/>
 
     <LinearLayout
         android:orientation="horizontal"

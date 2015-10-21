@@ -2,6 +2,27 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\libs\internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\internal_impl-23.1.0-2582aa474d920ae07640aa23a9f468109ee29b32.jar" />
+    </item>
+    <item
+        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-c750c3fc13d5b9dc5d1309210690e4866e11c3b6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Javier G\sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.0\support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\support-annotations-23.1.0-7592d593343baaf6fd2f6a803760d8438533f27c.jar" />
+    </item>
+    <item
         jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
@@ -9,32 +30,11 @@
         <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-a7b73665e40f64aa8bd98b68fcea79e62c378e9f.jar" />
     </item>
     <item
-        jar="C:\Users\Javier G\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-b58b2aef3e0223038f23b96f2172b3165f1a2053.jar" />
-    </item>
-    <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-590b097dcfdf35a30105e160cedc880ffc431aee.jar" />
-    </item>
-    <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-b7580cb7f620d8eb645888056e92d5b79920c295.jar" />
-    </item>
-    <item
-        jar="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-8c571efc61a26cf2283f735fcbbc9405217b0734.jar" />
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="C:\Users\Javier G\GIT_ROOT\tams-android\tams\app\build\intermediates\pre-dexed\debug\classes-f346e7f8e90ac33a1fa996d854b6670ad9657ae9.jar" />
     </item>
 
 </items>

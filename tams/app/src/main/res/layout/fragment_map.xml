@@ -16,9 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        fab:fab_addButtonColorNormal="@color/red"
-        fab:fab_addButtonColorPressed="@color/red_pressed"
-        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_addButtonColorNormal="@color/primary"
+        fab:fab_addButtonColorPressed="@color/primary_dark"
+        fab:fab_addButtonPlusIconColor="@color/accent"
         fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_labelsPosition="left">
 

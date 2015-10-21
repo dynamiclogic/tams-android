@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dynamiclogic.tams.activity.fragment.PanelFragment"
-    android:background="@color/white">
+    android:background="@color/primary">
 
     <TextView
         android:id="@+id/upperView"
@@ -17,11 +17,11 @@
         android:gravity="center" />
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/list"
         android:layout_below="@id/upperView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/pink" />
+        android:background="@color/accent" />
 
 
 </RelativeLayout>
