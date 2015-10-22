@@ -28,7 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Javier G on 8/17/2015.
  */
-public class AddAssetFragment extends Fragment{
+public class AddAssetFragment extends Fragment {
+
     private static final String TAG = AddAssetFragment.class.getSimpleName();
     private static final int CAMERA_REQUEST = 1888;
     private TextView mLatitude, mLongitude;
@@ -43,12 +44,9 @@ public class AddAssetFragment extends Fragment{
     private String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
 
-
     /*Trying to save asset on state change
     public static final String ASSET =
             "com.dynamiclogic.tams.activity.asset";*/
-
-
 
     @Nullable
     @Override
@@ -56,8 +54,6 @@ public class AddAssetFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
 
         db = Database.getInstance();
-
-
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
         startIntentService();
@@ -66,9 +62,6 @@ public class AddAssetFragment extends Fragment{
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             mAsset = new Asset(latLng);
         }
-
-
-
 
         mLatitude = (TextView)v.findViewById(R.id.latitudeTextView);
         mLatitude.setText(String.valueOf(mAsset.getLatLng().latitude));
@@ -85,17 +78,11 @@ public class AddAssetFragment extends Fragment{
             }
         });
 
-
-
-
-
         mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
         mNameEditField.setText(mAsset.getName());
         mNameEditField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -104,20 +91,16 @@ public class AddAssetFragment extends Fragment{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) { }
 
-            }
         });
 
         mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
-
         mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
         mDescriptionEditField.setHintTextColor(getResources().getColor(R.color.material_blue_grey_800));
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -126,15 +109,13 @@ public class AddAssetFragment extends Fragment{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) { }
         });
-
 
         this.mImageView = (ImageView)v.findViewById(R.id.imageView);
 
         Button pictureButton = (Button)v.findViewById(R.id.pictureButton);
+        pictureButton.setEnabled(false);
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +123,6 @@ public class AddAssetFragment extends Fragment{
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
-
 
         return v;
     }

@@ -361,10 +361,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     // from the location request
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged");
-        Log.d(TAG, "ONLOCATIONCHANGED---mCurrentLocation: " + mCurrentLocation);
+    //    Log.d(TAG, "onLocationChanged");
+    //    Log.d(TAG, "ONLOCATIONCHANGED---mCurrentLocation: " + mCurrentLocation);
         if (location == null){
-
             Log.d(TAG, "location is null for some reason");
         }
         mCurrentLocation = location;
