@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">TAMS</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="asset_type_prompt">Chose the asset type</string>
+
+    <string-array name="asset_type_array">
+        <item>Stop Sign</item>
+        <item>Tree</item>
+        <item>Traffic Light</item>
+        <item>Road</item>
+    </string-array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Latitude and Logitude Coordinates Used</string>
+    <string name="no_address_found">No Address was Found</string>
+    <string name="address_found">Address Found</string>
+</resources>

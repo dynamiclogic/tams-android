@@ -1,0 +1,27 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dynamiclogic.tams.activity.fragment.PanelFragment"
+    android:background="@color/primary">
+
+    <TextView
+        android:id="@+id/upperView"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="LIST VIEW"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="24dp"
+        android:gravity="center" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_below="@id/upperView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/accent" />
+
+
+</RelativeLayout>
