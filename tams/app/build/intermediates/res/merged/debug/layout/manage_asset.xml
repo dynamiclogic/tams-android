@@ -4,4 +4,4 @@
           android:name="com.dynamiclogic.tams.activity.ManageAssetFragment"
           tools:layout="@layout/fragment_manage_asset"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"/><!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/layout/manage_asset.xml -->
+          android:layout_height="match_parent"/><!-- From: file:/C:/Users/Andreas/Documents/TAMSandroid/repo2/tams-android/tams/app/src/main/res/layout/manage_asset.xml -->
