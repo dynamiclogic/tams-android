@@ -22,6 +22,7 @@ import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
+import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -57,6 +59,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager mLocationManager;
     private Database database;
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
+    private List<TAMSLocationListener> mLocationListeners = new ArrayList<>();
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
 //    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 0;
@@ -130,12 +133,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Log.d(TAG, "onClick for FAB");
 
-
                 addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, mCurrentLocation);
 
                 startActivity(addAssetIntent);
                 drawMarkers();
-
             }
         });
 
@@ -321,19 +322,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG, "Exception: " + e);
         }
 
-
-        // add marker on long press
         if (map != null) {
             final GoogleMap finalMap = map;
 
             map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 public void onMapLongClick(LatLng point) {
-                    MarkerOptions newMarker = new MarkerOptions().position(point);
-                    finalMap.addMarker(newMarker);
-                    mListLatLngs.add(newMarker.getPosition());
 
-                    Asset newAsset = new Asset(newMarker.getPosition());
-                    database.addNewAsset(newAsset);
+                    Intent addAssetIntent = new Intent(MainActivity.this, AddAsset.class);
+
+                    Location loc = new Location("new_location");
+                    loc.setLatitude(point.latitude);
+                    loc.setLongitude(point.longitude);
+
+                    addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, loc);
+                    startActivity(addAssetIntent);
+
                 }
             });
 
@@ -366,11 +369,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (location == null){
             Log.d(TAG, "location is null for some reason");
         }
+
+        // Only pan to the current location the very first time
+        if (mCurrentLatLng == null) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory
+                    .newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 19);
+            map.animateCamera(cameraUpdate);
+        }
+
         mCurrentLocation = location;
         mCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCurrentLatLng, 19);
-        map.animateCamera(cameraUpdate);
+        // notify location listeners
+        for (TAMSLocationListener listener : mLocationListeners) {
+            listener.onLocationChanged(mCurrentLocation);
+        }
     }
 
     @Override
@@ -463,4 +476,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
+
+    public void addTAMSLocationListener(TAMSLocationListener listener) {
+        mLocationListeners.add(listener);
+    }
+
+    public void removeTAMSLocationListener(TAMSLocationListener listener) {
+        mLocationListeners.remove(listener);
+    }
+
 }

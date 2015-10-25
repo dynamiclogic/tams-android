@@ -99,7 +99,7 @@ public final class SharedPrefsDatabase implements Database {
         return latLngs;
     }
 
-    private boolean writeMapOfAssetsToPrefs(Map<String,Asset> assets) {
+    private synchronized boolean writeMapOfAssetsToPrefs(Map<String,Asset> assets) {
         GsonBuilder gsonb = new GsonBuilder();
         Gson gson = gsonb.create();
         String data = gson.toJson(assets);
@@ -118,7 +118,7 @@ public final class SharedPrefsDatabase implements Database {
         return null;
     }
 
-    public void updateAsset(Asset asset){
+    public synchronized void updateAsset(Asset asset){
         Log.d(TAG, "onUpdateAsset");
 
         Map<String,Asset> map = getMapOfAssets();
