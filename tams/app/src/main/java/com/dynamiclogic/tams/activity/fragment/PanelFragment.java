@@ -95,7 +95,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
     public void onPause() {
         super.onPause();
         database.removeAssetListener(this);
-        ((MainActivity)getActivity()).removeTAMSLocationListener((TAMSLocationListener) mListAdapter);
     }
 
     @Override
@@ -163,11 +162,39 @@ public class PanelFragment extends Fragment implements AssetsListener {
         public View getView(int position, View convertView, ViewGroup parent) {
             Log.d(TAG, "getView called with position " + position);
 
-            Asset asset = mAssetList.get(position);
-
+            // TODO NEED TO CONSOLIDATE DUPLICATED CODE
+            // had issues with onclick events when moving code out
             if (convertView == null) {
                 LayoutInflater theInflater = LayoutInflater.from(mContext);
+
                 convertView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
+
+                Log.d(TAG, "convertview == null for position " + position +
+                                " so lets look at at asset " + mAssetList.get(position).getDescription());
+                Asset asset = mAssetList.get(position);
+
+                TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
+                TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
+                TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
+
+                textViewTitle.setText(asset.getName());
+                textViewBody.setText(asset.getDescription());
+                //textViewBody.setText(asset.getLatLng().toString());
+
+                // set distance away
+                Location loc = new Location("existing_location");
+                loc.setLatitude(asset.getLatLng().latitude);
+                loc.setLongitude(asset.getLatLng().longitude);
+
+                final float metersPerMile = 1609.34f;
+                if (mLastLocation != null) {
+                    float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
+                    textViewDistance.setText(String.format("%.2f miles away", milesAway));
+                    Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
+                } else {
+                    Log.d(TAG, "mLastLocation is still null");
+                    textViewDistance.setText("? miles away");
+                }
 
                 convertView.setTag(asset);
 
@@ -216,31 +243,35 @@ public class PanelFragment extends Fragment implements AssetsListener {
                     }
                 });
 
+                return convertView;
             } else {
                 Log.d(TAG, "re-using the same view");
-            }
+                TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
+                TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
+                TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
-            TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
-            TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
-            TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
+                Asset asset = mAssetList.get(position);
 
-            textViewTitle.setText(asset.getName());
-            textViewBody.setText(asset.getDescription());
+                textViewTitle.setText(asset.getName());
+                textViewBody.setText(asset.getDescription());
 
-            // set distance away
-            Location loc = new Location("existing_location");
-            loc.setLatitude(asset.getLatLng().latitude);
-            loc.setLongitude(asset.getLatLng().longitude);
+                // set distance away
+                Location loc = new Location("existing_location");
+                loc.setLatitude(asset.getLatLng().latitude);
+                loc.setLongitude(asset.getLatLng().longitude);
 
-            if (mLastLocation != null) {
                 final float metersPerMile = 1609.34f;
-                float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
-                textViewDistance.setText(String.format("%.2f miles away", milesAway));
-            } else {
-                textViewDistance.setText("? miles away");
-            }
+                if (mLastLocation != null) {
+                    float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
+                    textViewDistance.setText(String.format("%.2f miles away", milesAway));
+                    Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
+                } else {
+                    Log.d(TAG, "mLastLocation is still null");
+                    textViewDistance.setText("? miles away");
+                }
 
-            return convertView;
+                return convertView;
+            }
         }
 
         @Override
@@ -255,6 +286,12 @@ public class PanelFragment extends Fragment implements AssetsListener {
             sortAssets();
             notifyDataSetChanged();
 
+////            for (int i=0; i < getCount(); i++) {
+////                Log.d(TAG, "id = " + ((Asset) getItem(i)).getDescription());
+////                getView(i, null, null);
+////            }
+//
+//            notifyDataSetChanged();
         }
 
         public void sortAssets() {
