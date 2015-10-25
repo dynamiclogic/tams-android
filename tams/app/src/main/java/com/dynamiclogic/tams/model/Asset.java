@@ -12,7 +12,8 @@ public class Asset{
 
     //Not sure if we need mId as a string or a UUID???
     private UUID mId;
-    private String mName, mDescription;
+    private String mName, mDescription, mCreatedAt, mUpdatedAt;
+    private String mDeleted, mNeedsSync, mIsNew; // TODO why aren't these booleans (Nati)
     private Bitmap mPicture;
     private LatLng mLatLng;
 
@@ -26,8 +27,20 @@ public class Asset{
         return mLatLng;
     }
 
+    public Double getLatitude() { return mLatLng.latitude;}
+
+    public Double getLongitude() { return mLatLng.longitude;}
+
     public UUID getId() {
         return mId;
+    }
+
+    public void setId(UUID id) {
+        mId = id;
+    }
+
+    public void setId(String id) {
+        mId = UUID.fromString(id);
     }
 
     public String getName() {
@@ -46,6 +59,26 @@ public class Asset{
         mDescription = description;
     }
 
+    public String getCreatedAt() { return mCreatedAt; }
+
+    public void setCreatedAt(String createdAt) { this.mCreatedAt = createdAt;}
+
+    public String getUpdatedAt() { return mUpdatedAt; }
+
+    public void setUpdatedAt(String updatedAt) { this.mUpdatedAt = updatedAt;}
+
+    public String getIsNew() { return mIsNew; }
+
+    public void setIsNew(String isNew) { this.mIsNew = isNew; }
+
+    public String getDeleted() { return mDeleted; }
+
+    public void setDeleted(String deleted) { this.mDeleted = deleted; }
+
+    public String getNeedsSync() { return mNeedsSync; }
+
+    public void setNeedsSync(String needsSync) { this.mNeedsSync = needsSync; }
+
     public Bitmap getPicture() {
         return mPicture;
     }
@@ -53,8 +86,6 @@ public class Asset{
     public void setPicture(Bitmap picture) {
         mPicture = picture;
     }
-
-
 
     @Override
     public boolean equals(Object o) {

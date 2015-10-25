@@ -91,7 +91,7 @@ public final class SharedPrefsDatabase implements Database {
     public List<LatLng> getListOfLatLngs() {
         List<LatLng> latLngs = new ArrayList<LatLng>();
 
-        List<Asset> assets = new ArrayList<Asset>(getMapOfAssets().values());
+        List<Asset> assets = getListOfAssets();
         for (Asset a : assets) {
             latLngs.add(a.getLatLng());
         }
