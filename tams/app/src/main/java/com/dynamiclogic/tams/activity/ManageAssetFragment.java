@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 
 import java.util.List;
@@ -51,9 +52,9 @@ public class ManageAssetFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_asset, container, false);
 
-        db = Database.getInstance();
+        db = SharedPrefsDatabase.getInstance();
 
-        list = db.getListOfAssets();
+    //    list = db.getListOfAssets();
         Intent intent = getActivity().getIntent();
         String value = intent.getStringExtra("asset_pass");
         UUID mUID = UUID.fromString(value);

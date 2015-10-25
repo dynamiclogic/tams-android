@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -53,7 +54,7 @@ public class AddAssetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
 
-        db = Database.getInstance();
+        db = SharedPrefsDatabase.getInstance();
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
         startIntentService();

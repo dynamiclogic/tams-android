@@ -1,9 +1,11 @@
 package com.dynamiclogic.tams.model;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 public class Asset{
@@ -64,5 +66,27 @@ public class Asset{
     @Override
     public int hashCode() {
         return (int)(mLatLng.latitude * mLatLng.longitude * 1000000);
+    }
+
+    // Going to be used to determine the sorting for assets in the ListView
+    public static class AssetDistanceComparator implements Comparator<Asset> {
+        Location currentLocation;
+        public AssetDistanceComparator(Location location) {
+            currentLocation = location;
+        }
+        public int compare(Asset a1, Asset a2) {
+            if (currentLocation == null) { return 0; }
+            Location a1Loc = new Location("a1");
+            a1Loc.setLatitude(a1.getLatLng().latitude);
+            a1Loc.setLongitude(a1.getLatLng().longitude);
+
+            Location a2Loc = new Location("a2");
+            a2Loc.setLatitude(a2.getLatLng().latitude);
+            a2Loc.setLongitude(a2.getLatLng().longitude);
+
+            float a1Dist = currentLocation.distanceTo(a1Loc);
+            float a2Dist = currentLocation.distanceTo(a2Loc);
+            return (int)(a1Dist - a2Dist);
+        }
     }
 }
