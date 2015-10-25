@@ -270,6 +270,53 @@ public class PanelFragment extends Fragment implements AssetsListener {
                     textViewDistance.setText("? miles away");
                 }
 
+                convertView.setTag(asset);
+
+                convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Asset asset = null;
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnLongClick: " + e);
+                            return false;
+                        }
+
+                        if (asset != null) {
+                            UUID uuid = asset.getId();
+                            database.removeAsset(uuid.toString());
+                            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
+                        }
+
+                        return true;
+                    }
+                });
+
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Asset asset = null;
+                        Intent intent = new Intent(getActivity(), ManageAsset.class);
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnClick: " + e);
+                            return;
+                        }
+
+                        if (asset != null) {
+                            UUID dis = asset.getId();
+                            Bundle bundle = new Bundle();
+                            // bundle.putSerializable("asset_pass",asset);
+                            intent.putExtra("asset_pass", dis.toString());
+                            //intent.putExtra("asset_pass",(Serializable)asset);
+                            // intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
                 return convertView;
             }
         }
