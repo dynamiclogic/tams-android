@@ -28,6 +28,7 @@ public final class SharedPrefsDatabase implements Database {
     private static SharedPrefsDatabase sDatabase = new SharedPrefsDatabase();
     private SharedPreferences prefs;
     private List<AssetsListener> assetListenerList = new ArrayList<>();
+    private static final String ASSETS_KEY = "asset_map";
 
     private SharedPrefsDatabase() {}
 
@@ -50,24 +51,17 @@ public final class SharedPrefsDatabase implements Database {
 
     public synchronized void addNewAsset(Asset asset) {
 
-        List<Asset> list = getListOfAssets();
-        list.add(asset);
-        writeListOfAssetsToPrefs(list);
-
         Map<String,Asset> map = getMapOfAssets();
         map.put(asset.getId().toString(), asset);
         writeMapOfAssetsToPrefs(map);
 
         for (AssetsListener listener : assetListenerList) {
-            listener.onAssetsUpdated(list);
+            listener.onAssetsUpdated(new ArrayList<Asset>(map.values()));
         }
     }
 
     public synchronized void removeAsset(String id) {
         Log.d(TAG, "removing asset " + id);
-//        List<Asset> list = getListOfAssets();
-//        list.remove(asset);
-//        writeListOfAssetsToPrefs(list);
 
         Map<String, Asset> map = getMapOfAssets();
         map.remove(id);
@@ -78,69 +72,31 @@ public final class SharedPrefsDatabase implements Database {
         }
     }
 
-//    public List<Asset> getListOfAssets() {
-//        String data = prefs.getString("asset_list", null);
-//
-//        GsonBuilder gsonb = new GsonBuilder();
-//        Gson gson = gsonb.create();
-//        Log.d(TAG, "inflating list");
-//        List<Asset> list = gson.fromJson(data, new TypeToken<ArrayList<Asset>>(){}.getType());
-//        Log.d(TAG, "list inflated");
-//
-//        if (list == null) {
-//            return new ArrayList<Asset>();
-//        }
-//
-//        return list;
-//    }
-
     public List<Asset> getListOfAssets() {
         return new ArrayList<Asset>(getMapOfAssets().values());
     }
 
-    public Map<String,Asset> getMapOfAssets() {
-        String data = prefs.getString("asset_map", null);
+    private Map<String,Asset> getMapOfAssets() {
+        String data = prefs.getString(ASSETS_KEY, null);
 
         GsonBuilder gsonb = new GsonBuilder();
         Gson gson = gsonb.create();
-        Log.d(TAG, "inflating map");
         Map<String,Asset> map = gson.fromJson(data, new TypeToken<HashMap<String,Asset>>(){}.getType());
-        Log.d(TAG, "map inflated");
 
-        if (map == null) {
-            return new HashMap<>();
-        }
+        if (map == null) { return new HashMap<>(); }
 
         return map;
     }
 
     public List<LatLng> getListOfLatLngs() {
-        String data = prefs.getString("asset_list", null);
-
-        GsonBuilder gsonb = new GsonBuilder();
-        Gson gson = gsonb.create();
-        List<Asset> list = gson.fromJson(data, new TypeToken<ArrayList<Asset>>(){}.getType());
-
-        if (list == null) {
-            return new ArrayList<LatLng>();
-        }
-
         List<LatLng> latLngs = new ArrayList<LatLng>();
 
-        for (Asset a : list) {
+        List<Asset> assets = new ArrayList<Asset>(getMapOfAssets().values());
+        for (Asset a : assets) {
             latLngs.add(a.getLatLng());
         }
 
         return latLngs;
-    }
-
-    private boolean writeListOfAssetsToPrefs(List<Asset> assets) {
-        GsonBuilder gsonb = new GsonBuilder();
-        Gson gson = gsonb.create();
-        String data = gson.toJson(assets);
-        SharedPreferences.Editor e = prefs.edit();
-        e.putString("asset_list", data);
-        return e.commit();
     }
 
     private boolean writeMapOfAssetsToPrefs(Map<String,Asset> assets) {
@@ -148,7 +104,7 @@ public final class SharedPrefsDatabase implements Database {
         Gson gson = gsonb.create();
         String data = gson.toJson(assets);
         SharedPreferences.Editor e = prefs.edit();
-        e.putString("asset_map", data);
+        e.putString(ASSETS_KEY, data);
         return e.commit();
     }
 
@@ -164,18 +120,17 @@ public final class SharedPrefsDatabase implements Database {
 
     public void updateAsset(Asset asset){
         Log.d(TAG, "onUpdateAsset");
-        List<Asset> list = getListOfAssets();
 
-        for(Asset a : list){
-            if(a.getId().equals(asset.getId())){
-                a.setName(asset.getName());
-                a.setDescription(asset.getDescription());
+        Map<String,Asset> map = getMapOfAssets();
 
-            }
-        }
-        writeListOfAssetsToPrefs(list);
+        Asset a = map.get(asset.getId().toString());
+        a.setName(asset.getName());
+        a.setDescription(asset.getDescription());
+
+        writeMapOfAssetsToPrefs(map);
+
         for (AssetsListener listener : assetListenerList) {
-            listener.onAssetsUpdated(list);
+            listener.onAssetsUpdated(new ArrayList<Asset>(map.values()));
         }
 
     }

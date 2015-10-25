@@ -256,7 +256,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onAssetsUpdated(List<Asset> assets) {
-        Log.d(TAG, "onAssetsUpdated");
         mListLatLngs.clear();
         mListLatLngs.addAll(database.getListOfLatLngs());
         refreshMarkers();
