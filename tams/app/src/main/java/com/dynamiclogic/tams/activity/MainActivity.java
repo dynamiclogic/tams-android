@@ -19,6 +19,7 @@ import android.view.View;
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.fragment.PanelFragment.OnPanelFragmentInteractionListener;
 import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
@@ -72,7 +73,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d(TAG, "ONCREATE---mCurrentLocation: " + mCurrentLocation);
         setContentView(R.layout.activity_main);
 
-        database = Database.getInstance();
+        database = SharedPrefsDatabase.getInstance();
 
         ((SlidingUpPanelLayout) getWindow().getDecorView().findViewById(R.id.sliding_layout))
                 .setPanelSlideListener(this);

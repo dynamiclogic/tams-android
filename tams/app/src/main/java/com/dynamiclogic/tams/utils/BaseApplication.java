@@ -2,7 +2,7 @@ package com.dynamiclogic.tams.utils;
 
 import android.app.Application;
 
-import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 
 public class BaseApplication extends Application {
 
@@ -13,6 +13,6 @@ public class BaseApplication extends Application {
         super.onCreate();
 
         // Initialize the Database
-        Database.getInstance().initialize(getApplicationContext());
+        SharedPrefsDatabase.getInstance().initialize(getApplicationContext());
     }
 }

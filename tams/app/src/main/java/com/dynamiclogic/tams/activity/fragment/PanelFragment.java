@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.ManageAsset;
 import com.dynamiclogic.tams.database.Database;
+import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 
@@ -29,7 +30,7 @@ import java.util.UUID;
 
 public class PanelFragment extends Fragment implements AssetsListener {
 
-    private static final String TAG = MyAdapter.class.getSimpleName();
+    private static final String TAG = PanelFragment.class.getSimpleName();
 
     private OnPanelFragmentInteractionListener mListener;
 
@@ -45,7 +46,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        database = Database.getInstance();
+        database = SharedPrefsDatabase.getInstance();
 
         mListAssets.addAll(database.getListOfAssets());
     }
@@ -72,8 +73,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
     public void onResume() {
         super.onResume();
 
-        mListAdapter = new MyAdapter(getActivity(), mListAssets) {
-        };
+        mListAdapter = new MyAdapter(getActivity(), mListAssets);
         mListView = (ListView) getView().findViewById(R.id.list);
         mListView.setAdapter(mListAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,7 +81,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, String.format("at position (%d+1) : %s ", position,
                         String.valueOf(mListAdapter.getItem(position))));
-
             }
         });
 
@@ -183,12 +182,33 @@ public class PanelFragment extends Fragment implements AssetsListener {
                     @Override
                     public boolean onLongClick(View v) {
                         Asset asset = null;
-                        Intent intent = new Intent(getActivity(), ManageAsset.class);
                         try {
                             asset = (Asset) v.getTag();
                         } catch (ClassCastException e) {
                             Log.e(TAG, "error on OnLongClick: " + e);
                             return false;
+                        }
+
+                        if (asset != null) {
+                            UUID uuid = asset.getId();
+                            database.removeAsset(uuid.toString());
+                            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
+                        }
+
+                        return true;
+                    }
+                });
+
+                theView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Asset asset = null;
+                        Intent intent = new Intent(getActivity(), ManageAsset.class);
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnClick: " + e);
+                            return;
                         }
 
                         if (asset != null) {
@@ -199,12 +219,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                             //intent.putExtra("asset_pass",(Serializable)asset);
                             // intent.putExtras(bundle);
                             startActivity(intent);
-
-                            database.removeAsset(asset);
-                            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
-
-                        return true;
                     }
                 });
 
