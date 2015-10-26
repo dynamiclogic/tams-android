@@ -20,9 +20,8 @@ public class Asset{
 
 
     public Asset(LatLng latLng){
-        // Looks like the SQL DB wants a number for an id?
+        // TODO Looks like the SQL DB wants a number for an id?
         mId = new Random().nextInt(500000) + "";
-        // mId = UUID.randomUUID().toString();
         mLatLng = latLng;
     }
 

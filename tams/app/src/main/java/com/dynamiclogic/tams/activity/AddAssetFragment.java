@@ -61,6 +61,9 @@ public class AddAssetFragment extends Fragment {
         if(mLocation != null) {
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             mAsset = new Asset(latLng);
+            String time = System.currentTimeMillis()/1000L + "";
+            mAsset.setCreatedAt(time);
+            mAsset.setUpdatedAt(time);
         }
 
         mLatitude = (TextView)v.findViewById(R.id.latitudeTextView);

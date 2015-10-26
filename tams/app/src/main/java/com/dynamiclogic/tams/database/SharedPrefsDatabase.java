@@ -105,7 +105,7 @@ public final class SharedPrefsDatabase extends Database {
         return e.commit();
     }
 
-    public Asset getAssetFromUUID(UUID id){
+    public Asset getAssetFromID(String id){
 
         for(Asset a : this.getListOfAssets()){
             if(a.getId().equals(id)){

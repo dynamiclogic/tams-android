@@ -73,41 +73,41 @@ public class DBController extends SQLiteOpenHelper {
         if (asset.getCreatedAt() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_CREATED_AT, asset.getCreatedAt());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_CREATED_AT, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_CREATED_AT, "0");
         }
         if (asset.getUpdatedAt() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_UPDATED_AT, asset.getUpdatedAt());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_UPDATED_AT, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_UPDATED_AT, "0");
         }
 
         if (asset.getNeedsSync() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, asset.getNeedsSync());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, "1");
         }
 
         if (asset.getDeleted() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_DELETED, asset.getDeleted());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_DELETED, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_DELETED, "0");
         }
         if (asset.getIsNew() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, asset.getIsNew());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, "1");
         }
 
         if (asset.getName() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_NAME, asset.getName());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_NAME, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_NAME, "Unnamed");
         }
 
         if (asset.getDescription() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_DESCRIPTION, asset.getDescription());
         } else {
-            assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_DESCRIPTION, "yo");
+            assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_DESCRIPTION, "");
         }
 
         locationValues.put(SQLVariables._LOCATIONS_COLUMN_ASSET_ID, asset.getId());

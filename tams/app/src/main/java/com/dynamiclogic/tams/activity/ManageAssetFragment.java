@@ -22,7 +22,6 @@ import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  *Andreas
@@ -53,8 +52,7 @@ public class ManageAssetFragment extends Fragment{
     //    list = db.getListOfAssets();
         Intent intent = getActivity().getIntent();
         String value = intent.getStringExtra("asset_pass");
-        UUID mUID = UUID.fromString(value);
-        mAsset = db.getAssetFromUUID(mUID);
+        mAsset = db.getAssetFromID(value);
         //Intent intent = getIntent();
         //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
 

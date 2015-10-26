@@ -27,7 +27,7 @@ public abstract class Database {
         mContext = context;
     }
 
-    public abstract Asset getAssetFromUUID(UUID id);
+    public abstract Asset getAssetFromID(String id);
     public abstract void updateAsset(Asset asset);
 
     public abstract List<Asset> getListOfAssets();

@@ -50,7 +50,7 @@ public class IvanDatabase extends Database {
     }
 
     @Override
-    public synchronized Asset getAssetFromUUID(UUID id) {
+    public synchronized Asset getAssetFromID(String id) {
         return null;
     }
 
