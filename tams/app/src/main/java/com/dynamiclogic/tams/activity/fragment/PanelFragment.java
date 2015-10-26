@@ -21,7 +21,6 @@ import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.MainActivity;
 import com.dynamiclogic.tams.activity.ManageAsset;
 import com.dynamiclogic.tams.database.Database;
-import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
@@ -48,7 +47,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        database = SharedPrefsDatabase.getInstance();
+        database = Database.getInstance();
 
         mListAssets.addAll(database.getListOfAssets());
     }
@@ -146,8 +145,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
         @Override
         public Object getItem(int position) {
             if (position >= mListAssets.size()) {
-                Log.d(TAG, String.format("position = %d, array length = %d",
-                        position, mListAssets.size()));
                 return null;
             }
             return mListAssets.get(position);
@@ -160,7 +157,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d(TAG, "getView called with position " + position);
+//            Log.d(TAG, "getView called with position " + position);
 
             // TODO NEED TO CONSOLIDATE DUPLICATED CODE
             // had issues with onclick events when moving code out
@@ -169,8 +166,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
                 convertView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
 
-                Log.d(TAG, "convertview == null for position " + position +
-                                " so lets look at at asset " + mAssetList.get(position).getDescription());
                 Asset asset = mAssetList.get(position);
 
                 TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
@@ -190,7 +185,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 if (mLastLocation != null) {
                     float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
                     textViewDistance.setText(String.format("%.2f miles away", milesAway));
-                    Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
+        //            Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
                 } else {
                     Log.d(TAG, "mLastLocation is still null");
                     textViewDistance.setText("? miles away");
@@ -210,8 +205,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            UUID uuid = asset.getId();
-                            database.removeAsset(uuid.toString());
+                            String uuid = asset.getId();
+                            database.removeAsset(uuid);
                             Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
 
@@ -232,10 +227,10 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            UUID dis = asset.getId();
+                            String dis = asset.getId();
                             Bundle bundle = new Bundle();
                             // bundle.putSerializable("asset_pass",asset);
-                            intent.putExtra("asset_pass", dis.toString());
+                            intent.putExtra("asset_pass", dis);
                             //intent.putExtra("asset_pass",(Serializable)asset);
                             // intent.putExtras(bundle);
                             startActivity(intent);
@@ -245,7 +240,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
                 return convertView;
             } else {
-                Log.d(TAG, "re-using the same view");
                 TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
                 TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
@@ -264,9 +258,9 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 if (mLastLocation != null) {
                     float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
                     textViewDistance.setText(String.format("%.2f miles away", milesAway));
-                    Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
+            //        Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
                 } else {
-                    Log.d(TAG, "mLastLocation is still null");
+            //        Log.d(TAG, "mLastLocation is still null");
                     textViewDistance.setText("? miles away");
                 }
 
@@ -284,8 +278,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            UUID uuid = asset.getId();
-                            database.removeAsset(uuid.toString());
+                            String id = asset.getId();
+                            database.removeAsset(id);
                             Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
 
@@ -306,10 +300,10 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            UUID dis = asset.getId();
+                            String dis = asset.getId();
                             Bundle bundle = new Bundle();
                             // bundle.putSerializable("asset_pass",asset);
-                            intent.putExtra("asset_pass", dis.toString());
+                            intent.putExtra("asset_pass", dis);
                             //intent.putExtra("asset_pass",(Serializable)asset);
                             // intent.putExtras(bundle);
                             startActivity(intent);
@@ -323,22 +317,17 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
         @Override
         public synchronized void onLocationChanged(Location location) {
+
             // TODO want to get the locations in the ListView to update
             if (location == null) {
-                Log.e(TAG, "location in the panel TO NULL");
+                Log.e(TAG, "location in the panel set TO NULL");
                 return;
             }
-            Log.d(TAG, "location changed in panel");
+        //    Log.d(TAG, "location changed in panel");
             mLastLocation = location;
             sortAssets();
             notifyDataSetChanged();
 
-////            for (int i=0; i < getCount(); i++) {
-////                Log.d(TAG, "id = " + ((Asset) getItem(i)).getDescription());
-////                getView(i, null, null);
-////            }
-//
-//            notifyDataSetChanged();
         }
 
         public void sortAssets() {

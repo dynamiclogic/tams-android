@@ -14,60 +14,54 @@ import java.util.UUID;
 /**
  * Created by ntessema on 10/25/15.
  */
-public class IvanDatabase implements Database {
+public class IvanDatabase extends Database {
 
     private static final String TAG = IvanDatabase.class.getSimpleName();
-    private Context mContext;
     private DBController mDBController;
     private DBSync mDBSync;
-    private List<AssetsListener> assetListenerList = new ArrayList<>();
 
-    public IvanDatabase(Context context) {
-        mContext = context;
-        mDBController = new DBController(mContext);
-        mDBSync = new DBSync(mContext, mDBController);
+    protected IvanDatabase() {}
+
+    public void initialize(Context context) {
+        super.initialize(context);
+        mDBController = new DBController(context);
+        mDBSync = new DBSync(context, mDBController);
     }
 
     @Override
-    public void addNewAsset(Asset asset) {
+    public synchronized void addNewAsset(Asset asset) {
         mDBController.insertAsset(asset);
-
-//        for (AssetsListener listener : assetListenerList) {
-//            listener.onAssetsUpdated(); // TODO needs a list of the current assets
-//        }
+        notifyListeners();
+        mDBSync.sync();
     }
 
     @Override
-    public void updateAsset(Asset asset) {
+    public synchronized void updateAsset(Asset asset) {
         mDBController.updateAsset(asset);
-
-//        for (AssetsListener listener : assetListenerList) {
-//            listener.onAssetsUpdated(); // TODO needs a list of the current assets
-//        }
+        notifyListeners();
+        mDBSync.sync();
     }
 
     @Override
-    public void removeAsset(String id) {
-        Log.e(TAG, "removeAsset not implemented yet");
-    //    mDBController.deleteAsset();
-
-//        for (AssetsListener listener : assetListenerList) {
-//            listener.onAssetsUpdated(); // TODO needs a list of the current assets
-//        }
+    public synchronized void removeAsset(String id) {
+        mDBController.deleteAsset(id);
+        notifyListeners();
+        mDBSync.sync();
     }
 
     @Override
-    public Asset getAssetFromUUID(UUID id) {
+    public synchronized Asset getAssetFromUUID(UUID id) {
         return null;
     }
 
     @Override
-    public List<Asset> getListOfAssets() {
-        return new ArrayList<>();
+    public synchronized List<Asset> getListOfAssets() {
+        List<Asset> assets = mDBController.getListOfAssets();
+        return assets;
     }
 
     @Override
-    public List<LatLng> getListOfLatLngs() {
+    public synchronized List<LatLng> getListOfLatLngs() {
         List<LatLng> latLngs = new ArrayList<LatLng>();
 
         List<Asset> assets = new ArrayList<Asset>(getListOfAssets());
@@ -78,11 +72,4 @@ public class IvanDatabase implements Database {
         return latLngs;
     }
 
-    public boolean addAssetListener(AssetsListener listener) {
-        return assetListenerList.add(listener);
-    }
-
-    public boolean removeAssetListener(AssetsListener listener) {
-        return assetListenerList.remove(listener);
-    }
 }

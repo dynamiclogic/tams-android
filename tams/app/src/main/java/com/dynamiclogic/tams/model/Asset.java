@@ -6,12 +6,13 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Comparator;
+import java.util.Random;
 import java.util.UUID;
 
 public class Asset{
 
     //Not sure if we need mId as a string or a UUID???
-    private UUID mId;
+    private String mId;
     private String mName, mDescription, mCreatedAt, mUpdatedAt;
     private String mDeleted, mNeedsSync, mIsNew; // TODO why aren't these booleans (Nati)
     private Bitmap mPicture;
@@ -19,7 +20,9 @@ public class Asset{
 
 
     public Asset(LatLng latLng){
-        mId = UUID.randomUUID();
+        // Looks like the SQL DB wants a number for an id?
+        mId = new Random().nextInt(500000) + "";
+        // mId = UUID.randomUUID().toString();
         mLatLng = latLng;
     }
 
@@ -31,16 +34,12 @@ public class Asset{
 
     public Double getLongitude() { return mLatLng.longitude;}
 
-    public UUID getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(UUID id) {
-        mId = id;
-    }
-
     public void setId(String id) {
-        mId = UUID.fromString(id);
+        mId = id;
     }
 
     public String getName() {
