@@ -190,7 +190,7 @@ public class DBController extends SQLiteOpenHelper {
      * Purge Asset from SQLlite
      * @param assetId
      *
-     * TODO: delte the location of the asset
+     * TODO: delete the location of the asset or set it as CASCADE
      */
     protected void purgeAsset(String assetId) {
         if(hasAsset(assetId)) {

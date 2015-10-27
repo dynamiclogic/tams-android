@@ -21,7 +21,8 @@ public class Asset{
 
     public Asset(LatLng latLng){
         // TODO Looks like the SQL DB wants a number for an id?
-        mId = new Random().nextInt(500000) + "";
+        // Ivan: Assigned the current unix time as id
+        mId = getCurrentUnixTime();
         mLatLng = latLng;
     }
 
@@ -90,6 +91,15 @@ public class Asset{
         return this.mLatLng.latitude == ((Asset)o).mLatLng.latitude
                 && this.mLatLng.longitude == ((Asset)o).mLatLng.longitude
                 && this.mId == ((Asset)o).mId;
+    }
+
+    /**
+     * Gets the current UNIX time and return it
+     * @return currentTime
+     */
+    public String getCurrentUnixTime() {
+        Long currentTime = System.currentTimeMillis() / 1000L;
+        return currentTime.toString();
     }
 
     @Override
