@@ -205,7 +205,7 @@ public class DBController extends SQLiteOpenHelper {
     public ArrayList<HashMap<String, String>> getAllAssets() {
         ArrayList<HashMap<String, String>> assetsList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + SQLVariables._ASSETS_TABLE + " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " =0";
-        SQLiteDatabase database = this.getWritableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -228,7 +228,7 @@ public class DBController extends SQLiteOpenHelper {
                 " FROM " + SQLVariables._ASSETS_TABLE +
                 " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
                 " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " = '0'";
-        SQLiteDatabase database = this.getWritableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         ArrayList<Asset> assetList = new ArrayList<>();
@@ -290,6 +290,8 @@ public class DBController extends SQLiteOpenHelper {
         return assetList;
     }
 
+
+
     /**
      * Compose JSON out of SQLite records
      * @return
@@ -314,7 +316,7 @@ public class DBController extends SQLiteOpenHelper {
                     " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
                     " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " = '0'";
         }
-        SQLiteDatabase database = this.getWritableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -366,7 +368,7 @@ public class DBController extends SQLiteOpenHelper {
     protected int dbSyncCount(){
         int count = 0;
         String selectQuery = "SELECT * FROM " + SQLVariables._ASSETS_TABLE + " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1'";
-        SQLiteDatabase database = this.getWritableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         count = cursor.getCount();
         database.close();
@@ -388,7 +390,7 @@ public class DBController extends SQLiteOpenHelper {
     }
 
     protected boolean isAssetDeleted(String id) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String selectString = "SELECT * FROM " + SQLVariables._ASSETS_TABLE + " WHERE " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " =? AND "+ SQLVariables._ASSETS_COLUMN_DELETED + "=1";
 
         // Add the String you are searching by here.
@@ -406,7 +408,7 @@ public class DBController extends SQLiteOpenHelper {
     }
 
     protected boolean hasAsset(String id) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String selectString = "SELECT * FROM " + SQLVariables._ASSETS_TABLE + " WHERE " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " =?";
 
         // Add the String you are searching by here.
@@ -424,7 +426,7 @@ public class DBController extends SQLiteOpenHelper {
     }
 
     protected int getAssetUpdatedTimestamp(String id) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String selectString = "SELECT " + SQLVariables._ASSETS_COLUMN_UPDATED_AT + " FROM " + SQLVariables._ASSETS_TABLE + " WHERE " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " =?";
 
         // Add the String you are searching by here.
