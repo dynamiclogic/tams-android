@@ -75,6 +75,7 @@ public class DBController extends SQLiteOpenHelper {
         } else {
             assetValues.put(SQLVariables._ASSETS_COLUMN_CREATED_AT, "0");
         }
+
         if (asset.getUpdatedAt() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_UPDATED_AT, asset.getUpdatedAt());
         } else {
@@ -92,6 +93,7 @@ public class DBController extends SQLiteOpenHelper {
         } else {
             assetValues.put(SQLVariables._ASSETS_COLUMN_DELETED, "0");
         }
+
         if (asset.getIsNew() != null) {
             assetValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, asset.getIsNew());
         } else {
@@ -205,7 +207,7 @@ public class DBController extends SQLiteOpenHelper {
     public ArrayList<HashMap<String, String>> getAllAssets() {
         ArrayList<HashMap<String, String>> assetsList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + SQLVariables._ASSETS_TABLE + " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " =0";
-        SQLiteDatabase database = this.getWritableDatabase();
+        SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -220,6 +222,77 @@ public class DBController extends SQLiteOpenHelper {
         return assetsList;
     }
 
+    public Asset getAssetFromId(String id) {
+        String selectQuery =
+                "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
+                    SQLVariables._LOCATIONS_TABLE + "." + SQLVariables._LOCATIONS_COLUMN_LONGITUDE + ", " +
+                    SQLVariables._LOCATIONS_TABLE + "." + SQLVariables._LOCATIONS_COLUMN_LATITUDE +
+                " FROM " + SQLVariables._ASSETS_TABLE +
+                " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."
+                    + SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."
+                    + SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                " WHERE " + SQLVariables._ASSETS_TABLE + "." + SQLVariables._ASSETS_COLUMN_ASSET_ID + " = " + id;
+
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        Asset asset = null;
+
+        if (cursor.moveToFirst()) {
+        //    do {
+                HashMap<String, String> map = new HashMap<>();
+                for(int i=0; i<cursor.getColumnCount();i++) {
+                    map.put(cursor.getColumnName(i), cursor.getString(i));
+                }
+
+                double lat = Double.valueOf(map.get(SQLVariables._LOCATIONS_COLUMN_LATITUDE));
+                double lng = Double.valueOf(map.get(SQLVariables._LOCATIONS_COLUMN_LONGITUDE));
+                asset = new Asset(new LatLng(lat, lng));
+
+                for (String key : map.keySet()) {
+                    String value = map.get(key);
+                    if (value == null) { value = ""; }
+                    switch (key) {
+                        case SQLVariables._ASSETS_COLUMN_ISNEW:
+                            asset.setIsNew(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_UPDATED_AT:
+                            asset.setUpdatedAt(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_NEEDSSYNC:
+                            asset.setNeedsSync(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_ASSET_DESCRIPTION:
+                            asset.setDescription(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_ASSET_ID:
+                            asset.setId(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_ASSET_NAME:
+                            asset.setName(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_DELETED:
+                            asset.setDeleted(value);
+                            break;
+                        case SQLVariables._ASSETS_COLUMN_CREATED_AT:
+                            asset.setCreatedAt(value);
+                            break;
+                        case SQLVariables._LOCATIONS_COLUMN_LATITUDE:
+                        case SQLVariables._LOCATIONS_COLUMN_LONGITUDE:
+                            break;
+                        default:
+                            Log.w("warning", "Unrecognized attribute " + key);
+                            //throw new Exception("Unrecognized attribute " + key);
+                    }
+                }
+
+
+    //        } while (cursor.moveToNext());
+        }
+        return asset;
+    }
+
+
     public ArrayList<Asset> getListOfAssets()/* throws Exception */{
         // DB query for all assets (with locations)
         String selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
@@ -228,7 +301,7 @@ public class DBController extends SQLiteOpenHelper {
                 " FROM " + SQLVariables._ASSETS_TABLE +
                 " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
                 " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " = '0'";
-        SQLiteDatabase database = this.getWritableDatabase();
+        SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         ArrayList<Asset> assetList = new ArrayList<>();

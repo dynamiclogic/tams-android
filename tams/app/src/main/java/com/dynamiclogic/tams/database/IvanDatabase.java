@@ -51,7 +51,7 @@ public class IvanDatabase extends Database {
 
     @Override
     public synchronized Asset getAssetFromID(String id) {
-        return null;
+        return mDBController.getAssetFromId(id);
     }
 
     @Override
