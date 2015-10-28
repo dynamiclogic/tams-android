@@ -81,7 +81,7 @@ public class SQLVariables {
             SQLVariables._MEDIA_TABLE + " ( " +
             SQLVariables._MEDIA_COLUMN_MEDIA_ID + " INTEGER PRIMARY KEY, " +
             SQLVariables._MEDIA_COLUMN_ASSET_ID + " INTEGER, " +
-            SQLVariables._MEDIA_COLUMN_IMAGES + " VARCHAR, " +
+            SQLVariables._MEDIA_COLUMN_IMAGES + " BLOB, " +
             SQLVariables._MEDIA_COLUMN_VOICE_MEMO + " VARCHAR, " +
             "FOREIGN KEY ("+ _MEDIA_COLUMN_ASSET_ID +") REFERENCES "+_ASSETS_TABLE+"("+ _ASSETS_COLUMN_ASSET_ID +")" +
             ");";

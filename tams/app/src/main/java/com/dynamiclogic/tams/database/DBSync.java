@@ -176,6 +176,9 @@ public class DBSync extends Observable {
                             mAsset.setIsNew(obj.get(SQLVariables._ASSETS_COLUMN_ISNEW).toString());
                             mAsset.setDescription(obj.get(SQLVariables._ASSETS_COLUMN_ASSET_DESCRIPTION).toString());
 
+                            if(obj.get(SQLVariables._MEDIA_COLUMN_IMAGES).toString() != "")
+                                mAsset.setPictureBase64(obj.get(SQLVariables._MEDIA_COLUMN_IMAGES).toString());
+
                             /**
                              * Server returns assets
                              * if asset is not present locally create it
