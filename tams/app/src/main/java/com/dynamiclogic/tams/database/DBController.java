@@ -68,6 +68,7 @@ public class DBController extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues assetValues = new ContentValues();
         ContentValues locationValues = new ContentValues();
+        ContentValues mediaValues = new ContentValues();
 
         assetValues.put(SQLVariables._ASSETS_COLUMN_ASSET_ID, asset.getId());
         if (asset.getCreatedAt() != null) {
@@ -116,8 +117,12 @@ public class DBController extends SQLiteOpenHelper {
         locationValues.put(SQLVariables._LOCATIONS_COLUMN_LATITUDE, asset.getLatitude());
         locationValues.put(SQLVariables._LOCATIONS_COLUMN_LONGITUDE, asset.getLongitude());
 
+        mediaValues.put(SQLVariables._MEDIA_COLUMN_ASSET_ID, asset.getId());
+        mediaValues.put(SQLVariables._MEDIA_COLUMN_IMAGES, asset.getPictureBase64());
+
         database.insert(SQLVariables._ASSETS_TABLE, null, assetValues);
         database.insert(SQLVariables._LOCATIONS_TABLE, null, locationValues);
+        database.insert(SQLVariables._MEDIA_TABLE, null, mediaValues);
         database.close();
     }
 
@@ -129,6 +134,7 @@ public class DBController extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues assetValues = new ContentValues();
         ContentValues locationValues = new ContentValues();
+        ContentValues mediaValues = new ContentValues();
 
         assetValues.put(SQLVariables._ASSETS_COLUMN_UPDATED_AT, asset.getUpdatedAt());
         assetValues.put(SQLVariables._ASSETS_COLUMN_DELETED, asset.getDeleted());
@@ -142,8 +148,12 @@ public class DBController extends SQLiteOpenHelper {
         locationValues.put(SQLVariables._LOCATIONS_COLUMN_LATITUDE, asset.getLatitude());
         locationValues.put(SQLVariables._LOCATIONS_COLUMN_LONGITUDE, asset.getLongitude());
 
+        mediaValues.put(SQLVariables._MEDIA_COLUMN_IMAGES, asset.getPictureBase64());
+
         database.update(SQLVariables._ASSETS_TABLE, assetValues, SQLVariables._ASSETS_COLUMN_ASSET_ID + "=" + asset.getId(), null);
         database.update(SQLVariables._LOCATIONS_TABLE, locationValues, SQLVariables._ASSETS_COLUMN_ASSET_ID + "=" + asset.getId(), null);
+        database.update(SQLVariables._MEDIA_TABLE, mediaValues, SQLVariables._ASSETS_COLUMN_ASSET_ID + "=" + asset.getId(), null);
+
         database.close();
     }
 
@@ -196,6 +206,9 @@ public class DBController extends SQLiteOpenHelper {
         if(hasAsset(assetId)) {
             SQLiteDatabase database = this.getWritableDatabase();
             database.delete(SQLVariables._ASSETS_TABLE, SQLVariables._ASSETS_COLUMN_ASSET_ID + "=" + assetId, null);
+            database.delete(SQLVariables._LOCATIONS_TABLE, SQLVariables._ASSETS_COLUMN_ASSET_ID + "=" + assetId, null);
+            database.delete(SQLVariables._MEDIA_TABLE, SQLVariables._ASSETS_COLUMN_ASSET_ID + "=" + assetId, null);
+
             database.close();
         }
     }
@@ -227,11 +240,15 @@ public class DBController extends SQLiteOpenHelper {
         String selectQuery =
                 "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
                     SQLVariables._LOCATIONS_TABLE + "." + SQLVariables._LOCATIONS_COLUMN_LONGITUDE + ", " +
-                    SQLVariables._LOCATIONS_TABLE + "." + SQLVariables._LOCATIONS_COLUMN_LATITUDE +
+                    SQLVariables._LOCATIONS_TABLE + "." + SQLVariables._LOCATIONS_COLUMN_LATITUDE + ", " +
+                    SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
                 " FROM " + SQLVariables._ASSETS_TABLE +
                 " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."
                     + SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."
                     + SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."
+                    + SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."
+                    + SQLVariables._MEDIA_COLUMN_ASSET_ID+
                 " WHERE " + SQLVariables._ASSETS_TABLE + "." + SQLVariables._ASSETS_COLUMN_ASSET_ID + " = " + id;
 
         SQLiteDatabase database = getReadableDatabase();
@@ -278,6 +295,9 @@ public class DBController extends SQLiteOpenHelper {
                         case SQLVariables._ASSETS_COLUMN_CREATED_AT:
                             asset.setCreatedAt(value);
                             break;
+                        case SQLVariables._MEDIA_COLUMN_IMAGES:
+                            asset.setPictureBase64(value);
+                            break;
                         case SQLVariables._LOCATIONS_COLUMN_LATITUDE:
                         case SQLVariables._LOCATIONS_COLUMN_LONGITUDE:
                             break;
@@ -298,9 +318,11 @@ public class DBController extends SQLiteOpenHelper {
         // DB query for all assets (with locations)
         String selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
                 SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
-                SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +
+                SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
+                SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
                 " FROM " + SQLVariables._ASSETS_TABLE +
                 " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
                 " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " = '0'";
 
         SQLiteDatabase database = getReadableDatabase();
@@ -346,6 +368,9 @@ public class DBController extends SQLiteOpenHelper {
                         case SQLVariables._ASSETS_COLUMN_CREATED_AT:
                             asset.setCreatedAt(value);
                             break;
+                        case SQLVariables._MEDIA_COLUMN_IMAGES:
+                            asset.setPictureBase64(value);
+                            break;
                         case SQLVariables._LOCATIONS_COLUMN_LATITUDE:
                         case SQLVariables._LOCATIONS_COLUMN_LONGITUDE:
                             break;
@@ -376,18 +401,22 @@ public class DBController extends SQLiteOpenHelper {
         String selectQuery = "";
         if (needSyncOnly) {
             selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
-                    SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
-                    SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +
+                        SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
+                        SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
+                        SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
                     " FROM " + SQLVariables._ASSETS_TABLE +
                     " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                    " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
                     " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1'";
         } else {
             //selectQuery = "SELECT " + Variables._ASSETS_COLUMN_ASSET_ID + " FROM " + Variables._ASSETS_TABLE;
             selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
-                    SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
-                    SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +
+                        SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
+                        SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
+                        SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
                     " FROM " + SQLVariables._ASSETS_TABLE +
                     " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                    " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
                     " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " = '0'";
         }
         SQLiteDatabase database = this.getReadableDatabase();

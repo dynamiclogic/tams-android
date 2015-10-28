@@ -1,10 +1,15 @@
 package com.dynamiclogic.tams.model;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.util.Base64;
+import android.widget.ImageView;
 
+import com.dynamiclogic.tams.R;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.UUID;
@@ -15,6 +20,7 @@ public class Asset{
     private String mId;
     private String mName, mDescription, mCreatedAt, mUpdatedAt;
     private String mDeleted, mNeedsSync, mIsNew; // TODO why aren't these booleans (Nati)
+    private String mPictureBase64;
     private Bitmap mPicture;
     private LatLng mLatLng;
 
@@ -78,12 +84,30 @@ public class Asset{
 
     public void setNeedsSync(String needsSync) { this.mNeedsSync = needsSync; }
 
-    public Bitmap getPicture() {
-        return mPicture;
-    }
+    public Bitmap getPicture() { return mPicture; }
 
     public void setPicture(Bitmap picture) {
-        mPicture = picture;
+        this.mPicture = picture;
+        bitmapToBase64(picture);
+    }
+
+    public void setPictureBase64(String pictureBase64) {
+        this.mPictureBase64 = pictureBase64;
+        // TODO Fix this - getting an exception "bad base64"
+        //base64ToBitmap(pictureBase64);
+    }
+    public String getPictureBase64() { return mPictureBase64; }
+
+    public void bitmapToBase64(Bitmap picture) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArrayImage = stream.toByteArray();
+        mPictureBase64 = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+    }
+
+    public void base64ToBitmap(String pictureBase65) {
+        byte[] imageAsBytes = Base64.decode(pictureBase65.getBytes(), Base64.DEFAULT);
+        mPicture = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
     @Override
