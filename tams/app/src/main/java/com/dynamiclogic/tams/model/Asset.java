@@ -2,6 +2,7 @@ package com.dynamiclogic.tams.model;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -9,9 +10,8 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.UUID;
 
-public class Asset{
+public class Asset {
 
-    //Not sure if we need mId as a string or a UUID???
     private String mId;
     private String mName, mDescription, mCreatedAt, mUpdatedAt;
     private String mDeleted, mNeedsSync, mIsNew; // TODO why aren't these booleans (Nati)
@@ -19,9 +19,7 @@ public class Asset{
     private LatLng mLatLng;
 
 
-    public Asset(LatLng latLng){
-        // TODO Looks like the SQL DB wants a number for an id?
-        // Ivan: Assigned the current unix time as id
+    public Asset(LatLng latLng) {
         mId = getCurrentUnixTime();
         mLatLng = latLng;
     }
@@ -68,7 +66,9 @@ public class Asset{
 
     public String getIsNew() { return mIsNew; }
 
-    public void setIsNew(String isNew) { this.mIsNew = isNew; }
+    public void setIsNew(boolean isNew) { mIsNew = isNew? "1" : "0"; }
+
+    public void setIsNew(String isNew) { mIsNew = isNew; }
 
     public String getDeleted() { return mDeleted; }
 
@@ -76,11 +76,11 @@ public class Asset{
 
     public String getNeedsSync() { return mNeedsSync; }
 
+    public void setNeedsSync(boolean needsSync) { this.mNeedsSync = needsSync ? "1" : "0"; }
+
     public void setNeedsSync(String needsSync) { this.mNeedsSync = needsSync; }
 
-    public Bitmap getPicture() {
-        return mPicture;
-    }
+    public Bitmap getPicture() { return mPicture; }
 
     public void setPicture(Bitmap picture) {
         mPicture = picture;
@@ -97,7 +97,7 @@ public class Asset{
      * Gets the current UNIX time and return it
      * @return currentTime
      */
-    public String getCurrentUnixTime() {
+    public static String getCurrentUnixTime() {
         Long currentTime = System.currentTimeMillis() / 1000L;
         return currentTime.toString();
     }

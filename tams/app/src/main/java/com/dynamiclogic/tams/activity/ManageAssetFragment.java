@@ -85,9 +85,6 @@ public class ManageAssetFragment extends Fragment{
 
             mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
             mLongitude.setText(String.valueOf(mAsset.getLatLng().longitude));
-
-            mAsset.setNeedsSync("1");
-            mAsset.setUpdatedAt(mAsset.getCurrentUnixTime());
         }
         Button mRecordButton = (Button)v.findViewById(R.id.recordButton);
         mRecordButton.setOnClickListener(new View.OnClickListener() {

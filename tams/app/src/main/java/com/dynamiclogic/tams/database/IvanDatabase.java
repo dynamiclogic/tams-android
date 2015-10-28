@@ -16,7 +16,6 @@ import java.util.UUID;
  */
 public class IvanDatabase extends Database {
 
-    private static final String TAG = IvanDatabase.class.getSimpleName();
     private DBController mDBController;
     private DBSync mDBSync;
 
@@ -30,6 +29,8 @@ public class IvanDatabase extends Database {
 
     @Override
     public synchronized void addNewAsset(Asset asset) {
+        asset.setIsNew(true);
+        asset.setCreatedAt(Asset.getCurrentUnixTime());
         mDBController.insertAsset(asset);
         notifyListeners();
         mDBSync.sync();
@@ -37,6 +38,8 @@ public class IvanDatabase extends Database {
 
     @Override
     public synchronized void updateAsset(Asset asset) {
+        asset.setUpdatedAt(Asset.getCurrentUnixTime());
+        asset.setNeedsSync(true);
         mDBController.updateAsset(asset);
         notifyListeners();
         mDBSync.sync();
