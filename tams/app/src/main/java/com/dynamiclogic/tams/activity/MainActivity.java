@@ -19,7 +19,6 @@ import android.view.View;
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.fragment.PanelFragment.OnPanelFragmentInteractionListener;
 import com.dynamiclogic.tams.database.Database;
-import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
@@ -39,7 +38,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -72,11 +70,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
         Log.d(TAG, "ONCREATE---mCurrentLocation: " + mCurrentLocation);
         setContentView(R.layout.activity_main);
 
-        database = SharedPrefsDatabase.getInstance();
+        database = Database.getInstance();
 
         ((SlidingUpPanelLayout) getWindow().getDecorView().findViewById(R.id.sliding_layout))
                 .setPanelSlideListener(this);
@@ -241,7 +238,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
         if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
             startLocationUpdates();
         }
@@ -364,7 +360,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     // from the location request
     @Override
     public void onLocationChanged(Location location) {
-    //    Log.d(TAG, "onLocationChanged");
     //    Log.d(TAG, "ONLOCATIONCHANGED---mCurrentLocation: " + mCurrentLocation);
         if (location == null){
             Log.d(TAG, "location is null for some reason");

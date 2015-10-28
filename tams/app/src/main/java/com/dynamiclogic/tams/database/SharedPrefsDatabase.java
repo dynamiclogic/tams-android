@@ -22,42 +22,41 @@ import java.util.UUID;
 /**
  * Created by ntessema on 8/23/15.
  */
-public final class SharedPrefsDatabase implements Database {
+public final class SharedPrefsDatabase extends Database {
 
     private static final String TAG = SharedPrefsDatabase.class.getSimpleName();
-    private static SharedPrefsDatabase sDatabase = new SharedPrefsDatabase();
     private SharedPreferences prefs;
-    private List<AssetsListener> assetListenerList = new ArrayList<>();
     private static final String ASSETS_KEY = "asset_map";
-
-    private SharedPrefsDatabase() {}
-
-    public static final synchronized SharedPrefsDatabase getInstance() { return sDatabase; }
 
     /**
      * This method should be called exactly once, from {@link BaseApplication}.
      */
     public void initialize(Context context) {
-        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public boolean addAssetListener(AssetsListener listener) {
-        return assetListenerList.add(listener);
-    }
-
-    public boolean removeAssetListener(AssetsListener listener) {
-        return assetListenerList.remove(listener);
+        super.initialize(context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public synchronized void addNewAsset(Asset asset) {
-
         Map<String,Asset> map = getMapOfAssets();
         map.put(asset.getId().toString(), asset);
         writeMapOfAssetsToPrefs(map);
 
-        for (AssetsListener listener : assetListenerList) {
-            listener.onAssetsUpdated(new ArrayList<Asset>(map.values()));
-        }
+        notifyListeners();
+    }
+
+    public synchronized void updateAsset(Asset asset){
+        Log.d(TAG, "onUpdateAsset");
+
+        Map<String,Asset> map = getMapOfAssets();
+
+        Asset a = map.get(asset.getId().toString());
+        a.setName(asset.getName());
+        a.setDescription(asset.getDescription());
+
+        writeMapOfAssetsToPrefs(map);
+
+        notifyListeners();
+
     }
 
     public synchronized void removeAsset(String id) {
@@ -67,9 +66,7 @@ public final class SharedPrefsDatabase implements Database {
         map.remove(id);
         writeMapOfAssetsToPrefs(map);
 
-        for (AssetsListener listener : assetListenerList) {
-            listener.onAssetsUpdated(new ArrayList<Asset>(map.values()));
-        }
+        notifyListeners();
     }
 
     public List<Asset> getListOfAssets() {
@@ -91,7 +88,7 @@ public final class SharedPrefsDatabase implements Database {
     public List<LatLng> getListOfLatLngs() {
         List<LatLng> latLngs = new ArrayList<LatLng>();
 
-        List<Asset> assets = new ArrayList<Asset>(getMapOfAssets().values());
+        List<Asset> assets = getListOfAssets();
         for (Asset a : assets) {
             latLngs.add(a.getLatLng());
         }
@@ -108,7 +105,7 @@ public final class SharedPrefsDatabase implements Database {
         return e.commit();
     }
 
-    public Asset getAssetFromUUID(UUID id){
+    public Asset getAssetFromID(String id){
 
         for(Asset a : this.getListOfAssets()){
             if(a.getId().equals(id)){
@@ -116,23 +113,6 @@ public final class SharedPrefsDatabase implements Database {
             }
         }
         return null;
-    }
-
-    public synchronized void updateAsset(Asset asset){
-        Log.d(TAG, "onUpdateAsset");
-
-        Map<String,Asset> map = getMapOfAssets();
-
-        Asset a = map.get(asset.getId().toString());
-        a.setName(asset.getName());
-        a.setDescription(asset.getDescription());
-
-        writeMapOfAssetsToPrefs(map);
-
-        for (AssetsListener listener : assetListenerList) {
-            listener.onAssetsUpdated(new ArrayList<Asset>(map.values()));
-        }
-
     }
 
 

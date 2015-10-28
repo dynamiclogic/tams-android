@@ -2,23 +2,25 @@ package com.dynamiclogic.tams.model;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Comparator;
+import java.util.Random;
 import java.util.UUID;
 
-public class Asset{
+public class Asset {
 
-    //Not sure if we need mId as a string or a UUID???
-    private UUID mId;
-    private String mName, mDescription;
+    private String mId;
+    private String mName, mDescription, mCreatedAt, mUpdatedAt;
+    private String mDeleted, mNeedsSync, mIsNew; // TODO why aren't these booleans (Nati)
     private Bitmap mPicture;
     private LatLng mLatLng;
 
 
-    public Asset(LatLng latLng){
-        mId = UUID.randomUUID();
+    public Asset(LatLng latLng) {
+        mId = getCurrentUnixTime();
         mLatLng = latLng;
     }
 
@@ -26,8 +28,16 @@ public class Asset{
         return mLatLng;
     }
 
-    public UUID getId() {
+    public Double getLatitude() { return mLatLng.latitude;}
+
+    public Double getLongitude() { return mLatLng.longitude;}
+
+    public String getId() {
         return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 
     public String getName() {
@@ -46,21 +56,50 @@ public class Asset{
         mDescription = description;
     }
 
-    public Bitmap getPicture() {
-        return mPicture;
-    }
+    public String getCreatedAt() { return mCreatedAt; }
+
+    public void setCreatedAt(String createdAt) { this.mCreatedAt = createdAt;}
+
+    public String getUpdatedAt() { return mUpdatedAt; }
+
+    public void setUpdatedAt(String updatedAt) { this.mUpdatedAt = updatedAt;}
+
+    public String getIsNew() { return mIsNew; }
+
+    public void setIsNew(boolean isNew) { mIsNew = isNew? "1" : "0"; }
+
+    public void setIsNew(String isNew) { mIsNew = isNew; }
+
+    public String getDeleted() { return mDeleted; }
+
+    public void setDeleted(String deleted) { this.mDeleted = deleted; }
+
+    public String getNeedsSync() { return mNeedsSync; }
+
+    public void setNeedsSync(boolean needsSync) { this.mNeedsSync = needsSync ? "1" : "0"; }
+
+    public void setNeedsSync(String needsSync) { this.mNeedsSync = needsSync; }
+
+    public Bitmap getPicture() { return mPicture; }
 
     public void setPicture(Bitmap picture) {
         mPicture = picture;
     }
-
-
 
     @Override
     public boolean equals(Object o) {
         return this.mLatLng.latitude == ((Asset)o).mLatLng.latitude
                 && this.mLatLng.longitude == ((Asset)o).mLatLng.longitude
                 && this.mId == ((Asset)o).mId;
+    }
+
+    /**
+     * Gets the current UNIX time and return it
+     * @return currentTime
+     */
+    public static String getCurrentUnixTime() {
+        Long currentTime = System.currentTimeMillis() / 1000L;
+        return currentTime.toString();
     }
 
     @Override

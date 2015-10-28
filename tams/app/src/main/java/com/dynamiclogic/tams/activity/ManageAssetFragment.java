@@ -19,11 +19,9 @@ import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
-import com.dynamiclogic.tams.database.SharedPrefsDatabase;
 import com.dynamiclogic.tams.model.Asset;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  *Andreas
@@ -45,20 +43,16 @@ public class ManageAssetFragment extends Fragment{
     public static final String ASSET =
             "com.dynamiclogic.tams.activity.asset";*/
 
-
-
     @Nullable
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_asset, container, false);
 
-        db = SharedPrefsDatabase.getInstance();
+        db = Database.getInstance();
 
     //    list = db.getListOfAssets();
         Intent intent = getActivity().getIntent();
         String value = intent.getStringExtra("asset_pass");
-        UUID mUID = UUID.fromString(value);
-        mAsset = db.getAssetFromUUID(mUID);
+        mAsset = db.getAssetFromID(value);
         //Intent intent = getIntent();
         //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
 
