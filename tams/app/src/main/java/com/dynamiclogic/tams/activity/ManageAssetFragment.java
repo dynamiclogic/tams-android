@@ -53,11 +53,11 @@ public class ManageAssetFragment extends Fragment{
 
         db = Database.getInstance();
 
-        list = db.getListOfAssets();
+        //list = db.getListOfAssets();
         Intent intent = getActivity().getIntent();
         String value = intent.getStringExtra("asset_pass");
-        UUID mUID = UUID.fromString(value);
-        mAsset = db.getAssetFromUUID(mUID);
+        //UUID mUID = UUID.fromString(value);
+        mAsset = db.getAssetFromID(value);
         //Intent intent = getIntent();
         //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
 

@@ -21,6 +21,7 @@ import com.dynamiclogic.tams.activity.fragment.PanelFragment.OnPanelFragmentInte
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
+import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
@@ -56,6 +57,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager mLocationManager;
     private Database database;
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
+    private List<TAMSLocationListener> mLocationListeners = new ArrayList<>();
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
 //    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 0;
@@ -328,12 +330,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 public void onMapLongClick(LatLng point) {
-                    MarkerOptions newMarker = new MarkerOptions().position(point);
-                    finalMap.addMarker(newMarker);
-                    mListLatLngs.add(newMarker.getPosition());
+                    Intent addAssetIntent = new Intent(MainActivity.this, AddAsset.class);
 
-                    Asset newAsset = new Asset(newMarker.getPosition());
-                    database.addNewAsset(newAsset);
+                    Location loc = new Location("new_location");
+                    loc.setLatitude(point.latitude);
+                    loc.setLongitude(point.longitude);
+
+                    addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, loc);
+                    startActivity(addAssetIntent);
+
                 }
             });
 
@@ -365,6 +370,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //    Log.d(TAG, "ONLOCATIONCHANGED---mCurrentLocation: " + mCurrentLocation);
         if (location == null){
             Log.d(TAG, "location is null for some reason");
+        }
+
+        if (mCurrentLatLng == null) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory
+                    .newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 19);
+            map.animateCamera(cameraUpdate);
         }
         mCurrentLocation = location;
         mCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
@@ -462,5 +473,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+    public void addTAMSLocationListener(TAMSLocationListener listener) {
+        mLocationListeners.add(listener);
+    }
+
+    public void removeTAMSLocationListener(TAMSLocationListener listener) {
+        mLocationListeners.remove(listener);
     }
 }

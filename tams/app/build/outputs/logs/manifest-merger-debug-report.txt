@@ -19,7 +19,7 @@ uses-sdk
 ADDED from C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\src\main\AndroidManifest.xml:7:5-9:41
 MERGED from [com.android.support:appcompat-v7:23.0.0] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:design:22.2.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\design\22.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:design:23.0.0] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\design\23.0.0\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:appcompat-v7:23.0.0] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:20:5-43
@@ -205,7 +205,7 @@ application
 ADDED from C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\src\main\AndroidManifest.xml:31:5-77:19
 MERGED from [com.android.support:appcompat-v7:23.0.0] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:design:22.2.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\design\22.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:design:23.0.0] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\design\23.0.0\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:appcompat-v7:23.0.0] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Andreas\Documents\TAMSandroid\repo2\tams-android\tams\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:22:5-20

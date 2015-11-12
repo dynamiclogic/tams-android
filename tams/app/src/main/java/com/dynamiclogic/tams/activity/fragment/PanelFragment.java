@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,10 @@ import com.dynamiclogic.tams.activity.ManageAsset;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
+import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -31,7 +34,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
     private static final String TAG = MyAdapter.class.getSimpleName();
 
-    private OnPanelFragmentInteractionListener mListener;
+    private OnPanelFragmentInteractionListener mPanelListener;//mPanelListener
 
     private ListView mListView;
     private ArrayList<Asset> mListAssets = new ArrayList<Asset>();
@@ -61,7 +64,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnPanelFragmentInteractionListener) activity;
+            mPanelListener = (OnPanelFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -72,8 +75,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
     public void onResume() {
         super.onResume();
 
-        mListAdapter = new MyAdapter(getActivity(), mListAssets) {
-        };
+        mListAdapter = new MyAdapter(getActivity(), mListAssets);
         mListView = (ListView) getView().findViewById(R.id.list);
         mListView.setAdapter(mListAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,7 +100,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mPanelListener = null;
     }
 
     public void onAssetsUpdated(List<Asset> assets) {
@@ -127,20 +129,22 @@ public class PanelFragment extends Fragment implements AssetsListener {
         void onPanelFragmentInteraction();
     }
 
-    private class MyAdapter extends BaseAdapter {
+    private class MyAdapter extends BaseAdapter implements TAMSLocationListener{
 
         private final String TAG = MyAdapter.class.getSimpleName();
         private Context mContext;
-        private List<Asset> mAssets;
+        private List<Asset> mAssetList;
+        private Location mLastLocation;
 
         public MyAdapter(Context context, List<Asset> assets) {
             mContext = context;
-            mAssets = assets;
+            mAssetList = assets;
+            sortAssets();
         }
 
         @Override
         public int getCount() {
-            return mAssets.size();
+            return mAssetList.size();
         }
 
         @Override
@@ -164,26 +168,41 @@ public class PanelFragment extends Fragment implements AssetsListener {
             if (convertView == null) {
                 LayoutInflater theInflater = LayoutInflater.from(mContext);
 
-                View theView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
+                convertView = theInflater.inflate(R.layout.fragment_cell_asset, parent, false);
 
-                Asset asset = mAssets.get(position);
+                Asset asset = mAssetList.get(position);
 
-                TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
-                TextView textViewBody = (TextView) theView.findViewById(R.id.asset_description);
-                TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
+                TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
+                TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
+                TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
                 textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getDescription());
                 //textViewBody.setText(asset.getLatLng().toString());
-                textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
+                Location loc = new Location("existing_location");
+                loc.setLatitude(asset.getLatLng().latitude);
+                loc.setLongitude(asset.getLatLng().longitude);
 
-                theView.setTag(asset);
+                final float metersPerMile = 1609.34f;
+                if(mLastLocation != null){
+                    float milesAway = mLastLocation.distanceTo(loc)/metersPerMile;
+                    textViewDistance.setText(String.format("%.2f miles away", milesAway));
+                }else{
+                    Log.d(TAG,"mLastLocation is still null");
+                    textViewDistance.setText("? miles away");
+                }
 
-                theView.setOnLongClickListener(new View.OnLongClickListener() {
+                convertView.setTag(asset);
+
+                //textViewDistance.setText(String.format("%d miles away", new Random().nextInt(100)));
+
+                //theView.setTag(asset);
+
+                convertView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         Asset asset = null;
-                        Intent intent = new Intent(getActivity(), ManageAsset.class);
+                        //Intent intent = new Intent(getActivity(), ManageAsset.class);
                         try {
                             asset = (Asset) v.getTag();
                         } catch (ClassCastException e) {
@@ -192,15 +211,88 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         }
 
                         if (asset != null) {
-                            UUID dis = asset.getId();
+                            String uuid = asset.getId();
+                            //Bundle bundle = new Bundle();
+                            // bundle.putSerializable("asset_pass",asset);
+                            // intent.putExtra("asset_pass", dis.toString());
+                            //intent.putExtra("asset_pass",(Serializable)asset);
+                            // intent.putExtras(bundle);
+                            ///startActivity(intent);
+
+                            database.removeAsset(uuid);
+                            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
+                        }
+
+                        return true;
+                    }
+
+                });
+
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Asset asset = null;
+                        Intent intent = new Intent(getActivity(), ManageAsset.class);
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnClick: " + e);
+                            return;
+                        }
+
+                        if (asset != null) {
+                            String dis = asset.getId();
                             Bundle bundle = new Bundle();
                             // bundle.putSerializable("asset_pass",asset);
-                            intent.putExtra("asset_pass", dis.toString());
+                            intent.putExtra("asset_pass", dis);
                             //intent.putExtra("asset_pass",(Serializable)asset);
                             // intent.putExtras(bundle);
                             startActivity(intent);
+                        }
+                    }
+                });
+                return convertView;
+            } else {
+                TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
+                TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
+                TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
-                            database.removeAsset(asset);
+                Asset asset = mAssetList.get(position);
+
+                textViewTitle.setText(asset.getName());
+                textViewBody.setText(asset.getDescription());
+
+                // set distance away
+                Location loc = new Location("existing_location");
+                loc.setLatitude(asset.getLatLng().latitude);
+                loc.setLongitude(asset.getLatLng().longitude);
+
+                final float metersPerMile = 1609.34f;
+                if (mLastLocation != null) {
+                    float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
+                    textViewDistance.setText(String.format("%.2f miles away", milesAway));
+                    //        Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
+                } else {
+                    //        Log.d(TAG, "mLastLocation is still null");
+                    textViewDistance.setText("? miles away");
+                }
+
+                convertView.setTag(asset);
+
+                convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Asset asset = null;
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnLongClick: " + e);
+                            return false;
+                        }
+
+                        if (asset != null) {
+                            String id = asset.getId();
+                            database.removeAsset(id);
                             Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
 
@@ -208,9 +300,52 @@ public class PanelFragment extends Fragment implements AssetsListener {
                     }
                 });
 
-                return theView;
-            } else {
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Asset asset = null;
+                        Intent intent = new Intent(getActivity(), ManageAsset.class);
+                        try {
+                            asset = (Asset) v.getTag();
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "error on OnClick: " + e);
+                            return;
+                        }
+
+                        if (asset != null) {
+                            String dis = asset.getId();
+                            Bundle bundle = new Bundle();
+                            // bundle.putSerializable("asset_pass",asset);
+                            intent.putExtra("asset_pass", dis);
+                            //intent.putExtra("asset_pass",(Serializable)asset);
+                            // intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
                 return convertView;
+            }
+
+        }
+        @Override
+        public synchronized void onLocationChanged(Location location) {
+
+            // TODO want to get the locations in the ListView to update
+            if (location == null) {
+                Log.e(TAG, "location in the panel set TO NULL");
+                return;
+            }
+            //    Log.d(TAG, "location changed in panel");
+            mLastLocation = location;
+            sortAssets();
+            notifyDataSetChanged();
+
+        }
+
+        public void sortAssets() {
+            if (mLastLocation != null) {
+                Collections.sort(mAssetList, new Asset.AssetDistanceComparator(mLastLocation));
             }
         }
     }
