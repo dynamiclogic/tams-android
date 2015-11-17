@@ -95,7 +95,7 @@ public class Asset {
     public void setPictureBase64(String pictureBase64) {
         this.mPictureBase64 = pictureBase64;
         // TODO Fix this - getting an exception "bad base64"
-        //base64ToBitmap(pictureBase64);
+        base64ToBitmap(pictureBase64);
     }
     public String getPictureBase64() { return mPictureBase64; }
 
