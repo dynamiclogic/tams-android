@@ -149,10 +149,10 @@ public class DBSync extends Observable {
                         // Loop through each array element, get JSON object which has assetId and username
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject obj = (JSONObject) arr.get(i);
-                            System.out.println("RESPONSE:");
-                            System.out.println(obj);
-                            System.out.println("LOCAL:");
-                            System.out.println(mDBController.getAllAssets());
+                            //System.out.println("RESPONSE:");
+                            //System.out.println(obj);
+                            //System.out.println("LOCAL:");
+                            //System.out.println(mDBController.getAllAssets());
 
                             LatLng latLng = new LatLng(Double.parseDouble(obj.get(SQLVariables._LOCATIONS_COLUMN_LATITUDE).toString()),
                                     Double.parseDouble(obj.get(SQLVariables._LOCATIONS_COLUMN_LONGITUDE).toString()));
