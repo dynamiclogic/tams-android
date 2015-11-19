@@ -76,46 +76,71 @@
             />
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1"
-        android:gravity="center_horizontal"
-        android:layout_weight="1">
-
-        <Button
-            android:id="@+id/pictureButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Picture"
-            android:layout_weight=".5"/>
-
-        <Button
-            android:id="@+id/recordButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Record Audio"
-            android:layout_weight=".5"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1"
         android:gravity="center_horizontal"
         android:layout_weight="1">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:minHeight="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="300dp"
+            android:maxWidth="100dp"
+            android:minHeight="300dp"
             android:minWidth="100dp"
-            android:maxHeight="100dp"
-            android:maxWidth="100dp"/>
+            android:background="@color/darkgray"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <ImageButton
+            android:id="@+id/pictureButton"
+            android:layout_alignBottom="@id/imageView"
+            android:layout_alignRight="@id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:minWidth="20dp"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_photo_camera_black_24dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/audio_dlabel"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/recordButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mic_black_24dp"/>
+
+            <ImageButton
+                android:id="@+id/playButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_play_arrow_black_24dp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 

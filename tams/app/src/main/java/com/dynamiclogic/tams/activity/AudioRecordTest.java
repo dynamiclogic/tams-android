@@ -181,9 +181,6 @@ public class AudioRecordTest extends Activity
             mRecorder = null;
         }
 
-
-
-
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;

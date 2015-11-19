@@ -48,7 +48,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         database = Database.getInstance();
 
@@ -120,7 +119,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
     }
 
     public void onAssetsUpdated(List<Asset> assets) {
-        Log.d(TAG, "onAssetsUpdated");
         mListAssets.clear();
         mListAssets.addAll(assets);
         ((BaseAdapter)mListAdapter).notifyDataSetChanged();

@@ -18,4 +18,5 @@
     <string name="invalid_lat_long_used">Invalid Latitude and Logitude Coordinates Used</string>
     <string name="no_address_found">No Address was Found</string>
     <string name="address_found">Address Found</string>
+    <string name="audio_dlabel">AUDIO</string>
 </resources>

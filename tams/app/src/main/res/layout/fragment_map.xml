@@ -26,7 +26,7 @@
             android:id="@+id/polyline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/ic_polyline"
+            fab:fab_icon="@drawable/ic_timeline_black_24dp"
             fab:fab_colorNormal="@color/white"
             fab:fab_size="mini"
             fab:fab_title="New Polyline"
@@ -36,18 +36,12 @@
             android:id="@+id/node"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/ic_node"
+            fab:fab_icon="@drawable/ic_add_location_black_24dp"
             fab:fab_colorNormal="@color/white"
             fab:fab_size="mini"
             fab:fab_title="New Node"
             fab:fab_colorPressed="@color/white_pressed"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-    <!--<ImageView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:background="@drawable/google_maps"-->
-    <!--android:gravity="center" />-->
 
 </FrameLayout>

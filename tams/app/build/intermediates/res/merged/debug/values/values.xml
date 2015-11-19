@@ -636,6 +636,7 @@
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="asset_type_prompt">Chose the asset type</string>
+    <string name="audio_dlabel">AUDIO</string>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.8.0/res/values/auth_strings.xml -->
     <eat-comment/>
     <string name="auth_google_play_services_client_facebook_display_name">Facebook</string>
