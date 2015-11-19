@@ -102,8 +102,10 @@
         android:layout_weight="1">
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:minWidth="250dp"
+            android:minHeight="250dp"/>
     </LinearLayout>
 
 

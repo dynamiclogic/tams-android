@@ -11,9 +11,9 @@
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="red_pressed">#a3fe0c00</color>
 
-    <color name="primary">#CDDC39</color>
-    <color name="primary_dark">#AFB42B</color>
-    <color name="accent">#673AB7</color>
+    <color name="primary">#4CAF50</color>
+    <color name="primary_dark">#388E3C</color>
+    <color name="accent">#E8F5E9</color>
 
     <!-- all colors -->
 

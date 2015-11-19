@@ -88,11 +88,14 @@ public class FetchAddressIntentService extends IntentService {
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
-            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            Log.i(TAG, getString(R.string.address_found));
-            Log.i(TAG, address.toString());
+
+            //If we wanted the entire address we could use this loop
+//            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+//                addressFragments.add(address.getAddressLine(i));
+//            }
+
+            //Just need the street name and number of the address
+            addressFragments.add(address.getAddressLine(0));
 
             deliverResultToReceiver(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),

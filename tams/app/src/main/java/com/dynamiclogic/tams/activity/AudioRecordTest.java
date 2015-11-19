@@ -1,15 +1,11 @@
 package com.dynamiclogic.tams.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +13,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class AudioRecordTest extends Activity
@@ -30,8 +28,9 @@ public class AudioRecordTest extends Activity
     private PlayButton   mPlayButton = null;
     private MediaPlayer mPlayer = null;
 
+    /*Not doing 6.0 permissions
     private static final int MY_PERMISSIONS_REQUEST_MICROPHONE = 0;
-    private int microphonePermissionCheck;
+    private int microphonePermissionCheck;*/
 
     private void onRecord(boolean start) {
         if (start) {
@@ -133,6 +132,8 @@ public class AudioRecordTest extends Activity
 
     public AudioRecordTest() {
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        mFileName += timeStamp;
         mFileName += "/audiorecordtest.3gp";
     }
 
@@ -155,17 +156,20 @@ public class AudioRecordTest extends Activity
                         0));
         setContentView(ll);
 
+        /*
+        Not doing 6.0 permissions
+
         microphonePermissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO);
 
         //If the permission isn't granted, request it
-        //ONLY NEED 1 of 2 location permissions, TODO fix
         if( microphonePermissionCheck == PackageManager.PERMISSION_DENIED){
             //Request coarse location
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.RECORD_AUDIO},
                     MY_PERMISSIONS_REQUEST_MICROPHONE);
-        }
+        }*/
+         
 
     }
 
@@ -176,6 +180,9 @@ public class AudioRecordTest extends Activity
             mRecorder.release();
             mRecorder = null;
         }
+
+
+
 
         if (mPlayer != null) {
             mPlayer.release();

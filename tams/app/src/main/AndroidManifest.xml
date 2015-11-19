@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
 
 
@@ -27,6 +28,9 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>
+
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
 
     <application
         android:name=".utils.BaseApplication"
@@ -43,7 +47,8 @@
         <!-- Google Maps API key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA_veMSXmFGvXNnTpY6ecCjBSSw0F-OigA" />
+            android:value="AIzaSyBfP_RWLoMNez8OXOsm0O0SgBx1AcN5UhI" />
+            <!--android:value="AIzaSyA_veMSXmFGvXNnTpY6ecCjBSSw0F-OigA" />-->
             <!--android:value="AIzaSyBIr5Elw4i5olkVQn04nAfQg1FqwfF6aQw" />-->
 
         <activity
@@ -64,6 +69,12 @@
         <activity
             android:name="com.dynamiclogic.tams.activity.AudioRecordTest"
             android:label="Audio Record Test"
+            android:parentActivityName=".activity.AddAsset">
+        </activity>
+
+        <activity
+            android:name="com.dynamiclogic.tams.activity.AudioRecording"
+            android:label="Audio Recording"
             android:parentActivityName=".activity.AddAsset">
         </activity>
 

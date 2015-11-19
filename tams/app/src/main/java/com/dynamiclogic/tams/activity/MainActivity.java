@@ -27,8 +27,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -58,9 +56,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
-//    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 0;
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
-//    private int coarseLocationPermissionCheck;
     private int fineLocationPermissionCheck;
     private boolean mRequestingLocationUpdates = true;
 
@@ -68,8 +64,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
-        Log.d(TAG, "ONCREATE---mCurrentLocation: " + mCurrentLocation);
+        //Checking for permissions on Android Marshmallow and above
+
         setContentView(R.layout.activity_main);
 
         database = Database.getInstance();
@@ -83,39 +79,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         buildGoogleApiClient();
         mLocationRequest = createLocationRequest();
-
-        //Checking for permissions on Android Marshmallow and above
-        //ONLY NEED 1 of 2 location permissions, TODO fix
-//        coarseLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION);
-        fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-
-        //If the permission isn't granted, request it
-        //ONLY NEED 1 of 2 location permissions, TODO fix
-//        if( coarseLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
-//            //Request coarse location
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-//                    MY_PERMISSIONS_REQUEST_COARSE_LOCATION);
-//        }
-        if ( fineLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
-            //Request fine location
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
         // Restoring the markers on configuration changes
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("points")) {
-                mListLatLngs = savedInstanceState.getParcelableArrayList("points");
-            }
-        } else {
-            mListLatLngs.addAll(database.getListOfLatLngs());
-        }
+        restoreFromDestroyed(savedInstanceState);
 
 
         //Intent to start the AddAsset Activity
@@ -127,53 +94,58 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         newNode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick for FAB");
-
-
+                //Pass along the current location the the AddAsset activity
                 addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, mCurrentLocation);
 
                 startActivity(addAssetIntent);
                 drawMarkers();
-
             }
         });
 
     }
 
+    private void restoreFromDestroyed(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("points")) {
+                mListLatLngs = savedInstanceState.getParcelableArrayList("points");
+            }
+        } else {
+            mListLatLngs.addAll(database.getListOfLatLngs());
+        }
+    }
+
+    private void locationPermissionCheck() {
+        fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        //If the permission isn't granted, request it
+        if ( fineLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
+            //Request fine location
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+    }
+
     //Check the results of requested permissions for API 23+
+    /* Not doing permissions for 6.0
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        //ONLY NEED 1 of 2 location permissions, TODO fix
         switch (requestCode) {
-//            case MY_PERMISSIONS_REQUEST_COARSE_LOCATION: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    // permission was granted, yay! Do the
-//                    // contacts-related task you need to do.
-//                    Log.d(TAG, "Coarse Location permission granted");
-//                    coarseLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-//                            Manifest.permission.ACCESS_COARSE_LOCATION);
-//
-//                } else {
-//
-//                    // permission denied, boo! Disable the
-//                    // functionality that depends on this permission.
-//                }
-//                return;
-//            }
             case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+                    // related task you need to do.
                     Log.d(TAG, "Fine Location permission granted");
                     fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION);
+//                    Bundle bundle = new Bundle();
+//                    onConnected(bundle);
 
                 } else {
 
@@ -186,7 +158,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
+    }*/
 
     //Set up location request with the desired parameters for the level of accuracy we need
     protected LocationRequest createLocationRequest() {
@@ -213,6 +185,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onStart() {
         super.onStart();
+        locationPermissionCheck();
 
         //Connect to the Google API Client
         mGoogleApiClient.connect();
@@ -239,7 +212,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
         if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
             startLocationUpdates();
         }
@@ -249,13 +221,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onPause() {
         super.onPause();
-        stopLocationUpdates();
+        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+            stopLocationUpdates();
+        }
+
         database.removeAssetListener(this);
     }
 
     @Override
     public void onAssetsUpdated(List<Asset> assets) {
-        Log.d(TAG, "onAssetsUpdated");
         mListLatLngs.clear();
         mListLatLngs.addAll(database.getListOfLatLngs());
         refreshMarkers();
@@ -332,6 +306,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     finalMap.addMarker(newMarker);
                     mListLatLngs.add(newMarker.getPosition());
 
+                    //TODO: Move the adding of asset to AddAsset
                     Asset newAsset = new Asset(newMarker.getPosition());
                     database.addNewAsset(newAsset);
                 }
@@ -361,17 +336,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     // from the location request
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged");
-        Log.d(TAG, "ONLOCATIONCHANGED---mCurrentLocation: " + mCurrentLocation);
         if (location == null){
-
             Log.d(TAG, "location is null for some reason");
         }
         mCurrentLocation = location;
         mCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCurrentLatLng, 19);
-        map.animateCamera(cameraUpdate);
+        //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCurrentLatLng, 19);
+        //map.animateCamera(cameraUpdate);
     }
 
     @Override
@@ -432,15 +404,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //Getting current location using the Google API Client
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, "ONCONNECTED---mCurrentLocation: " + mCurrentLocation);
         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+                    mGoogleApiClient);
 
         //Boolean to see if we want location updates
         // initialized to true
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
         }
+
     }
 
     //Starts location updates

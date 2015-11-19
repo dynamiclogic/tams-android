@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import com.dynamiclogic.tams.activity.ManageAsset;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +59,20 @@ public class PanelFragment extends Fragment implements AssetsListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_panel, container, false);
+        View v = inflater.inflate(R.layout.fragment_panel, container, false);
+
+        // Get a reference to the floating button's to start appropriate activities
+        final FloatingActionButton newNode = (FloatingActionButton) v.findViewById(R.id.refresh);
+        newNode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 11/18/2015 Add refresh code
+                Toast.makeText(getActivity(), "Refresh FAB Pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return v;
+
     }
 
     @Override
@@ -168,10 +186,13 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
                 Asset asset = mAssets.get(position);
 
+                ImageView imageViewPreview = (ImageView) theView.findViewById(R.id.image);
                 TextView textViewTitle = (TextView) theView.findViewById(R.id.asset_title);
                 TextView textViewBody = (TextView) theView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) theView.findViewById(R.id.asset_distance);
 
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(asset.getPictureLocation()), 500, 500);
+                imageViewPreview.setImageBitmap(thumbImage);
                 textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getDescription());
                 //textViewBody.setText(asset.getLatLng().toString());
@@ -201,7 +222,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                             startActivity(intent);
 
                             database.removeAsset(asset);
-                            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
                         }
 
                         return true;

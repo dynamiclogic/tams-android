@@ -3,15 +3,16 @@ package com.dynamiclogic.tams.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +28,7 @@ import java.util.UUID;
 /**
  *Andreas
  */
-public class ManageAssetFragment extends Fragment{
+public class ManageAssetFragment extends Fragment {
     private static final String TAG = ManageAssetFragment.class.getSimpleName();
     private static final int CAMERA_REQUEST = 1888;
     private TextView mLatiture, mLongitude;
@@ -35,22 +36,17 @@ public class ManageAssetFragment extends Fragment{
     private EditText mNameEditField, mDescriptionEditField;
     private Asset mAsset;
     private Location mLocation;
+    private String mCurrentPhotoPath;
     public static final String EXTRA_ASSET_LOCATION =
             "com.dynamiclogic.tams.activity.asset_location";
     private Database db;
     private List<Asset> list;
 
-    /*Trying to save asset on state change
-    public static final String ASSET =
-            "com.dynamiclogic.tams.activity.asset";*/
 
-
-
-    @Nullable
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_asset, container, false);
-
+        
         db = Database.getInstance();
 
         list = db.getListOfAssets();
@@ -58,31 +54,6 @@ public class ManageAssetFragment extends Fragment{
         String value = intent.getStringExtra("asset_pass");
         UUID mUID = UUID.fromString(value);
         mAsset = db.getAssetFromUUID(mUID);
-        //Intent intent = getIntent();
-        //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
-
-
-        // Bundle bundle = getIntent.getExtra();
-
-        /*Trying to save asset on state change
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(ASSET)) {
-                mAsset = (Asset) savedInstanceState.getSerializable(ASSET);
-            }
-        } else {
-            *//*mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-            if (mAsset == null){
-                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-                mAsset = new Asset(latLng);
-            }*//*
-        }*/
-
-        //mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-
-        // LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        // mAsset = new Asset(latLng);
-
-
 
         if(mAsset != null) {
             mLatiture = (TextView) v.findViewById(R.id.latitudeTextView);
@@ -123,7 +94,6 @@ public class ManageAssetFragment extends Fragment{
 
 
         mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
-        mDescriptionEditField.setHintTextColor(getResources().getColor(R.color.material_blue_grey_800));
         mDescriptionEditField.setText(mAsset.getDescription());
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -143,10 +113,21 @@ public class ManageAssetFragment extends Fragment{
             }
         });
 
+        mCurrentPhotoPath = mAsset.getPictureLocation();
 
 
+        mImageView = (ImageView)v.findViewById(R.id.imageView);
 
-        this.mImageView = (ImageView)v.findViewById(R.id.imageView);
+        //Need onGlobalLayoutListener to get size of imageView after it has been inflated
+        // so we can set the picture in it
+        ViewTreeObserver ivvto = mImageView.getViewTreeObserver();
+        ivvto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                setPic();
+            }
+        });
+
 
         Button pictureButton = (Button)v.findViewById(R.id.pictureButton);
         pictureButton.setOnClickListener(new View.OnClickListener() {
@@ -158,33 +139,58 @@ public class ManageAssetFragment extends Fragment{
         });
 
 
+        Log.d(TAG, "onCreateView() in ManageAssetFragment");
+
         return v;
+    }
+
+
+    private void setPic() {
+        Log.d(TAG, "setPic() from ManageAssetFragment");
+
+        // Get the dimensions of the View
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         db.updateAsset(mAsset);
-        //Add Asset to the database
-        //db.addNewAsset(mAsset);
+
 
     }
+
 
     //Respond to calls to StartActivityForResult
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+
+
         //Responding to the Camera activity call for result
-        if (requestCode == CAMERA_REQUEST) {
-            mAsset.setPicture((Bitmap) data.getExtras().get("data"));
-            mImageView.setImageBitmap(mAsset.getPicture());
-        }
+//        if (requestCode == CAMERA_REQUEST) {
+//            //mAsset.setPictureLocation((Bitmap) data.getExtras().get("data"));
+//            //mImageView.setImageBitmap(mAsset.getPictureLocation());
+//        }
     }
 
-    /*Trying to save asset on state changed
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ASSET, mAsset);
-        super.onSaveInstanceState(outState);
-    }*/
 }

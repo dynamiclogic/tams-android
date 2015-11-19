@@ -1,7 +1,5 @@
 package com.dynamiclogic.tams.model;
 
-import android.graphics.Bitmap;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.UUID;
@@ -11,7 +9,8 @@ public class Asset{
     //Not sure if we need mId as a string or a UUID???
     private UUID mId;
     private String mName, mDescription;
-    private Bitmap mPicture;
+    private String mPictureLocation;
+    private String mAudioLocation;
     private LatLng mLatLng;
 
 
@@ -44,15 +43,21 @@ public class Asset{
         mDescription = description;
     }
 
-    public Bitmap getPicture() {
-        return mPicture;
+    public String getPictureLocation() {
+        return mPictureLocation;
     }
 
-    public void setPicture(Bitmap picture) {
-        mPicture = picture;
+    public void setPictureLocation(String pictureLocation) {
+        mPictureLocation = pictureLocation;
     }
 
+    public String getAudioLocation() {
+        return mAudioLocation;
+    }
 
+    public void setAudioLocation(String audioLocation) {
+        mAudioLocation = audioLocation;
+    }
 
     @Override
     public boolean equals(Object o) {

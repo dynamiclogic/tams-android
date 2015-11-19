@@ -15,7 +15,7 @@
   ~ limitations under the License
   -->
 
-<!-- Layout to be used with only max 3 actions. It has a much larger picture at the left side-->
+<!-- Layout to be used with only max 3 actions. It has a much larger pictureLocation at the left side-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/status_bar_latest_event_content"
     android:layout_width="match_parent"

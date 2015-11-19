@@ -38,7 +38,7 @@
     <color name="abc_search_url_text_selected">@android:color/black</color>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/src/main/res/values/colors.xml -->
     <eat-comment/>
-    <color name="accent">#673AB7</color>
+    <color name="accent">#E8F5E9</color>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
@@ -256,8 +256,8 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="plum">#dda0dd</color>
     <color name="powderblue">#b0e0e6</color>
-    <color name="primary">#CDDC39</color>
-    <color name="primary_dark">#AFB42B</color>
+    <color name="primary">#4CAF50</color>
+    <color name="primary_dark">#388E3C</color>
     <!-- From: file:/C:/Users/Javier%20G/GIT_ROOT/tams-android/tams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="primary_dark_material_dark">@android:color/black</color>
