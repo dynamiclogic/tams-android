@@ -1,10 +1,14 @@
 package com.dynamiclogic.tams.activity;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,14 +16,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
+import com.dynamiclogic.tams.model.Type;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,17 +36,23 @@ import java.util.UUID;
  *Andreas
  */
 public class ManageAssetFragment extends Fragment{
-    private static final String TAG = ManageAssetFragment.class.getSimpleName();
+    private static final String TAG = AddAssetFragment.class.getSimpleName();
     private static final int CAMERA_REQUEST = 1888;
-    private TextView mLatiture, mLongitude;
+    private TextView mLatitude, mLongitude;
     private ImageView mImageView;
     private EditText mNameEditField, mDescriptionEditField;
+    private Spinner mAssetTypeSpinner;
     private Asset mAsset;
     private Location mLocation;
     public static final String EXTRA_ASSET_LOCATION =
             "com.dynamiclogic.tams.activity.asset_location";
     private Database db;
-    private List<Asset> list;
+    private String mAddressOutput;
+    private String endText;
+    //private AddressResultReceiver mResultReceiver;
+    private boolean addressReceived = false;
+    private List<String> list;
+    private Type type;
 
     /*Trying to save asset on state change
     public static final String ASSET =
@@ -58,35 +72,11 @@ public class ManageAssetFragment extends Fragment{
         String value = intent.getStringExtra("asset_pass");
         //UUID mUID = UUID.fromString(value);
         mAsset = db.getAssetFromID(value);
-        //Intent intent = getIntent();
-        //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
-
-
-        // Bundle bundle = getIntent.getExtra();
-
-        /*Trying to save asset on state change
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(ASSET)) {
-                mAsset = (Asset) savedInstanceState.getSerializable(ASSET);
-            }
-        } else {
-            *//*mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-            if (mAsset == null){
-                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-                mAsset = new Asset(latLng);
-            }*//*
-        }*/
-
-        //mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-
-        // LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        // mAsset = new Asset(latLng);
-
 
 
         if(mAsset != null) {
-            mLatiture = (TextView) v.findViewById(R.id.latitudeTextView);
-            mLatiture.setText(String.valueOf(mAsset.getLatLng().latitude));
+            mLatitude = (TextView) v.findViewById(R.id.latitudeTextView);
+            mLatitude.setText(String.valueOf(mAsset.getLatLng().latitude));
 
             mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
             mLongitude.setText(String.valueOf(mAsset.getLatLng().longitude));
@@ -120,6 +110,35 @@ public class ManageAssetFragment extends Fragment{
 
             }
         });
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            populateSpinner(this.getContext(),v);
+            mAssetTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                    //String imc_met = mAssetTypeSpinner.getSelectedItem().toString();
+                    //updateUI();
+
+                    endText = mAssetTypeSpinner.getSelectedItem().toString();
+                    //mAsset.getType().setKey(endText);
+                    Log.d(TAG, "onItemSelected: " + endText);
+                    type = new Type(endText);
+                    mAsset.setType(type);
+                    if(addressReceived){updateUI();}
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+        }
+
+
 
 
         mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
@@ -181,10 +200,28 @@ public class ManageAssetFragment extends Fragment{
         }
     }
 
-    /*Trying to save asset on state changed
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ASSET, mAsset);
-        super.onSaveInstanceState(outState);
-    }*/
+
+
+    public void populateSpinner(Context context, View v ){
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                context,android.R.layout.simple_spinner_item,this.list);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
+        mAssetTypeSpinner.setAdapter(adapter);
+    }
+
+
+
+
+    private void updateUI() {
+        //tring endType;
+
+
+        mAsset.setName(mAddressOutput.toString() +
+                mAsset.getType().getName());
+        mNameEditField.setText(mAsset.getName());
+
+    }
 }

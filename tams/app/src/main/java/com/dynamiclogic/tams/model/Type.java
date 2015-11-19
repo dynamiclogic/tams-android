@@ -49,7 +49,7 @@ public class Type {
     public Type(String key) {
 
         this.key = key;
-        this.type = TypeE.vvalueOf(key);
+        this.type = TypeE.getEnumsOf(key);
        //this.value = typeTable.valueOf(key).toString();
     }
 
@@ -95,12 +95,8 @@ public class Type {
         TypeE(String s) {
             type = s;
         }
-        //private String code;
-        //private EnumSet<TypeDictionary> set = EnumSet.allOf(TypeDictionary.class);
-        // private
 
-
-        private static TypeE vvalueOf(String type){
+        private static TypeE getEnumsOf(String type){
             return map.get(type);
         }
 
