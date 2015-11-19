@@ -38,7 +38,8 @@ import java.util.Date;
 /**
  * Created by Javier G on 8/17/2015.
  */
-public class AddAssetFragment extends Fragment{
+public class AddAssetFragment extends Fragment {
+
     private static final String TAG = AddAssetFragment.class.getSimpleName();
     private TextView mLatitude, mLongitude;
     private ImageView mImageView;
@@ -52,10 +53,17 @@ public class AddAssetFragment extends Fragment{
     private Database db;
     private String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
+<<<<<<< HEAD
     private int externalStorageWrittingLocationPermissionCheck;
     private int cameraPermissionCheck;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE_WRITTING = 1;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
+=======
+
+    /*Trying to save asset on state change
+    public static final String ASSET =
+            "com.dynamiclogic.tams.activity.asset";*/
+>>>>>>> 58f6af939999f0b9ec9ac27e5583a69f5fc960c5
 
     @Nullable
     @Override
@@ -64,6 +72,7 @@ public class AddAssetFragment extends Fragment{
 
         //Getting Database singleton reference.
         db = Database.getInstance();
+<<<<<<< HEAD
 
         //Check current permission states
         externalStorageWrittingLocationPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
@@ -73,6 +82,8 @@ public class AddAssetFragment extends Fragment{
                 Manifest.permission.CAMERA);
 
         //Getting location from the intent coming from MainActivity
+=======
+>>>>>>> 58f6af939999f0b9ec9ac27e5583a69f5fc960c5
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
         //Start worker thread to get address from location
@@ -90,17 +101,42 @@ public class AddAssetFragment extends Fragment{
         mLongitude = (TextView)v.findViewById(R.id.longitudeTextView);
         mLongitude.setText(String.valueOf(mAsset.getLatLng().latitude));
 
+<<<<<<< HEAD
         mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
         mNameEditField.setText(mAsset.getName());
+=======
+        Button mRecordButton = (Button)v.findViewById(R.id.recordButton);
+        mRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AudioRecordTest.class);
+                startActivity(intent);
+            }
+        });
+
+        mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
+        mNameEditField.setText(mAsset.getName());
+        mNameEditField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mAsset.setName(s.toString());
+                Log.d(TAG, "Name: " + mAsset.getName());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+
+        });
+>>>>>>> 58f6af939999f0b9ec9ac27e5583a69f5fc960c5
 
         mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
-
         mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -108,21 +144,28 @@ public class AddAssetFragment extends Fragment{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
+<<<<<<< HEAD
         mImageView = (ImageView)v.findViewById(R.id.imageView);
 
         mPictureButton = (Button)v.findViewById(R.id.pictureButton);
         mPictureButton.setOnClickListener(new View.OnClickListener() {
+=======
+        this.mImageView = (ImageView)v.findViewById(R.id.imageView);
+
+        Button pictureButton = (Button)v.findViewById(R.id.pictureButton);
+        pictureButton.setEnabled(false);
+        pictureButton.setOnClickListener(new View.OnClickListener() {
+>>>>>>> 58f6af939999f0b9ec9ac27e5583a69f5fc960c5
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent();
             }
         });
 
+<<<<<<< HEAD
         mRecordButton = (Button)v.findViewById(R.id.recordButton);
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +176,8 @@ public class AddAssetFragment extends Fragment{
             }
         });
 
+=======
+>>>>>>> 58f6af939999f0b9ec9ac27e5583a69f5fc960c5
         return v;
     }
 
