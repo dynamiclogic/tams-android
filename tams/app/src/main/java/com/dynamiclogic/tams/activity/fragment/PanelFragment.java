@@ -24,11 +24,11 @@ import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public class PanelFragment extends Fragment implements AssetsListener {
 
@@ -56,7 +56,19 @@ public class PanelFragment extends Fragment implements AssetsListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_panel, container, false);
+        View v = inflater.inflate(R.layout.fragment_panel, container, false);
+
+        // Get a reference to the floating button's to start appropriate activities
+        final FloatingActionButton newNode = (FloatingActionButton) v.findViewById(R.id.refresh);
+        newNode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 11/18/2015 Add refresh code
+                Toast.makeText(getActivity(), "Refresh FAB Pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return v;
     }
 
     @Override
