@@ -87,6 +87,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:maxHeight="300dp"
             android:maxWidth="100dp"
             android:minHeight="300dp"
@@ -94,6 +95,11 @@
             android:background="@color/darkgray"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"/>
+=======
+            android:text="Picture"
+            android:layout_weight=".5"
+            android:clickable="false"/>
+>>>>>>> ddbe67dda4148c445caab476069c8b29ceef0be8
 
         <ImageButton
             android:id="@+id/pictureButton"
@@ -101,11 +107,17 @@
             android:layout_alignRight="@id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:minHeight="20dp"
             android:minWidth="20dp"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
             android:src="@drawable/ic_photo_camera_black_24dp"/>
+=======
+            android:text="Record Audio"
+            android:layout_weight=".5"
+            android:clickable="false"/>
+>>>>>>> ddbe67dda4148c445caab476069c8b29ceef0be8
 
     </RelativeLayout>
 

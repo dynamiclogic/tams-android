@@ -43,7 +43,8 @@ import java.util.Date;
 /**
  * Created by Javier G on 8/17/2015.
  */
-public class AddAssetFragment extends Fragment{
+public class AddAssetFragment extends Fragment {
+
     private static final String TAG = AddAssetFragment.class.getSimpleName();
     private TextView mLatitude, mLongitude;
     private ImageView mImageView;
@@ -57,6 +58,7 @@ public class AddAssetFragment extends Fragment{
     private Database db;
     private String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
+<<<<<<< HEAD
     private int externalStorageWrittingLocationPermissionCheck;
     private int cameraPermissionCheck;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE_WRITTING = 1;
@@ -66,6 +68,12 @@ public class AddAssetFragment extends Fragment{
     private static String mAudioFileName = null;
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
+=======
+
+    /*Trying to save asset on state change
+    public static final String ASSET =
+            "com.dynamiclogic.tams.activity.asset";*/
+>>>>>>> ddbe67dda4148c445caab476069c8b29ceef0be8
 
     @Nullable
     @Override
@@ -75,14 +83,6 @@ public class AddAssetFragment extends Fragment{
         //Getting Database singleton reference.
         db = Database.getInstance();
 
-        //Check current permission states
-        externalStorageWrittingLocationPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        cameraPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.CAMERA);
-
-        //Getting location from the intent coming from MainActivity
         mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
         //Start worker thread to get address from location
@@ -103,14 +103,28 @@ public class AddAssetFragment extends Fragment{
         mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
         mNameEditField.setText(mAsset.getName());
 
-        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
 
+
+        mNameEditField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mAsset.setName(s.toString());
+                Log.d(TAG, "Name: " + mAsset.getName());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+
+        });
+
+        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
         mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -118,9 +132,7 @@ public class AddAssetFragment extends Fragment{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
         mImageView = (ImageView)v.findViewById(R.id.imageView);
@@ -135,6 +147,7 @@ public class AddAssetFragment extends Fragment{
 
         mPictureButton = (ImageButton)v.findViewById(R.id.pictureButton);
         mPictureButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent();
