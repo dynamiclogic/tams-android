@@ -1,0 +1,6 @@
+tams/app/build
+tams/.gradle
+tams/.idea
+tams/local.properties
+tams/build
+*.iml
