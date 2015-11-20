@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,9 +29,11 @@ import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.Type;
+//import com.dynamiclogic.tams.model.TypeE;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  *Andreas
@@ -66,6 +69,7 @@ public class ManageAssetFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_manage_asset, container, false);
 
         db = Database.getInstance();
+        list = Type.createList();
 
         //list = db.getListOfAssets();
         Intent intent = getActivity().getIntent();
@@ -203,7 +207,7 @@ public class ManageAssetFragment extends Fragment{
 
 
     public void populateSpinner(Context context, View v ){
-
+        Log.d(TAG, "populateSpinner function launch: ");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 context,android.R.layout.simple_spinner_item,this.list);
 

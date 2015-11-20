@@ -35,9 +35,11 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -45,8 +47,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SlidingUpPanelLayout.PanelSlideListener,
         com.google.android.gms.location.LocationListener,
         OnPanelFragmentInteractionListener,
-        AssetsListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        AssetsListener,GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMarkerClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,ClusterItem {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -57,6 +59,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager mLocationManager;
     private Database database;
     protected ArrayList<LatLng> mListLatLngs = new ArrayList<>();
+    protected List<Asset> mListAsset = new ArrayList<>();
+    protected HashMap<Marker,Asset> assetMarkerHashMap = new HashMap<>();
     private List<TAMSLocationListener> mLocationListeners = new ArrayList<>();
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
@@ -65,7 +69,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //    private int coarseLocationPermissionCheck;
     private int fineLocationPermissionCheck;
     private boolean mRequestingLocationUpdates = true;
-
+    private boolean mMarkerLongClick = false;
+    private Marker currentMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,11 +272,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         return mListLatLngs;
     }
 
-    private void drawMarker(LatLng point) {
-        MarkerOptions markerOptions = new MarkerOptions().position(point);
+    private void drawMarker(Asset point) {
+        MarkerOptions markerOptions = new MarkerOptions().position(point.getLatLng())
+                .title(point.getName()).snippet(point.getDescription());
         //markerOptions.position(point);
+        Marker marker;
+
         if (map != null) {
-            this.map.addMarker(markerOptions);
+            marker = this.map.addMarker(markerOptions);
+            assetMarkerHashMap.put(marker,point);
         }
     }
 
@@ -281,6 +290,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             if (map == null) {
                 map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
             }
 
             Criteria criteria = new Criteria();
@@ -322,35 +332,43 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e);
         }
-
-
+        //check if marker was clicked
+        map.setOnMarkerClickListener(this);
         // add marker on long press
         if (map != null) {
             final GoogleMap finalMap = map;
 
             map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 public void onMapLongClick(LatLng point) {
-                    Intent addAssetIntent = new Intent(MainActivity.this, AddAsset.class);
+                    //if(mMarkerLongClick){
 
-                    Location loc = new Location("new_location");
-                    loc.setLatitude(point.latitude);
-                    loc.setLongitude(point.longitude);
+                   // }
+                   // else {
 
-                    addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, loc);
-                    startActivity(addAssetIntent);
+                        Intent addAssetIntent = new Intent(MainActivity.this, AddAsset.class);
+
+                        Location loc = new Location("new_location");
+                        loc.setLatitude(point.latitude);
+                        loc.setLongitude(point.longitude);
+
+                        addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, loc);
+                        startActivity(addAssetIntent);
+                   // }
 
                 }
-            });
 
+            });
+            map.setOnInfoWindowClickListener(this);
             drawMarkers();
         }
     }
 
     public void drawMarkers() {
-        if (mListLatLngs != null) {
-            for (int i = 0; i < mListLatLngs.size(); i++) {
-                if (mListLatLngs.get(i) != null) {
-                    drawMarker(mListLatLngs.get(i));
+        mListAsset=database.getListOfAssets();
+        if (mListAsset != null) {
+            for (int i = 0; i < mListAsset.size(); i++) {
+                if (mListAsset.get(i) != null) {
+                    drawMarker(mListAsset.get(i));
                 }
             }
         }
@@ -358,6 +376,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refreshMarkers() {
         map.clear();
+        assetMarkerHashMap.clear();
         drawMarkers();
     }
 
@@ -480,5 +499,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void removeTAMSLocationListener(TAMSLocationListener listener) {
         mLocationListeners.remove(listener);
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Log.d(TAG, "onInfoWindowClick() marker"+ marker.getId());
+        marker.hideInfoWindow();
+        currentMarker = marker;
+        Asset markerAsset = assetMarkerHashMap.get(currentMarker);
+
+        Intent mngAssetIntent = new Intent(MainActivity.this,ManageAsset.class);
+        //stuff to capture data of asset
+        String selectedAsset = markerAsset.getId();
+        mngAssetIntent.putExtra("asset_pass",selectedAsset);
+        startActivity(mngAssetIntent);
+        //reset flag
+        // mMarkerLongClick = false;
+        currentMarker = null;
+    }
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+
+       // mMarkerLongClick = true;
+        return true;
     }
 }
