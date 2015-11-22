@@ -25,10 +25,10 @@ public final class R {
 		public static final int below_shadow = 0x7f02003f;
 	}
 	public static final class id {
-		public static final int anchored = 0x7f0e0040;
-		public static final int collapsed = 0x7f0e0041;
-		public static final int expanded = 0x7f0e0042;
-		public static final int hidden = 0x7f0e0043;
+		public static final int anchored = 0x7f0e0041;
+		public static final int collapsed = 0x7f0e0042;
+		public static final int expanded = 0x7f0e0043;
+		public static final int hidden = 0x7f0e0044;
 	}
 	public static final class styleable {
 		public static final int[] SlidingUpPanelLayout = { 0x7f0100a8, 0x7f0100a9, 0x7f0100aa, 0x7f0100ab, 0x7f0100ac, 0x7f0100ad, 0x7f0100ae, 0x7f0100af, 0x7f0100b0, 0x7f0100b1, 0x7f0100b2 };

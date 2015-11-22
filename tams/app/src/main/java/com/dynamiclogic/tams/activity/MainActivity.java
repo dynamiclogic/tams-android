@@ -1,5 +1,8 @@
 package com.dynamiclogic.tams.activity;
 
+import android.support.v4.app.FragmentActivity;
+
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +18,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.fragment.PanelFragment.OnPanelFragmentInteractionListener;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
+import com.dynamiclogic.tams.model.AssetIconRendered;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
 import com.dynamiclogic.tams.utils.SlidingUpPanelLayout;
@@ -37,18 +42,43 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.ClusterRenderer;
 
+import org.json.JSONException;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+/**
+ * We will ask khan about login.
+ How are users created? (By you or from the app)
+ people just type their name as a string
+ How are passwords managed? Does each user have a password or is there one master password?
+ master per DB
+ Deleting assets, how should it be displayed. Does he want users to to be able to edit a deleted asset?
+ flag deleted assets
+ How does he expect different fields, does he still want additional fields to be added? Could he provide examples. Also polyline, what’s that about.
+ There is an official manual with all the details for each asset.
+ Most assets are highway related
+ Sample asset id: HWY16N_R-1_15
+ all assets need street direction
+ hwy name/direction, type of asset (R-1), unique serial number, notes/comments
+ he wants a “collection session”:
+
+ */
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
         SlidingUpPanelLayout.PanelSlideListener,
         com.google.android.gms.location.LocationListener,
         OnPanelFragmentInteractionListener,
-        AssetsListener,GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMarkerClickListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,ClusterItem {
+        AssetsListener,//GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMarkerClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -69,9 +99,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //    private int coarseLocationPermissionCheck;
     private int fineLocationPermissionCheck;
     private boolean mRequestingLocationUpdates = true;
-    private boolean mMarkerLongClick = false;
     private Marker currentMarker;
-
+    //for clustering
+    private ClusterManager<Asset> mClusterManager;
+    private AssetIconRendered mClusterRenderer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -279,8 +310,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Marker marker;
 
         if (map != null) {
-            marker = this.map.addMarker(markerOptions);
-            assetMarkerHashMap.put(marker,point);
+            //marker = this.map.addMarker(markerOptions);
+            //assetMarkerHashMap.put(marker, point);
+
+            mClusterManager.addItem(point);
+            assetMarkerHashMap.put(mClusterRenderer.getMarker(point), point);
+            mClusterManager.cluster();
         }
     }
 
@@ -332,8 +367,76 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e);
         }
+
+        /**
+         * cluster stuff
+         */
+
+        mClusterManager = new ClusterManager<Asset>(this,map);
+        mClusterRenderer = new AssetIconRendered(this, map, mClusterManager);
+        mClusterManager.setRenderer(mClusterRenderer);
+
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Asset>() {
+            @Override
+            public boolean onClusterItemClick(Asset item) {
+                Log.d(TAG, "onCLusterItemClick() marker" + mClusterRenderer.getMarker(item).getId());
+                mClusterRenderer.getMarker(item).showInfoWindow();
+                return false;
+            }
+        });
+
+        mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<Asset>() {
+
+            @Override
+            public void onClusterItemInfoWindowClick(Asset item) {
+                Log.d(TAG, "onClusterInfoWindowClick() marker" + mClusterRenderer.getMarker(item).getId());
+                mClusterRenderer.getMarker(item).hideInfoWindow();
+                currentMarker = mClusterRenderer.getMarker(item);
+                Asset markerAsset = assetMarkerHashMap.get(currentMarker);
+
+                Intent mngAssetIntent = new Intent(MainActivity.this, ManageAsset.class);
+                //stuff to capture data of asset
+                String selectedAsset = item.getId();
+                mngAssetIntent.putExtra("asset_pass", selectedAsset);
+                startActivity(mngAssetIntent);
+                //reset flag
+                // mMarkerLongClick = false;
+                currentMarker = null;
+            }
+        });
+
+
         //check if marker was clicked
-        map.setOnMarkerClickListener(this);
+       //map.setOnMarkerClickListener(this);
+        //map.setOnCameraChangeListener(mClusterManager);
+       /** map.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                marker.showInfoWindow();
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+        });
+        mClusterManager.getClusterMarkerCollection().setOnInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                marker.showInfoWindow();
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+        });*/
+        map.setOnInfoWindowClickListener(mClusterManager);
+        map.setOnCameraChangeListener(mClusterManager);
+        map.setOnMarkerClickListener(mClusterManager);
         // add marker on long press
         if (map != null) {
             final GoogleMap finalMap = map;
@@ -358,7 +461,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
             });
-            map.setOnInfoWindowClickListener(this);
+           // map.setOnInfoWindowClickListener(this);
+
+
+
             drawMarkers();
         }
     }
@@ -377,6 +483,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void refreshMarkers() {
         map.clear();
         assetMarkerHashMap.clear();
+        mClusterManager.clearItems();
         drawMarkers();
     }
 
@@ -500,7 +607,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void removeTAMSLocationListener(TAMSLocationListener listener) {
         mLocationListeners.remove(listener);
     }
-
+/**
     @Override
     public void onInfoWindowClick(Marker marker) {
         Log.d(TAG, "onInfoWindowClick() marker"+ marker.getId());
@@ -525,5 +632,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
        // mMarkerLongClick = true;
         return true;
-    }
+    }*/
+
 }

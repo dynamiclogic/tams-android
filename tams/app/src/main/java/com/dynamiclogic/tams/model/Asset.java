@@ -8,13 +8,14 @@ import android.util.Base64;
 import android.widget.ImageView;
 import com.dynamiclogic.tams.R;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.UUID;
 
-public class Asset{
+public class Asset implements ClusterItem{
 
     //Not sure if we need mId as a string or a UUID???
     private String mId;
@@ -141,6 +142,11 @@ public class Asset{
     @Override
     public int hashCode() {
         return (int)(mLatLng.latitude * mLatLng.longitude * 1000000);
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return mLatLng;
     }
 
     // Going to be used to determine the sorting for assets in the ListView
