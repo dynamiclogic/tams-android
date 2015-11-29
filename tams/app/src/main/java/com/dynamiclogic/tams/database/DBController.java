@@ -1,5 +1,6 @@
 package com.dynamiclogic.tams.database;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,8 +200,6 @@ public class DBController extends SQLiteOpenHelper {
     /**
      * Purge Asset from SQLlite
      * @param assetId
-     *
-     * TODO: delete the location of the asset or set it as CASCADE
      */
     protected void purgeAsset(String assetId) {
         if(hasAsset(assetId)) {
@@ -211,6 +210,17 @@ public class DBController extends SQLiteOpenHelper {
 
             database.close();
         }
+    }
+
+    /**
+     * Purge Asset from SQLlite
+     */
+    protected void purgeAllAssets() {
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.execSQL("DELETE FROM " + SQLVariables._ASSETS_TABLE);
+        database.execSQL("DELETE FROM "+ SQLVariables._LOCATIONS_TABLE);
+        database.execSQL("DELETE FROM "+ SQLVariables._MEDIA_TABLE);
+        database.close();
     }
 
     /**
@@ -396,11 +406,10 @@ public class DBController extends SQLiteOpenHelper {
      * Compose JSON out of SQLite records
      * @return
      */
-    protected String assetsToJSON(boolean needSyncOnly){
+    protected String assetsToJSON(){
         ArrayList<HashMap<String, String>> wordList;
         wordList = new ArrayList<>();
         String selectQuery = "";
-        if (needSyncOnly) {
             selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
                         SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
                         SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
@@ -408,20 +417,9 @@ public class DBController extends SQLiteOpenHelper {
                     " FROM " + SQLVariables._ASSETS_TABLE +
                     " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
                     " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
-                    " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1'"+
+                    " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1' AND "+ SQLVariables._ASSETS_COLUMN_DELETED + " = '0'" +
                     " ORDER BY " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " DESC";
-        } else {
-            //selectQuery = "SELECT " + Variables._ASSETS_COLUMN_ASSET_ID + " FROM " + Variables._ASSETS_TABLE;
-            selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
-                        SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
-                        SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
-                        SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
-                    " FROM " + SQLVariables._ASSETS_TABLE +
-                    " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
-                    " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
-                    " WHERE " + SQLVariables._ASSETS_COLUMN_DELETED + " = '0'"+
-                    " ORDER BY " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " DESC";
-        }
+
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -434,6 +432,8 @@ public class DBController extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         database.close();
+        if (wordList.isEmpty()) return "";
+
         Gson gson = new GsonBuilder().create();
         //Use GSON to serialize Array List to JSON
 //        System.out.println("ALLASSETS");
@@ -441,16 +441,127 @@ public class DBController extends SQLiteOpenHelper {
         return gson.toJson(wordList);
     }
 
+    /**
+     * Compose JSON out of SQLite records
+     * @return
+     */
+    protected String deletedAssetsToJSON(){
+        ArrayList<HashMap<String, String>> wordList;
+        wordList = new ArrayList<>();
+        String selectQuery = "";
+            selectQuery = "SELECT "+ SQLVariables._ASSETS_COLUMN_ASSET_ID+", "+SQLVariables._ASSETS_COLUMN_UPDATED_AT +
+                    " FROM " + SQLVariables._ASSETS_TABLE +
+                    " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1' AND " + SQLVariables._ASSETS_COLUMN_DELETED + " = '1'" +
+                    " ORDER BY " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " DESC";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                for(int i=0; i<cursor.getColumnCount();i++) {
+                    map.put(cursor.getColumnName(i), cursor.getString(i));
+                }
+                wordList.add(map);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        if (wordList.isEmpty()) return "";
+
+        Gson gson = new GsonBuilder().create();
+        //Use GSON to serialize Array List to JSON
+        return gson.toJson(wordList);
+    }
+
     public List<Asset> assetsList() {
-        String data = assetsToJSON(false);
+        String data = assetsToJSON();
         GsonBuilder gsonb = new GsonBuilder();
         Gson gson = gsonb.create();
-        List<Asset> list = gson.fromJson(data, new TypeToken<ArrayList<Asset>>(){}.getType());
+        List<Asset> list = gson.fromJson(data, new TypeToken<ArrayList<Asset>>() {
+        }.getType());
 
         if (list == null) {
             return new ArrayList<Asset>();
         }
         return list;
+    }
+
+    /**
+     * Compose JSON out of SQLite records
+     * @return
+     */
+    protected String newAssetsToJSON(){
+        ArrayList<HashMap<String, String>> wordList;
+        wordList = new ArrayList<>();
+        String selectQuery = "";
+        selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
+                SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
+                SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
+                SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
+                " FROM " + SQLVariables._ASSETS_TABLE +
+                " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
+                " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1' AND "+ SQLVariables._ASSETS_COLUMN_DELETED + " = '0' AND " +SQLVariables._ASSETS_COLUMN_ISNEW + " = '1'" +
+                " ORDER BY " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " DESC";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                for(int i=0; i<cursor.getColumnCount();i++) {
+                    map.put(cursor.getColumnName(i), cursor.getString(i));
+                }
+                wordList.add(map);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        if (wordList.isEmpty()) return "";
+
+        Gson gson = new GsonBuilder().create();
+        //Use GSON to serialize Array List to JSON
+//        System.out.println("ALLASSETS");
+//        System.out.println(gson.toJson(wordList));
+        return gson.toJson(wordList);
+    }
+
+    /**
+     * Compose JSON out of SQLite records
+     * @return
+     */
+    protected String updatedAssetsToJSON(){
+        ArrayList<HashMap<String, String>> wordList;
+        wordList = new ArrayList<>();
+        String selectQuery = "";
+        selectQuery = "SELECT "+ SQLVariables._ASSETS_TABLE+".*, " +
+                SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LONGITUDE+", " +
+                SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_LATITUDE +", " +
+                SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_IMAGES +
+                " FROM " + SQLVariables._ASSETS_TABLE +
+                " LEFT JOIN " + SQLVariables._LOCATIONS_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._LOCATIONS_TABLE+"."+ SQLVariables._LOCATIONS_COLUMN_ASSET_ID+
+                " LEFT JOIN " + SQLVariables._MEDIA_TABLE+ " ON "+ SQLVariables._ASSETS_TABLE+"."+ SQLVariables._ASSETS_COLUMN_ASSET_ID +" = " + SQLVariables._MEDIA_TABLE+"."+ SQLVariables._MEDIA_COLUMN_ASSET_ID+
+                " WHERE " + SQLVariables._ASSETS_COLUMN_NEEDSSYNC + " = '1' AND "+ SQLVariables._ASSETS_COLUMN_DELETED + " = '0' AND " +SQLVariables._ASSETS_COLUMN_ISNEW + " = '0'" +
+                " ORDER BY " + SQLVariables._ASSETS_COLUMN_ASSET_ID + " DESC";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                for(int i=0; i<cursor.getColumnCount();i++) {
+                    map.put(cursor.getColumnName(i), cursor.getString(i));
+                }
+                wordList.add(map);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        if (wordList.isEmpty()) return "";
+
+        Gson gson = new GsonBuilder().create();
+        //Use GSON to serialize Array List to JSON
+//        System.out.println("ALLASSETS");
+//        System.out.println(gson.toJson(wordList));
+        return gson.toJson(wordList);
     }
 
     /**
