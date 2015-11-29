@@ -296,6 +296,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 onLocationChanged(location);
             }
 
+            Log.d(TAG, "onMapReady: mCurrentLatLng = " + mCurrentLatLng);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCurrentLatLng, 19);
+            map.animateCamera(cameraUpdate);
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(map.getMyLocation().getLatitude(),map.getMyLocation().getLongitude()),13));
             map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
