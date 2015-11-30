@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.activity.MainActivity;
 import com.dynamiclogic.tams.activity.ManageAsset;
+import com.dynamiclogic.tams.database.DBController;
+import com.dynamiclogic.tams.database.DBSync;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
@@ -39,6 +41,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
     private ArrayList<Asset> mListAssets = new ArrayList<Asset>();
     private ListAdapter mListAdapter;
     private Database database;
+    private DBSync dbSync;
+    private DBController dbController;
 
     public PanelFragment() { }
 
@@ -48,6 +52,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
         Log.d(TAG, "onCreate");
 
         database = Database.getInstance();
+        dbController = new DBController(getActivity());
+        dbSync = new DBSync(getActivity(), dbController);
 
         mListAssets.addAll(database.getListOfAssets());
     }
@@ -64,6 +70,13 @@ public class PanelFragment extends Fragment implements AssetsListener {
             @Override
             public void onClick(View v) {
                 // TODO: 11/18/2015 Add refresh code
+                dbSync.sync();
+
+                mListAssets.clear();
+                mListAssets.addAll(dbController.getListOfAssets());
+                ((MyAdapter)mListAdapter).sortAssets();
+                ((BaseAdapter) mListAdapter).notifyDataSetChanged();
+
                 Toast.makeText(getActivity(), "Refresh FAB Pressed", Toast.LENGTH_SHORT).show();
             }
         });

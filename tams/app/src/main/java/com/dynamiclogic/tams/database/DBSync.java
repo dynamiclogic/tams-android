@@ -42,7 +42,7 @@ public class DBSync extends Observable {
         //prgDialog = new ProgressDialog(mContext); //crashes
     }
 
-    protected void sync() {
+    public void sync() {
         pull();
         //deleteAssets();
         //updateAssets();
@@ -79,8 +79,8 @@ public class DBSync extends Observable {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String response) {
-                    String isNew, needsSync, purgeAsset, assetId;
-                    isNew = needsSync = purgeAsset = assetId = "";
+                    String isNew, needsSync, assetId;
+                    isNew = needsSync = assetId = "";
                     HashMap<String, String> queryValues = new HashMap<>();
 
                     try {
@@ -96,16 +96,11 @@ public class DBSync extends Observable {
                             assetId = obj.get(SQLVariables._ASSETS_COLUMN_ASSET_ID).toString().trim();
                             needsSync = obj.get(SQLVariables._ASSETS_COLUMN_NEEDSSYNC).toString().trim();
 
-                            //if asset was successfully deleted on server, purge it from sqllite
-                            purgeAsset = obj.get("purgeAsset").toString().trim();
-                            if (purgeAsset.equals("1")) {
-                                mDBController.purgeAsset(assetId);
-                            } else {
-                                queryValues.put(SQLVariables._ASSETS_COLUMN_ASSET_ID, assetId);
-                                queryValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, isNew);
-                                queryValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, needsSync);
-                                mDBController.updateAssetFlags(queryValues);
-                            }
+                            queryValues.put(SQLVariables._ASSETS_COLUMN_ASSET_ID, assetId);
+                            queryValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, isNew);
+                            queryValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, needsSync);
+                            mDBController.updateAssetFlags(queryValues);
+
                             Toast.makeText(mContext.getApplicationContext(), "Asset create completed!", Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
@@ -147,8 +142,8 @@ public class DBSync extends Observable {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String response) {
-                    String isNew, needsSync, purgeAsset, assetId;
-                    isNew = needsSync = purgeAsset = assetId = "";
+                    String isNew, needsSync, assetId;
+                    isNew = needsSync = assetId = "";
                     HashMap<String, String> queryValues = new HashMap<>();
 
                     try {
@@ -163,16 +158,11 @@ public class DBSync extends Observable {
                             assetId = obj.get(SQLVariables._ASSETS_COLUMN_ASSET_ID).toString().trim();
                             needsSync = obj.get(SQLVariables._ASSETS_COLUMN_NEEDSSYNC).toString().trim();
 
-                            //if asset was successfully deleted on server, purge it from sqllite
-                            purgeAsset = obj.get("purgeAsset").toString().trim();
-                            if (purgeAsset.equals("1")) {
-                                mDBController.purgeAsset(assetId);
-                            } else {
-                                queryValues.put(SQLVariables._ASSETS_COLUMN_ASSET_ID, assetId);
-                                queryValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, isNew);
-                                queryValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, needsSync);
-                                mDBController.updateAssetFlags(queryValues);
-                            }
+                            queryValues.put(SQLVariables._ASSETS_COLUMN_ASSET_ID, assetId);
+                            queryValues.put(SQLVariables._ASSETS_COLUMN_ISNEW, isNew);
+                            queryValues.put(SQLVariables._ASSETS_COLUMN_NEEDSSYNC, needsSync);
+                            mDBController.updateAssetFlags(queryValues);
+
                             createAssets();
                             Toast.makeText(mContext.getApplicationContext(), "Asset update completed!", Toast.LENGTH_LONG).show();
                         }
