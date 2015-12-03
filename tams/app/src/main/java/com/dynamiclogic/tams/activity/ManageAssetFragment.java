@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,7 +24,6 @@ import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  *Andreas
@@ -43,17 +43,40 @@ public class ManageAssetFragment extends Fragment {
     private List<Asset> list;
 
 
-
+    @Nullable
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_asset, container, false);
         
         db = Database.getInstance();
 
-        list = db.getListOfAssets();
+    //    list = db.getListOfAssets();
         Intent intent = getActivity().getIntent();
         String value = intent.getStringExtra("asset_pass");
-        UUID mUID = UUID.fromString(value);
-        mAsset = db.getAssetFromUUID(mUID);
+        mAsset = db.getAssetFromID(value);
+        //Intent intent = getIntent();
+        //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
+
+
+        // Bundle bundle = getIntent.getExtra();
+
+        /*Trying to save asset on state change
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(ASSET)) {
+                mAsset = (Asset) savedInstanceState.getSerializable(ASSET);
+            }
+        } else {
+            *//*mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
+            if (mAsset == null){
+                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+                mAsset = new Asset(latLng);
+            }*//*
+        }*/
+
+        //mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
+
+        // LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        // mAsset = new Asset(latLng);
+
 
         if(mAsset != null) {
             mLatiture = (TextView) v.findViewById(R.id.latitudeTextView);

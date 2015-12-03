@@ -123,10 +123,12 @@ public class SQLVariables {
 
     // Server settings - store address in prefferences
     public static final String _IPADDRESS = "http://tams.imihov.com";
-    public static final String _PUSH_URL = "/api/push.php";
-    public static final String _PULL_URL = "/api/pull.php";
+    public static final String _CREATE_URL = "/api/v2/asset/create";
+    public static final String _UPDATE_URL = "/api/v2/asset/update";
+    public static final String _DELETE_URL = "/api/v2/asset/delete";
+    public static final String _PULL_URL = "/api/v2/asset/list";
     public static final String _API_AUTH_POST = "apiAuth";
-    public static final String _ASSETS_JSON_POST = "assetsJSON";
+    public static final String _ASSETS_JSON_POST = "assets";
 
     // API KEY - To be stored in preferences
     public static final String _API_PASSWORD = "1111";

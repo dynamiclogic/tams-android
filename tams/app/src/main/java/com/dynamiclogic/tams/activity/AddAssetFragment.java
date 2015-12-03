@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,7 +42,8 @@ import java.util.Date;
 /**
  * Created by Javier G on 8/17/2015.
  */
-public class AddAssetFragment extends Fragment{
+public class AddAssetFragment extends Fragment {
+
     private static final String TAG = AddAssetFragment.class.getSimpleName();
     private TextView mLatitude, mLongitude;
     private ImageView mImageView;
@@ -72,7 +74,7 @@ public class AddAssetFragment extends Fragment{
         //Getting location from the intent coming from MainActivity
         mLocation = getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
-        //Start worker thread to get address from location
+
         startIntentService();
 
         //Make a new asset from location latitude and longitude
@@ -94,6 +96,9 @@ public class AddAssetFragment extends Fragment{
         if(mLocation != null) {
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             mAsset = new Asset(latLng);
+            String time = System.currentTimeMillis()/1000L + "";
+            mAsset.setCreatedAt(time);
+            mAsset.setUpdatedAt(time);
         }
     }
 
@@ -103,9 +108,7 @@ public class AddAssetFragment extends Fragment{
         mNameEditField.setText(mAsset.getName());
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -113,9 +116,8 @@ public class AddAssetFragment extends Fragment{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) { }
 
-            }
         });
     }
 
