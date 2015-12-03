@@ -1,6 +1,5 @@
 package com.dynamiclogic.tams.activity;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,7 +15,6 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -57,10 +55,6 @@ public class AddAssetFragment extends Fragment{
     private Database db;
     private String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
-    private int externalStorageWrittingLocationPermissionCheck;
-    private int cameraPermissionCheck;
-    private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE_WRITTING = 1;
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
     private boolean playIsPressed = true;
     private boolean recordIsPressed = true;
     private static String mAudioFileName = null;
@@ -75,37 +69,38 @@ public class AddAssetFragment extends Fragment{
         //Getting Database singleton reference.
         db = Database.getInstance();
 
-        //Check current permission states
-        externalStorageWrittingLocationPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        cameraPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.CAMERA);
-
         //Getting location from the intent coming from MainActivity
-        mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
+        mLocation = getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
         //Start worker thread to get address from location
         startIntentService();
 
         //Make a new asset from location latitude and longitude
+        createAsset();
+
+        //Hook up layout components
+        setUpLayoutComponents(v);
+
+        //Set text for layouts
+        setTextMethods();
+
+        //Set on click listeners
+        setUpOnClickListeners();
+
+        return v;
+    }
+
+    private void createAsset() {
         if(mLocation != null) {
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             mAsset = new Asset(latLng);
         }
+    }
 
-        mLatitude = (TextView)v.findViewById(R.id.latitudeTextView);
+    private void setTextMethods() {
         mLatitude.setText(String.valueOf(mAsset.getLatLng().latitude));
-
-        mLongitude = (TextView)v.findViewById(R.id.longitudeTextView);
         mLongitude.setText(String.valueOf(mAsset.getLatLng().latitude));
-
-        mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
         mNameEditField.setText(mAsset.getName());
-
-        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
-
-        mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -122,26 +117,15 @@ public class AddAssetFragment extends Fragment{
 
             }
         });
+    }
 
-        mImageView = (ImageView)v.findViewById(R.id.imageView);
-
-        /*mPictureButton = (Button)v.findViewById(R.id.pictureButton);
-        mPictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });*/
-
-        mPictureButton = (ImageButton)v.findViewById(R.id.pictureButton);
+    private void setUpOnClickListeners() {
         mPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent();
             }
         });
-
-        mRecordButton = (ImageButton)v.findViewById(R.id.recordButton);
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,10 +140,6 @@ public class AddAssetFragment extends Fragment{
                 //startActivity(intent);
             }
         });
-
-
-
-        mPlayButton = (ImageButton)v.findViewById(R.id.playButton);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,8 +152,18 @@ public class AddAssetFragment extends Fragment{
                 playIsPressed = !playIsPressed;
             }
         });
+    }
 
-        return v;
+    private void setUpLayoutComponents(View v) {
+        mLatitude = (TextView)v.findViewById(R.id.latitudeTextView);
+        mLongitude = (TextView)v.findViewById(R.id.longitudeTextView);
+        mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
+        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
+        mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
+        mImageView = (ImageView)v.findViewById(R.id.imageView);
+        mPictureButton = (ImageButton)v.findViewById(R.id.pictureButton);
+        mRecordButton = (ImageButton)v.findViewById(R.id.recordButton);
+        mPlayButton = (ImageButton)v.findViewById(R.id.playButton);
     }
 
     @Override
