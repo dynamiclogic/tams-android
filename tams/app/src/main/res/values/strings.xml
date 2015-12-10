@@ -19,4 +19,5 @@
     <string name="no_address_found">No Address was Found</string>
     <string name="address_found">Address Found</string>
     <string name="audio_dlabel">AUDIO</string>
+    <string name="action_save">Save</string>
 </resources>

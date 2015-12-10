@@ -12,7 +12,7 @@
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/accent</item>
     </style>
 
-    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:colorPrimary" tools:targetApi="lollipop">@color/primary</item>
         <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/primary_dark</item>
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/accent</item>

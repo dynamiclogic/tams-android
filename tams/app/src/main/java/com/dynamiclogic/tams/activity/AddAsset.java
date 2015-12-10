@@ -3,6 +3,7 @@ package com.dynamiclogic.tams.activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.dynamiclogic.tams.R;
 
@@ -17,10 +18,14 @@ public class AddAsset extends AppCompatActivity {
     public static final String EXTRA_ASSET_LOCATION =
             "com.dynamiclogic.tams.activity.asset_location";
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_asset);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
 
         mLocation = (Location) getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 

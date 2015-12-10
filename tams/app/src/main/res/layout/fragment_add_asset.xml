@@ -7,6 +7,17 @@
               android:weightSum="1"
               tools:context=".AddAssetFragment">
 
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+       android:id="@+id/tool_bar"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/primary"
+       android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar" 
+       android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+       android:elevation="4dp">
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til"
         android:layout_width="match_parent"
@@ -138,6 +149,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_play_arrow_black_24dp"/>
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"/>
 
         </LinearLayout>
 

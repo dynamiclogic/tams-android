@@ -1,5 +1,6 @@
 package com.dynamiclogic.tams.activity;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,16 +10,22 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
@@ -50,6 +58,7 @@ public class AddAssetFragment extends Fragment {
     private EditText mNameEditField, mDescriptionEditField;
     private Spinner mAssetTypeSpinner;
     private ImageButton mPictureButton, mRecordButton, mPlayButton;
+    private Button mSaveButton;
     private Asset mAsset;
     private Location mLocation;
     public static final String EXTRA_ASSET_LOCATION =
@@ -62,11 +71,16 @@ public class AddAssetFragment extends Fragment {
     private static String mAudioFileName = null;
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
+    private Toolbar toolbar;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
+        toolbar = (Toolbar) v.findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        toolbar.setTitle("Add Asset");
 
         //Getting Database singleton reference.
         db = Database.getInstance();
@@ -90,6 +104,27 @@ public class AddAssetFragment extends Fragment {
         setUpOnClickListeners();
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_addasset, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_save) {
+            Toast.makeText(getActivity(), "Hit Save Button", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void createAsset() {
@@ -154,6 +189,13 @@ public class AddAssetFragment extends Fragment {
                 playIsPressed = !playIsPressed;
             }
         });
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.addNewAsset(mAsset);
+
+            }
+        });
     }
 
     private void setUpLayoutComponents(View v) {
@@ -166,6 +208,7 @@ public class AddAssetFragment extends Fragment {
         mPictureButton = (ImageButton)v.findViewById(R.id.pictureButton);
         mRecordButton = (ImageButton)v.findViewById(R.id.recordButton);
         mPlayButton = (ImageButton)v.findViewById(R.id.playButton);
+        mSaveButton = (Button)v.findViewById(R.id.saveButton);
     }
 
     @Override
@@ -365,7 +408,7 @@ public class AddAssetFragment extends Fragment {
     public void onStop() {
         super.onStop();
         //Add Asset to the database
-        db.addNewAsset(mAsset);
+//        db.addNewAsset(mAsset);
     }
 
     private void dispatchTakePictureIntent() {
