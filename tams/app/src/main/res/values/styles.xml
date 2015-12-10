@@ -2,8 +2,8 @@
 
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="@android:style/Theme.Holo.Light.NoActionBar" >-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-        <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
     <!--</style>-->
 
     <style name="AppTheme" parent="Base.AppTheme">

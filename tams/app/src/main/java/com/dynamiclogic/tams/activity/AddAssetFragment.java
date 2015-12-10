@@ -1,6 +1,5 @@
 package com.dynamiclogic.tams.activity;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,13 +9,13 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -28,13 +27,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
@@ -58,7 +55,6 @@ public class AddAssetFragment extends Fragment {
     private EditText mNameEditField, mDescriptionEditField;
     private Spinner mAssetTypeSpinner;
     private ImageButton mPictureButton, mRecordButton, mPlayButton;
-    private Button mSaveButton;
     private Asset mAsset;
     private Location mLocation;
     public static final String EXTRA_ASSET_LOCATION =
@@ -73,14 +69,11 @@ public class AddAssetFragment extends Fragment {
     private MediaPlayer mPlayer = null;
     private Toolbar toolbar;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_asset, container, false);
-        toolbar = (Toolbar) v.findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle("Add Asset");
+
 
         //Getting Database singleton reference.
         db = Database.getInstance();
@@ -88,7 +81,7 @@ public class AddAssetFragment extends Fragment {
         //Getting location from the intent coming from MainActivity
         mLocation = getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 
-
+        //Intent Service to get Address related to current location
         startIntentService();
 
         //Make a new asset from location latitude and longitude
@@ -103,12 +96,26 @@ public class AddAssetFragment extends Fragment {
         //Set on click listeners
         setUpOnClickListeners();
 
+        //Set up toolbar
+        setUpToolbar();
+
+        //Let Android know we have menu items we want for the toolbar
+        setHasOptionsMenu(true);
+
         return v;
+    }
+
+    private void setUpToolbar() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setTitle("Add Asset");
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_addasset, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -120,7 +127,8 @@ public class AddAssetFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            Toast.makeText(getActivity(), "Hit Save Button", Toast.LENGTH_SHORT).show();
+            db.addNewAsset(mAsset);
+            getActivity().finish();
             return true;
         }
 
@@ -128,10 +136,10 @@ public class AddAssetFragment extends Fragment {
     }
 
     private void createAsset() {
-        if(mLocation != null) {
+        if (mLocation != null) {
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             mAsset = new Asset(latLng);
-            String time = System.currentTimeMillis()/1000L + "";
+            String time = System.currentTimeMillis() / 1000L + "";
             mAsset.setCreatedAt(time);
             mAsset.setUpdatedAt(time);
         }
@@ -143,7 +151,8 @@ public class AddAssetFragment extends Fragment {
         mNameEditField.setText(mAsset.getName());
         mDescriptionEditField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -151,7 +160,8 @@ public class AddAssetFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
 
         });
     }
@@ -167,7 +177,7 @@ public class AddAssetFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onRecord(recordIsPressed);
-                if (recordIsPressed){
+                if (recordIsPressed) {
                     mRecordButton.setImageResource(R.drawable.ic_mic_black_24dp);
                 } else {
                     mRecordButton.setImageResource(R.drawable.ic_mic_off_black_24dp);
@@ -181,7 +191,7 @@ public class AddAssetFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 onPlay(playIsPressed);
-                if (playIsPressed){
+                if (playIsPressed) {
                     mPlayButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 } else {
                     mPlayButton.setImageResource(R.drawable.ic_stop_black_24dp);
@@ -189,26 +199,19 @@ public class AddAssetFragment extends Fragment {
                 playIsPressed = !playIsPressed;
             }
         });
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                db.addNewAsset(mAsset);
-
-            }
-        });
     }
 
     private void setUpLayoutComponents(View v) {
-        mLatitude = (TextView)v.findViewById(R.id.latitudeTextView);
-        mLongitude = (TextView)v.findViewById(R.id.longitudeTextView);
-        mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
-        mAssetTypeSpinner = (Spinner)v.findViewById(R.id.assetTypesSpinner);
-        mDescriptionEditField = (EditText)v.findViewById(R.id.descriptionEditText);
-        mImageView = (ImageView)v.findViewById(R.id.imageView);
-        mPictureButton = (ImageButton)v.findViewById(R.id.pictureButton);
-        mRecordButton = (ImageButton)v.findViewById(R.id.recordButton);
-        mPlayButton = (ImageButton)v.findViewById(R.id.playButton);
-        mSaveButton = (Button)v.findViewById(R.id.saveButton);
+        toolbar = (Toolbar) v.findViewById(R.id.tool_bar);
+        mLatitude = (TextView) v.findViewById(R.id.latitudeTextView);
+        mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
+        mNameEditField = (EditText) v.findViewById(R.id.nameEditText);
+        mAssetTypeSpinner = (Spinner) v.findViewById(R.id.assetTypesSpinner);
+        mDescriptionEditField = (EditText) v.findViewById(R.id.descriptionEditText);
+        mImageView = (ImageView) v.findViewById(R.id.imageView);
+        mPictureButton = (ImageButton) v.findViewById(R.id.pictureButton);
+        mRecordButton = (ImageButton) v.findViewById(R.id.recordButton);
+        mPlayButton = (ImageButton) v.findViewById(R.id.playButton);
     }
 
     @Override
@@ -283,41 +286,6 @@ public class AddAssetFragment extends Fragment {
         mPlayer = null;
     }
 
-
-
-    /*Not doing 6.0 permissions
-
-    private void cameraPermissionChecks() {
-
-        // TODO: 11/6/2015 Have 2 ways of checking permission's before requesting, not sure which is best
-        *//*if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE_WRITTING);
-
-        }*//*
-
-        if ( externalStorageWrittingLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
-            //Request access to write to external storage
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE_WRITTING);
-        }
-
-        // TODO: 11/6/2015 Need to uncomment camera permission once I have them fixed
-        if ( cameraPermissionCheck == PackageManager.PERMISSION_DENIED){
-            //Request access to write to external storage
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.CAMERA},
-                    MY_PERMISSIONS_REQUEST_CAMERA);
-        }
-
-
-    }*/
-
     String mCurrentPhotoPath;
 
     private void createAudioFile() throws IOException {
@@ -347,62 +315,6 @@ public class AddAssetFragment extends Fragment {
         return image;
     }
 
-    /* Not doing 6.0 permissions
-
-    // TODO: 11/6/2015 Never getting the call back after permission's are requested, need to fix
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult() called with: " + "requestCode = [" + requestCode + "], permissions = [" + permissions + "], grantResults = [" + grantResults + "]");
-
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE_WRITTING: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-                    Log.d(TAG, "Write External Storage permission granted");
-                    externalStorageWrittingLocationPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                    if (cameraPermissionCheck == PackageManager.PERMISSION_GRANTED){
-                        dispatchTakePictureIntent();
-                    }
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            case MY_PERMISSIONS_REQUEST_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    Log.d(TAG, "Camera permission granted");
-                    cameraPermissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.CAMERA);
-
-                    if (externalStorageWrittingLocationPermissionCheck == PackageManager.PERMISSION_GRANTED){
-                        dispatchTakePictureIntent();
-                    }
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-
-                // other 'case' lines to check for other
-                // permissions this app might request
-            }
-        }
-    }*/
 
     @Override
     public void onStop() {

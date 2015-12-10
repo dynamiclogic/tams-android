@@ -34,6 +34,8 @@ public class AddAsset extends AppCompatActivity {
         //startIntentService();
     }
 
+
+
 //    protected void startIntentService() {
 //        Intent intent = new Intent(this, FetchAddressIntentService.class);
 //        mResultReceiver = new AddressResultReceiver(new Handler());
