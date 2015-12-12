@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +28,7 @@ import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,12 +51,15 @@ public class PanelFragment extends Fragment implements AssetsListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
 
         database = Database.getInstance();
         dbController = new DBController(getActivity());
         dbSync = new DBSync(getActivity(), dbController);
 
         mListAssets.addAll(database.getListOfAssets());
+//        Log.d(TAG, "onCreate() called, adding listener");
+//        database.addAssetListener(this);
     }
 
     @Override
@@ -77,10 +78,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
                 mListAssets.clear();
                 mListAssets.addAll(dbController.getListOfAssets());
-                ((MyAdapter)mListAdapter).sortAssets();
+                ((MyAdapter) mListAdapter).sortAssets();
                 ((BaseAdapter) mListAdapter).notifyDataSetChanged();
-
-                Toast.makeText(getActivity(), "Refresh FAB Pressed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -99,6 +98,15 @@ public class PanelFragment extends Fragment implements AssetsListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+//        Log.d(TAG, "onStart() called, adding listener");
+//        database.addAssetListener(this);
+    }
+
+
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -112,16 +120,25 @@ public class PanelFragment extends Fragment implements AssetsListener {
                         String.valueOf(mListAdapter.getItem(position))));
             }
         });
+//        Log.d(TAG, "onResume() called, adding listener");
+//        database.addAssetListener(this);
+        ((MainActivity)getActivity()).addTAMSLocationListener((TAMSLocationListener) mListAdapter);
 
-        database.addAssetListener(this);
-        ((MainActivity)getActivity()).addTAMSLocationListener((TAMSLocationListener)mListAdapter);
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        database.removeAssetListener(this);
+//        Log.d(TAG, "onPause() called, removing listener");
+//        database.removeAssetListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+//        Log.d(TAG, "onStop() called, removing listener");
+//        database.removeAssetListener(this);
     }
 
     @Override
@@ -135,6 +152,8 @@ public class PanelFragment extends Fragment implements AssetsListener {
         mListAssets.addAll(assets);
         ((MyAdapter)mListAdapter).sortAssets();
         ((BaseAdapter) mListAdapter).notifyDataSetChanged();
+        Log.d(TAG, "onAssetsUpdated: ");
+        Log.d(TAG, "onAssetsUpdated() called with: list = [" + assets + "]");
     }
 
     /**
@@ -184,7 +203,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-//            Log.d(TAG, "getView called with position " + position);
 
             // TODO NEED TO CONSOLIDATE DUPLICATED CODE
             // had issues with onclick events when moving code out
@@ -200,8 +218,11 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
-                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(asset.getPictureLocation()), 500, 500);
-                imageViewPreview.setImageBitmap(thumbImage);
+//                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(asset.getPictureLocation()), 500, 500);
+//                imageViewPreview.setImageBitmap(thumbImage);
+                Picasso.with(getContext())
+                        .load("file://" + asset.getPictureLocation())
+                        .into(imageViewPreview);
                 textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getDescription());
                 //textViewBody.setText(asset.getLatLng().toString());
@@ -215,7 +236,6 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 if (mLastLocation != null) {
                     float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
                     textViewDistance.setText(String.format("%.2f miles away", milesAway));
-        //            Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
                 } else {
                     Log.d(TAG, "mLastLocation is still null");
                     textViewDistance.setText("? miles away");
@@ -270,12 +290,17 @@ public class PanelFragment extends Fragment implements AssetsListener {
 
                 return convertView;
             } else {
+                Asset asset = mAssetList.get(position);
+                ImageView imageViewPreview = (ImageView) convertView.findViewById(R.id.image);
                 TextView textViewTitle = (TextView) convertView.findViewById(R.id.asset_title);
                 TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
-                Asset asset = mAssetList.get(position);
-
+//                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(asset.getPictureLocation()), 500, 500);
+//                imageViewPreview.setImageBitmap(thumbImage);
+                Picasso.with(getContext())
+                        .load("file://" + asset.getPictureLocation())
+                        .into(imageViewPreview);
                 textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getDescription());
 
@@ -288,9 +313,7 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 if (mLastLocation != null) {
                     float milesAway = mLastLocation.distanceTo(loc) / metersPerMile;
                     textViewDistance.setText(String.format("%.2f miles away", milesAway));
-            //        Log.d(TAG, "recalculated location for " + asset.getDescription() + " to be " + milesAway);
                 } else {
-            //        Log.d(TAG, "mLastLocation is still null");
                     textViewDistance.setText("? miles away");
                 }
 

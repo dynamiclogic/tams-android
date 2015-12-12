@@ -1,6 +1,7 @@
 package com.dynamiclogic.tams.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
@@ -8,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by ntessema on 10/24/15.
@@ -18,6 +18,7 @@ public abstract class Database {
     private static Database instance = new IvanDatabase();
     private Context mContext;
     private List<AssetsListener> assetListenerList = new ArrayList<>();
+    private static final String TAG = Database.class.getSimpleName();
 
     protected Database() {}
 
@@ -38,7 +39,10 @@ public abstract class Database {
 
     // Asset listeners
     public void notifyListeners() {
+        Log.d(TAG, "notifyListeners() called with: " + "");
+        Log.d(TAG, "assetListenerList: " + assetListenerList.toString());
         for (AssetsListener listener : assetListenerList) {
+            Log.d(TAG, "Listener: " + listener.toString());
             listener.onAssetsUpdated(getListOfAssets());
         }
     }

@@ -2,8 +2,6 @@ package com.dynamiclogic.tams.activity;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -141,17 +138,6 @@ public class ManageAssetFragment extends Fragment {
 
         mImageView = (ImageView)v.findViewById(R.id.imageView);
 
-        //Need onGlobalLayoutListener to get size of imageView after it has been inflated
-        // so we can set the picture in it
-        ViewTreeObserver ivvto = mImageView.getViewTreeObserver();
-        ivvto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                setPic();
-            }
-        });
-
-
         Button pictureButton = (Button)v.findViewById(R.id.pictureButton);
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,33 +151,6 @@ public class ManageAssetFragment extends Fragment {
         Log.d(TAG, "onCreateView() in ManageAssetFragment");
 
         return v;
-    }
-
-
-    private void setPic() {
-        Log.d(TAG, "setPic() from ManageAssetFragment");
-
-        // Get the dimensions of the View
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageView.setImageBitmap(bitmap);
     }
 
     @Override

@@ -1,15 +1,12 @@
 package com.dynamiclogic.tams.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dynamiclogic.tams.model.Asset;
-import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by ntessema on 10/25/15.

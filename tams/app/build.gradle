@@ -19,19 +19,20 @@ android {
     }
 }
 
+ext {
+    supportLibVersion = '23.1.1'
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:design:23.0.0'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:cardview-v7:${supportLibVersion}"
     compile 'com.getbase:floatingactionbutton:1.10.0'
     compile 'com.google.android.gms:play-services:7.8.0'
-    compile 'com.android.support:recyclerview-v7:+'
-
-    //TODO this dependency is causing issues, not sure why
-    //compile 'com.nineoldandroids:library:2.4.0+'
     compile 'com.sothree.slidinguppanel:library:3.1.1'
     compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.android.support:cardview-v7:23.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.loopj.android:android-async-http:1.4.6'
     compile "org.apache.httpcomponents:httpcore:4.3.2"

@@ -102,7 +102,7 @@
             android:maxWidth="100dp"
             android:minHeight="300dp"
             android:minWidth="100dp"
-            android:background="@color/darkgray"
+            android:background="@color/lightgrey"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"/>
 

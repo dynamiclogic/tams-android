@@ -2,20 +2,16 @@ package com.dynamiclogic.tams.activity;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -37,10 +33,10 @@ import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
 import com.dynamiclogic.tams.model.Asset;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -103,46 +99,6 @@ public class AddAssetFragment extends Fragment {
         setHasOptionsMenu(true);
 
         return v;
-    }
-
-    private void setUpToolbar() {
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle("Add Asset");
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_addasset, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_save) {
-            db.addNewAsset(mAsset);
-            getActivity().finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void createAsset() {
-        if (mLocation != null) {
-            LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            mAsset = new Asset(latLng);
-            String time = System.currentTimeMillis() / 1000L + "";
-            mAsset.setCreatedAt(time);
-            mAsset.setUpdatedAt(time);
-        }
     }
 
     private void setTextMethods() {
@@ -212,6 +168,47 @@ public class AddAssetFragment extends Fragment {
         mPictureButton = (ImageButton) v.findViewById(R.id.pictureButton);
         mRecordButton = (ImageButton) v.findViewById(R.id.recordButton);
         mPlayButton = (ImageButton) v.findViewById(R.id.playButton);
+    }
+
+    private void setUpToolbar() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setTitle("Add Asset");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //Set up layout for toolbar
+        inflater.inflate(R.menu.menu_addasset, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_save) {
+            db.addNewAsset(mAsset);
+            getActivity().finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void createAsset() {
+        if (mLocation != null) {
+            LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            mAsset = new Asset(latLng);
+            String time = System.currentTimeMillis() / 1000L + "";
+            mAsset.setCreatedAt(time);
+            mAsset.setUpdatedAt(time);
+        }
     }
 
     @Override
@@ -286,8 +283,6 @@ public class AddAssetFragment extends Fragment {
         mPlayer = null;
     }
 
-    String mCurrentPhotoPath;
-
     private void createAudioFile() throws IOException {
         // Create an audio file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -296,6 +291,7 @@ public class AddAssetFragment extends Fragment {
         mAudioFileName += "/audiorecordtest.3gp";
     }
 
+    String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -319,8 +315,6 @@ public class AddAssetFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        //Add Asset to the database
-//        db.addNewAsset(mAsset);
     }
 
     private void dispatchTakePictureIntent() {
@@ -333,7 +327,6 @@ public class AddAssetFragment extends Fragment {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -350,83 +343,15 @@ public class AddAssetFragment extends Fragment {
 
         //Responding to the Camera activity call for result
         if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
-            //setPic();
-            loadBitmap(999, mImageView);
+
+            //Crop image and place in Image View
+            Picasso.with(getActivity().getApplicationContext())
+                    .load("file://" + mCurrentPhotoPath)
+                    .placeholder(R.drawable.progress_animation)
+                    .resize(mImageView.getWidth(), mImageView.getHeight())
+                    .centerCrop()
+                    .into(mImageView);
         }
-    }
-
-    public void loadBitmap(int resId, ImageView imageView) {
-        BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-        task.execute(resId);
-    }
-
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
-
-        mImageView.setImageBitmap(
-                decodeSampledBitmapFromFile(mCurrentPhotoPath, targetW, targetH));
-
-
-        /*// Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        calculateInSampleSize(bmOptions, targetW, targetH);
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageView.setImageBitmap(bitmap);*/
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    public static Bitmap decodeSampledBitmapFromFile(String picturePath,
-                                                     int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(picturePath, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(picturePath, options);
     }
 
     //Start worker thread to get address from lat, long
@@ -463,40 +388,6 @@ public class AddAssetFragment extends Fragment {
         mAsset.setName(mAddressOutput.toString());
         mNameEditField.setText(mAsset.getName());
 
-    }
-
-    //Background worker thread to process images from camera
-    class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
-        private final WeakReference<ImageView> imageViewReference;
-        private int data = 0;
-        int targetW;
-        int targetH;
-
-        public BitmapWorkerTask(ImageView imageView) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            imageViewReference = new WeakReference<ImageView>(imageView);
-            targetW = imageView.getWidth();
-            targetH = imageView.getHeight();
-
-        }
-
-        // Decode image in background.
-        @Override
-        protected Bitmap doInBackground(Integer... params) {
-            data = params[0];
-            return decodeSampledBitmapFromFile(mCurrentPhotoPath, targetW, targetH);
-        }
-
-        // Once complete, see if ImageView is still around and set bitmap.
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (imageViewReference != null && bitmap != null) {
-                final ImageView imageView = imageViewReference.get();
-                if (imageView != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
     }
 
 }
