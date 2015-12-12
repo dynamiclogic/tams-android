@@ -20,4 +20,6 @@
     <string name="address_found">Address Found</string>
     <string name="audio_dlabel">AUDIO</string>
     <string name="action_save">Save</string>
+    <string name="server_settings">Server Settings</string>
+    <string name="help">Help</string>
 </resources>

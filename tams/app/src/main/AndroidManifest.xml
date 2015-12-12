@@ -79,6 +79,11 @@
         <activity android:name="com.dynamiclogic.tams.activity.ManageAsset"
                   android:label="Manage Asset"
                   android:parentActivityName=".activity.ManageAsset"/>
+        <activity
+            android:name="com.dynamiclogic.tams.activity.Settings"
+            android:label="Settings"
+            android:parentActivityName=".activity.MainActivity">
+        </activity>
 
         <service
             android:name="com.dynamiclogic.tams.activity.FetchAddressIntentService"

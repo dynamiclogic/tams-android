@@ -9,8 +9,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         SlidingUpPanelLayout.PanelSlideListener,
         com.google.android.gms.location.LocationListener,
         OnPanelFragmentInteractionListener,
@@ -63,6 +64,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
     private int fineLocationPermissionCheck;
     private boolean mRequestingLocationUpdates = true;
+    private Toolbar mToolbar;
 
 
     @Override
@@ -71,6 +73,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
 
         database = Database.getInstance();
+
+        // TODO: 12/12/2015 Fix the overflow menu background color so it is white with black labels
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle("TAMS");
 
         ((SlidingUpPanelLayout) getWindow().getDecorView().findViewById(R.id.sliding_layout))
                 .setPanelSlideListener(this);
@@ -127,39 +134,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     MY_PERMISSIONS_REQUEST_FINE_LOCATION);
         }
     }
-
-    //Check the results of requested permissions for API 23+
-    /* Not doing permissions for 6.0
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // related task you need to do.
-                    Log.d(TAG, "Fine Location permission granted");
-                    fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION);
-//                    Bundle bundle = new Bundle();
-//                    onConnected(bundle);
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }*/
 
     //Set up location request with the desired parameters for the level of accuracy we need
     protected LocationRequest createLocationRequest() {
@@ -377,7 +351,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         // noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Log.d(TAG, "Server Settings");
+            Intent settingsIntent = new Intent(this, Settings.class);
+            startActivity(settingsIntent);
+            //return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -84,6 +84,7 @@
             android:layout_height="wrap_content"
             android:hint="Description"
             android:padding="10dp"
+            android:inputType="textCapSentences"
             />
     </android.support.design.widget.TextInputLayout>
 

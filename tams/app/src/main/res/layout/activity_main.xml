@@ -1,25 +1,50 @@
-<com.dynamiclogic.tams.utils.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sliding_layout"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="bottom"
-    android:background="@color/white"
-    android:gravity="bottom"
-    tools:context=".MainActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1"
+              tools:context=".activity.MainActivity">
 
-    <include
-        android:id="@+id/fragment_map"
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                                       android:id="@+id/tool_bar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:background="@color/primary"
+                                       android:theme="@style/Toolbar"
+                                       android:popupTheme="@style/Toolbar_Popup"
+                                       android:elevation="4dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <com.dynamiclogic.tams.utils.SlidingUpPanelLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sliding_layout"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        layout="@layout/fragment_map" />
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:gravity="bottom"
+        tools:context=".MainActivity">
 
-    <fragment
-        android:id="@+id/fragment_panel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.dynamiclogic.tams.activity.fragment.PanelFragment" />
 
-</com.dynamiclogic.tams.utils.SlidingUpPanelLayout>
+
+        <include
+            android:id="@+id/fragment_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            layout="@layout/fragment_map" />
+
+        <fragment
+            android:id="@+id/fragment_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.dynamiclogic.tams.activity.fragment.PanelFragment" />
+
+    </com.dynamiclogic.tams.utils.SlidingUpPanelLayout>
+
+</LinearLayout>
