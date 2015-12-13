@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +30,6 @@ import com.dynamiclogic.tams.model.Asset;
 import com.dynamiclogic.tams.model.callback.AssetsListener;
 import com.dynamiclogic.tams.model.callback.TAMSLocationListener;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -218,14 +219,12 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
-//                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(asset.getPictureLocation()), 500, 500);
-//                imageViewPreview.setImageBitmap(thumbImage);
-                Picasso.with(getContext())
-                        .load("file://" + asset.getPictureLocation())
-                        .into(imageViewPreview);
+                //Trying from db base64
+                Bitmap bitmap = asset.getPicture();
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 500, 500);
+                imageViewPreview.setImageBitmap(thumbImage);
                 textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getDescription());
-                //textViewBody.setText(asset.getLatLng().toString());
 
                 // set distance away
                 Location loc = new Location("existing_location");
@@ -296,11 +295,10 @@ public class PanelFragment extends Fragment implements AssetsListener {
                 TextView textViewBody = (TextView) convertView.findViewById(R.id.asset_description);
                 TextView textViewDistance = (TextView) convertView.findViewById(R.id.asset_distance);
 
-//                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(asset.getPictureLocation()), 500, 500);
-//                imageViewPreview.setImageBitmap(thumbImage);
-                Picasso.with(getContext())
-                        .load("file://" + asset.getPictureLocation())
-                        .into(imageViewPreview);
+                Bitmap bitmap = asset.getPicture();
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 500, 500);
+                imageViewPreview.setImageBitmap(thumbImage);
+
                 textViewTitle.setText(asset.getName());
                 textViewBody.setText(asset.getDescription());
 

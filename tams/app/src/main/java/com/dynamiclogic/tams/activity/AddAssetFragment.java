@@ -2,10 +2,13 @@ package com.dynamiclogic.tams.activity;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -344,6 +347,7 @@ public class AddAssetFragment extends Fragment {
         //Responding to the Camera activity call for result
         if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
 
+
             //Crop image and place in Image View
             Picasso.with(getActivity().getApplicationContext())
                     .load("file://" + mCurrentPhotoPath)
@@ -351,6 +355,10 @@ public class AddAssetFragment extends Fragment {
                     .resize(mImageView.getWidth(), mImageView.getHeight())
                     .centerCrop()
                     .into(mImageView);
+
+            //Shrink bitmap in background thread before converting to base74
+            shrinkBitmap(mCurrentPhotoPath);
+
         }
     }
 
@@ -388,6 +396,81 @@ public class AddAssetFragment extends Fragment {
         mAsset.setName(mAddressOutput.toString());
         mNameEditField.setText(mAsset.getName());
 
+    }
+
+    //Starts background thread to shrink bitmap before base64 conversion
+    public void shrinkBitmap(String pictureLocation) {
+
+        //Not entirely sure about the size values passed here. I tested these and they work
+        // fine for now. Might need to adjust later
+        BitmapShrinkTask task = new BitmapShrinkTask(300, 300);
+        task.execute(pictureLocation);
+    }
+
+    //Decode bitmap from file to the reduced size
+    public static Bitmap decodeSampledBitmapFromResource(String path,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+
+    //Async Task for bitmap shrinking
+    class BitmapShrinkTask extends AsyncTask<String, Intent, Bitmap> {
+        String location;
+        int width, height;
+
+        public BitmapShrinkTask(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            location = params[0];
+            return decodeSampledBitmapFromResource(location, width, height);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            Log.d(TAG, "bitmap shrinking thread finished");
+            mAsset.bitmapToBase64(bitmap);
+        }
     }
 
 }

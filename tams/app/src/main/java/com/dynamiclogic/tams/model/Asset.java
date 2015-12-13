@@ -18,7 +18,6 @@ public class Asset {
     private String mName, mDescription, mCreatedAt, mUpdatedAt;
     private String mDeleted, mNeedsSync, mIsNew; // TODO why aren't these booleans (Nati)
     private String mPictureBase64;
-    private Bitmap mPicture;
     private LatLng mLatLng;
 
 
@@ -91,17 +90,12 @@ public class Asset {
 
     public void setNeedsSync(String needsSync) { this.mNeedsSync = needsSync; }
 
-    public Bitmap getPicture() { return mPicture; }
-
-    public void setPicture(Bitmap picture) {
-        this.mPicture = picture;
-        bitmapToBase64(picture);
+    public Bitmap getPicture() {
+        return base64ToBitmap(mPictureBase64);
     }
 
     public void setPictureBase64(String pictureBase64) {
         this.mPictureBase64 = pictureBase64;
-        // TODO Fix this - getting an exception "bad base64"
-        base64ToBitmap(pictureBase64);
     }
     public String getPictureBase64() { return mPictureBase64; }
 
@@ -120,9 +114,14 @@ public class Asset {
         mPictureBase64 = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
     }
 
-    public void base64ToBitmap(String pictureBase65) {
-        byte[] imageAsBytes = Base64.decode(pictureBase65.getBytes(), Base64.DEFAULT);
-        mPicture = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    public Bitmap base64ToBitmap(String pictureBase64) {
+        if (pictureBase64.equals("")){
+            //No base 64 image in the asset
+        } else {
+            byte[] imageAsBytes = Base64.decode(pictureBase64.getBytes(), Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+        }
+        return null;
     }
 
     @Override
