@@ -161,7 +161,7 @@ public class AddAssetFragment extends Fragment {
     }
 
     private void setUpLayoutComponents(View v) {
-        toolbar = (Toolbar) v.findViewById(R.id.tool_bar);
+        toolbar = (Toolbar) v.findViewById(R.id.add_asset_tool_bar);
         mLatitude = (TextView) v.findViewById(R.id.latitudeTextView);
         mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
         mNameEditField = (EditText) v.findViewById(R.id.nameEditText);
@@ -183,7 +183,7 @@ public class AddAssetFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //Set up layout for toolbar
-        inflater.inflate(R.menu.menu_addasset, menu);
+        inflater.inflate(R.menu.menu_add_asset, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

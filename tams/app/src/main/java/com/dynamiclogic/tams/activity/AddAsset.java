@@ -24,8 +24,8 @@ public class AddAsset extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_asset);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
+//        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+//        setSupportActionBar(toolbar);
 
         mLocation = (Location) getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
 

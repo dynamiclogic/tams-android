@@ -5,16 +5,22 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
@@ -38,6 +44,7 @@ public class ManageAssetFragment extends Fragment {
             "com.dynamiclogic.tams.activity.asset_location";
     private Database db;
     private List<Asset> list;
+    private Toolbar toolbar;
 
 
     @Nullable
@@ -46,34 +53,17 @@ public class ManageAssetFragment extends Fragment {
         
         db = Database.getInstance();
 
-    //    list = db.getListOfAssets();
+        toolbar = (Toolbar)v.findViewById(R.id.manage_asset_tool_bar);
+
+        //Set up toolbar
+        setUpToolbar();
+
+        //Let Android know we have menu items we want for the toolbar
+        setHasOptionsMenu(true);
+
         Intent intent = getActivity().getIntent();
         String value = intent.getStringExtra("asset_pass");
         mAsset = db.getAssetFromID(value);
-        //Intent intent = getIntent();
-        //mAsset = (Asset)getIntent().getExtras().getSerializable("asset_pass");
-
-
-        // Bundle bundle = getIntent.getExtra();
-
-        /*Trying to save asset on state change
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(ASSET)) {
-                mAsset = (Asset) savedInstanceState.getSerializable(ASSET);
-            }
-        } else {
-            *//*mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-            if (mAsset == null){
-                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-                mAsset = new Asset(latLng);
-            }*//*
-        }*/
-
-        //mLocation = (Location) getActivity().getIntent().getParcelableExtra(EXTRA_ASSET_LOCATION);
-
-        // LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        // mAsset = new Asset(latLng);
-
 
         if(mAsset != null) {
             mLatiture = (TextView) v.findViewById(R.id.latitudeTextView);
@@ -90,6 +80,7 @@ public class ManageAssetFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
 
 
         mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
@@ -151,6 +142,40 @@ public class ManageAssetFragment extends Fragment {
         Log.d(TAG, "onCreateView() in ManageAssetFragment");
 
         return v;
+    }
+
+    private void setUpToolbar() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setTitle("Manage Asset");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //Set up layout for toolbar
+        inflater.inflate(R.menu.menu_manage_asset, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete) {
+            // TODO: 12/16/2015 Add code to delete current asset
+            String uuid = mAsset.getId();
+            db.removeAsset(uuid);
+            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

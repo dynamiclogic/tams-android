@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 addAssetIntent.putExtra(AddAssetFragment.EXTRA_ASSET_LOCATION, mCurrentLocation);
-
                 startActivity(addAssetIntent);
                 drawMarkers();
             }
