@@ -2,14 +2,15 @@ package com.dynamiclogic.tams.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
+
     private void restoreFromDestroyed(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("points")) {
@@ -121,18 +124,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void locationPermissionCheck() {
-        fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-
-        //If the permission isn't granted, request it
-        if ( fineLocationPermissionCheck == PackageManager.PERMISSION_DENIED){
-            //Request fine location
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-    }
 
     //Set up location request with the desired parameters for the level of accuracy we need
     protected LocationRequest createLocationRequest() {
@@ -157,9 +148,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        MainActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
-        locationPermissionCheck();
 
         //Connect to the Google API Client
         mGoogleApiClient.connect();
@@ -263,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //    map.setIndoorEnabled(true);
 
             // Turns on 3D buildings
-        //    map.setBuildingsEnabled(true);
+            map.setBuildingsEnabled(true);
 
             // Show Zoom buttons
         //    map.getUiSettings().setZoomControlsEnabled(true);

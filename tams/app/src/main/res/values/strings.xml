@@ -22,4 +22,8 @@
     <string name="action_save">Save</string>
     <string name="server_settings">Server Settings</string>
     <string name="help">Help</string>
+    <string name="deleteAsset">Delete Asset</string>
+    <string name="deleteAssetPrompt">Are you sure you want to delete this asset?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

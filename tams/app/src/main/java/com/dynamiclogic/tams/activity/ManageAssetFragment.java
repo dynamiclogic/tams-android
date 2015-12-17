@@ -1,10 +1,12 @@
 package com.dynamiclogic.tams.activity;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -167,12 +169,27 @@ public class ManageAssetFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
-            // TODO: 12/16/2015 Add code to delete current asset
-            String uuid = mAsset.getId();
-            db.removeAsset(uuid);
-            Toast.makeText(getActivity(), "Removing asset", Toast.LENGTH_SHORT).show();
-            getActivity().finish();
+            new AlertDialog.Builder(getActivity())
+                    .setIcon(R.drawable.ic_delete_black_24dp)
+                    .setTitle(R.string.deleteAsset)
+                    .setMessage(R.string.deleteAssetPrompt)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(getActivity(), "Deleted Asset", Toast.LENGTH_SHORT).show();
+                            String uuid = mAsset.getId();
+                            db.removeAsset(uuid);
+                            getActivity().finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
             return true;
+        }
+        if (id == R.id.action_save) {
+            Toast.makeText(getActivity(), "Saved Asset", Toast.LENGTH_SHORT).show();
+            db.updateAsset(mAsset);
+            getActivity().finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -181,7 +198,7 @@ public class ManageAssetFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        db.updateAsset(mAsset);
+
 
 
     }

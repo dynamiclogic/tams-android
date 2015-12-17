@@ -340,7 +340,7 @@ public class DBSync extends Observable {
                         notifyObservers();
                     }
                     deleteAssets();
-                    Toast.makeText(mContext.getApplicationContext(), "Asset get completed!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext.getApplicationContext(), "Sync Completed!", Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     Toast.makeText(mContext.getApplicationContext(), "Error occurred [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
