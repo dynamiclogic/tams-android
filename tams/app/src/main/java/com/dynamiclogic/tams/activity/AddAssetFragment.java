@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dynamiclogic.tams.R;
 import com.dynamiclogic.tams.database.Database;
@@ -180,6 +181,7 @@ public class AddAssetFragment extends Fragment {
         toolbar.setTitle("Add Asset");
     }
 
+    //Here we specify where the toolbar should get it's items from
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //Set up layout for toolbar
@@ -187,6 +189,7 @@ public class AddAssetFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    //Handle toolbar item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -197,6 +200,7 @@ public class AddAssetFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
             db.addNewAsset(mAsset);
+            Toast.makeText(getActivity(), "Saved Asset", Toast.LENGTH_SHORT).show();
             getActivity().finish();
             return true;
         }
@@ -244,32 +248,6 @@ public class AddAssetFragment extends Fragment {
         }
     }
 
-    private void startRecording() {
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        try {
-            createAudioFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mRecorder.setOutputFile(mAudioFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
-        }
-
-        mRecorder.start();
-    }
-
-    private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
-    }
-
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
@@ -286,10 +264,37 @@ public class AddAssetFragment extends Fragment {
         mPlayer = null;
     }
 
+    private void startRecording() {
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        try {
+            createAudioFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mRecorder.setOutputFile(mAudioFileName);
+
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Log.e(TAG, "prepare() failed");
+        }
+
+        mRecorder.start();
+    }
+
+    private void stopRecording() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
+    }
+
     private void createAudioFile() throws IOException {
         // Create an audio file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         mAudioFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         mAudioFileName += timeStamp;
         mAudioFileName += "/audiorecordtest.3gp";
     }

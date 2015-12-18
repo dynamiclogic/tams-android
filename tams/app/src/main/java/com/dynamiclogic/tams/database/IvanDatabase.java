@@ -30,7 +30,8 @@ public class IvanDatabase extends Database {
         asset.setCreatedAt(Asset.getCurrentUnixTime());
         mDBController.insertAsset(asset);
         notifyListeners();
-        mDBSync.sync();
+        //mDBSync.sync();
+        mDBSync.createAssets();
     }
 
     @Override
@@ -39,14 +40,16 @@ public class IvanDatabase extends Database {
         asset.setNeedsSync(true);
         mDBController.updateAsset(asset);
         notifyListeners();
-        mDBSync.sync();
+        //mDBSync.sync();
+        mDBSync.updateAssets();
     }
 
     @Override
     public synchronized void removeAsset(String id) {
         mDBController.deleteAsset(id);
         notifyListeners();
-        mDBSync.sync();
+        //mDBSync.sync();
+        mDBSync.deleteAssets();
     }
 
     @Override

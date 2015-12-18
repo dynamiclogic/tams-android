@@ -156,21 +156,6 @@ public class AudioRecordTest extends Activity
                         0));
         setContentView(ll);
 
-        /*
-        Not doing 6.0 permissions
-
-        microphonePermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO);
-
-        //If the permission isn't granted, request it
-        if( microphonePermissionCheck == PackageManager.PERMISSION_DENIED){
-            //Request coarse location
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    MY_PERMISSIONS_REQUEST_MICROPHONE);
-        }*/
-         
-
     }
 
     @Override
