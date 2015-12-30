@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.d(TAG, "onMapReady: mCurrentLatLng = " + mCurrentLatLng);
             //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mCurrentLatLng, 19);
             //map.animateCamera(cameraUpdate);
-            map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
             // Place dot on current location
             map.setMyLocationEnabled(true);

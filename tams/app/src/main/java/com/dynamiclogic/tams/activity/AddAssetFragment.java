@@ -105,6 +105,19 @@ public class AddAssetFragment extends Fragment {
         return v;
     }
 
+    private void setUpLayoutComponents(View v) {
+        toolbar = (Toolbar) v.findViewById(R.id.add_asset_tool_bar);
+        mLatitude = (TextView) v.findViewById(R.id.latitudeTextView);
+        mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
+        mNameEditField = (EditText) v.findViewById(R.id.nameEditText);
+        mAssetTypeSpinner = (Spinner) v.findViewById(R.id.assetTypesSpinner);
+        mDescriptionEditField = (EditText) v.findViewById(R.id.descriptionEditText);
+        mImageView = (ImageView) v.findViewById(R.id.imageView);
+        mPictureButton = (ImageButton) v.findViewById(R.id.pictureButton);
+        mRecordButton = (ImageButton) v.findViewById(R.id.recordButton);
+        mPlayButton = (ImageButton) v.findViewById(R.id.playButton);
+    }
+
     private void setTextMethods() {
         mLatitude.setText(String.valueOf(mAsset.getLatLng().latitude));
         mLongitude.setText(String.valueOf(mAsset.getLatLng().latitude));
@@ -159,19 +172,6 @@ public class AddAssetFragment extends Fragment {
                 playIsPressed = !playIsPressed;
             }
         });
-    }
-
-    private void setUpLayoutComponents(View v) {
-        toolbar = (Toolbar) v.findViewById(R.id.add_asset_tool_bar);
-        mLatitude = (TextView) v.findViewById(R.id.latitudeTextView);
-        mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
-        mNameEditField = (EditText) v.findViewById(R.id.nameEditText);
-        mAssetTypeSpinner = (Spinner) v.findViewById(R.id.assetTypesSpinner);
-        mDescriptionEditField = (EditText) v.findViewById(R.id.descriptionEditText);
-        mImageView = (ImageView) v.findViewById(R.id.imageView);
-        mPictureButton = (ImageButton) v.findViewById(R.id.pictureButton);
-        mRecordButton = (ImageButton) v.findViewById(R.id.recordButton);
-        mPlayButton = (ImageButton) v.findViewById(R.id.playButton);
     }
 
     private void setUpToolbar() {
@@ -361,6 +361,7 @@ public class AddAssetFragment extends Fragment {
                     .centerCrop()
                     .into(mImageView);
 
+            Log.d(TAG, "View width: " + mImageView.getWidth() + " and height: " + mImageView.getHeight());
             //Shrink bitmap in background thread before converting to base74
             shrinkBitmap(mCurrentPhotoPath);
 

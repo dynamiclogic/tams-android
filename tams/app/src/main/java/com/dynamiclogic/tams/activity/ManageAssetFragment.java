@@ -3,6 +3,9 @@ package com.dynamiclogic.tams.activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,8 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +42,7 @@ public class ManageAssetFragment extends Fragment {
     private TextView mLatiture, mLongitude;
     private ImageView mImageView;
     private EditText mNameEditField, mDescriptionEditField;
+    private ImageButton mPictureButton, mRecordButton, mPlayButton;
     private Asset mAsset;
     private Location mLocation;
     private String mCurrentPhotoPath;
@@ -74,16 +78,6 @@ public class ManageAssetFragment extends Fragment {
             mLongitude = (TextView) v.findViewById(R.id.longitudeTextView);
             mLongitude.setText(String.valueOf(mAsset.getLatLng().longitude));
         }
-        Button mRecordButton = (Button)v.findViewById(R.id.recordButton);
-        mRecordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AudioRecordTest.class);
-                startActivity(intent);
-            }
-        });
-
-
 
         mNameEditField = (EditText)v.findViewById(R.id.nameEditText);
         mNameEditField.setText(mAsset.getName());
@@ -131,19 +125,60 @@ public class ManageAssetFragment extends Fragment {
 
         mImageView = (ImageView)v.findViewById(R.id.imageView);
 
-        Button pictureButton = (Button)v.findViewById(R.id.pictureButton);
+        /*Button pictureButton = (Button)v.findViewById(R.id.pictureButton);
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
-        });
+        });*/
 
+        mPictureButton = (ImageButton) v.findViewById(R.id.pictureButton);
+        mRecordButton = (ImageButton) v.findViewById(R.id.recordButton);
+        mPlayButton = (ImageButton) v.findViewById(R.id.playButton);
+
+        Bitmap bitmap = mAsset.getPicture();
+        // TODO: 12/29/2015 Change the hardcoded values for width and height so we get them from the imageView
+        Bitmap croppedBitmap = scaleCenterCrop(bitmap, 1050, 1404);
+        mImageView.setImageBitmap(croppedBitmap);
 
         Log.d(TAG, "onCreateView() in ManageAssetFragment");
 
         return v;
+    }
+
+    public Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {
+        int sourceWidth = source.getWidth();
+        int sourceHeight = source.getHeight();
+
+        // Compute the scaling factors to fit the new height and width, respectively.
+        // To cover the final image, the final scaling will be the bigger
+        // of these two.
+        float xScale = (float) newWidth / sourceWidth;
+        float yScale = (float) newHeight / sourceHeight;
+        float scale = Math.max(xScale, yScale);
+
+        // Now get the size of the source bitmap when scaled
+        float scaledWidth = scale * sourceWidth;
+        float scaledHeight = scale * sourceHeight;
+
+        // Let's find out the upper left coordinates if the scaled bitmap
+        // should be centered in the new size give by the parameters
+        float left = (newWidth - scaledWidth) / 2;
+        float top = (newHeight - scaledHeight) / 2;
+
+        // The target rectangle for the new, scaled version of the source bitmap will now
+        // be
+        RectF targetRect = new RectF(left, top, left + scaledWidth, top + scaledHeight);
+
+        // Finally, we create a new bitmap of the specified size and draw our new,
+        // scaled bitmap onto it.
+        Bitmap dest = Bitmap.createBitmap(newWidth, newHeight, source.getConfig());
+        Canvas canvas = new Canvas(dest);
+        canvas.drawBitmap(source, null, targetRect, null);
+
+        return dest;
     }
 
     private void setUpToolbar() {
